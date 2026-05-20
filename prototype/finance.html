@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Finance & Grants — PKSF AI</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="shell">
+<div id="topbar">
+  <div class="tb-brand"><div class="tb-logo">🏛</div><div class="tb-brand-text"><div class="tb-brand-main">PKSF · Antarious AI</div><div class="tb-brand-sub">Intelligence Platform</div></div></div>
+  <div class="tb-freya-bar" onclick="openFreya()"><div class="tb-fa">🤖</div><div class="tb-fstatus" id="freya-status-text"><strong>Freya</strong> processed April payroll for 612 staff · Budget at 74% utilisation · On track</div><div class="tb-fdot"></div></div>
+  <div class="tb-controls">
+    <div class="mode-toggle">
+      <button class="mode-btn" data-mode="manual" onclick="setMode('manual')">Manual</button>
+      <button class="mode-btn on" data-mode="semi" onclick="setMode('semi')">Semi-Auto</button>
+      <button class="mode-btn" data-mode="full" onclick="setMode('full')">Full Auto</button>
+    </div>
+    <div class="tb-icon-btn" onclick="toggleTheme()" id="theme-btn">🌙</div>
+    <div class="tb-icon-btn">🔔<div class="tb-ndot"></div></div>
+    <div class="tb-user"><div class="tb-av">AH</div><div><div class="tb-uname">Dr. Anisul Haque</div><div class="tb-urole">Managing Director</div></div></div>
+  </div>
+</div>
+<div id="sidebar">
+  <div class="sb-inner">
+    <div class="sb-section-label">Overview</div>
+    <a href="dashboard.html"><div class="nav-item"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
+    <div class="sb-section-label">Partner Network</div>
+    <a href="partners.html"><div class="nav-item"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
+    <a href="portfolio.html"><div class="nav-item"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
+    <div class="sb-section-label">Programmes</div>
+    <a href="programs.html"><div class="nav-item"><span class="nav-ic">🌾</span>Active Programmes</div></a>
+    <a href="beneficiaries.html"><div class="nav-item"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
+    <div class="sb-section-label">Intelligence</div>
+    <a href="reports.html"><div class="nav-item"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
+    <a href="agents.html"><div class="nav-item"><span class="nav-ic">🤖</span>AI Agents</div></a>
+    <div class="sb-section-label">Operations</div>
+    <a href="finance.html"><div class="nav-item active"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
+    <a href="hr.html"><div class="nav-item"><span class="nav-ic">👥</span>HR &amp; People</div></a>
+    <a href="notifications.html"><div class="nav-item"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
+    <div class="sb-section-label">Account</div>
+    <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+  </div>
+  <div class="sb-footer"><div class="sb-org"><div class="sb-org-av">🏛</div><div><div class="sb-org-name">PKSF</div><div class="sb-org-type">Apex MFI · Dhaka, Bangladesh</div></div></div></div>
+</div>
+
+<div id="content">
+<div class="content-area">
+
+  <div class="page-hd">
+    <div>
+      <div class="page-title">Finance &amp; Grants</div>
+      <div class="page-sub">Budget utilisation, grant management, and financial intelligence</div>
+    </div>
+    <div class="page-acts">
+      <button class="btn btn-sec" onclick="showOutput('budget-analysis')">🤖 Budget Analysis</button>
+      <button class="btn btn-pri" onclick="toast('Opening new transaction entry...','💰','g')">+ New Entry</button>
+    </div>
+  </div>
+
+  <!-- FREYA -->
+  <div class="freya-box">
+    <div class="freya-box-ic">🤖</div>
+    <div style="flex:1">
+      <div class="freya-box-label">Freya · Finance Intelligence</div>
+      <div class="freya-box-text">Q3 budget utilisation is at <strong>74%</strong> — on track. April payroll for 612 staff is ready for your approval. <strong>ENRICH programme</strong> at 87% utilisation may need a no-cost extension request before year-end. IFAD PACE-II disbursement tranche of BDT 22 crore is expected next week.</div>
+    </div>
+    <div class="freya-box-acts">
+      <button class="btn btn-pri btn-sm" onclick="showOutput('budget-analysis')">Full Report</button>
+      <button class="btn btn-sec btn-sm" onclick="approvePayroll()">Approve Payroll</button>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="stat-card"><div class="stat-ic">💰</div><div class="stat-val">৳842 Cr</div><div class="stat-label">Annual Budget FY 2025-26</div><div class="stat-change chg-up">74% utilised (Q3)</div></div>
+    <div class="stat-card"><div class="stat-ic">✅</div><div class="stat-val">৳628 Cr</div><div class="stat-label">Total Expenditure (Q3)</div><div class="stat-change chg-up">On track vs plan</div></div>
+    <div class="stat-card amber"><div class="stat-ic">⏳</div><div class="stat-val">৳214 Cr</div><div class="stat-label">Remaining Budget</div><div class="stat-change chg-nt">Q4 planning needed</div></div>
+    <div class="stat-card"><div class="stat-ic">🏦</div><div class="stat-val">৳46 Cr</div><div class="stat-label">Grant Inflows This Quarter</div><div class="stat-change chg-up">IFAD + ADB + KfW</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab-item active" onclick="switchFTab(this,'budget')">Budget Overview</div>
+    <div class="tab-item" onclick="switchFTab(this,'grants')">Grants &amp; Donors</div>
+    <div class="tab-item" onclick="switchFTab(this,'transactions')">Recent Transactions</div>
+    <div class="tab-item" onclick="switchFTab(this,'payroll')">Payroll</div>
+  </div>
+
+  <!-- BUDGET TAB -->
+  <div id="ftab-budget">
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">Programme Budget Utilisation — Q3 FY 2025-26</div>
+      <div class="sheet-view">
+        <table class="data-table">
+          <thead><tr><th>Programme</th><th>Approved Budget</th><th>Disbursed</th><th>Utilised</th><th>% Used</th><th>Variance</th><th>Donor</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>USSP</td><td>৳280 Cr</td><td>৳260 Cr</td><td>৳198 Cr</td><td style="color:var(--pri)">76%</td><td style="color:var(--pri)">+৳62 Cr under</td><td>GoB + IFAD</td><td><span class="badge badge-g">On Track</span></td></tr>
+            <tr><td>ENRICH</td><td>৳145 Cr</td><td>৳130 Cr</td><td>৳112 Cr</td><td style="color:var(--am)">87%</td><td style="color:var(--am)">+৳18 Cr left</td><td>GoB</td><td><span class="badge badge-a">Monitor</span></td></tr>
+            <tr><td>PACE-II</td><td>৳98 Cr</td><td>৳92 Cr</td><td>৳71 Cr</td><td style="color:var(--pri)">72%</td><td style="color:var(--pri)">+৳27 Cr under</td><td>IFAD</td><td><span class="badge badge-g">On Track</span></td></tr>
+            <tr><td>SFMF (ADB)</td><td>৳87 Cr</td><td>৳80 Cr</td><td>৳58 Cr</td><td style="color:var(--pri)">67%</td><td style="color:var(--pri)">+৳29 Cr under</td><td>ADB</td><td><span class="badge badge-g">On Track</span></td></tr>
+            <tr><td>Climate Adaptation</td><td>৳72 Cr</td><td>৳65 Cr</td><td>৳48 Cr</td><td style="color:var(--am)">67%</td><td style="color:var(--am)">+৳24 Cr under</td><td>KfW / GIZ</td><td><span class="badge badge-a">Below Target</span></td></tr>
+            <tr><td>SEIP</td><td>৳55 Cr</td><td>৳50 Cr</td><td>৳41 Cr</td><td style="color:var(--pri)">82%</td><td style="color:var(--pri)">+৳9 Cr under</td><td>ADB</td><td><span class="badge badge-g">On Track</span></td></tr>
+            <tr><td>HQ Operations</td><td>৳105 Cr</td><td>৳105 Cr</td><td>৳100 Cr</td><td style="color:var(--rd)">95%</td><td style="color:var(--rd)">-৳5 Cr over</td><td>Own Fund</td><td><span class="badge badge-a">Monitor</span></td></tr>
+            <tr style="font-weight:700;background:rgba(0,92,43,.04)"><td>TOTAL</td><td>৳842 Cr</td><td>৳782 Cr</td><td>৳628 Cr</td><td style="color:var(--pri)">74%</td><td style="color:var(--pri)">+৳164 Cr under</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRANTS TAB -->
+  <div id="ftab-grants" style="display:none">
+    <div class="grid-2">
+      <div class="card card-lg">
+        <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">Active Grants &amp; Donor Agreements</div>
+        <div class="data-table" style="width:100%">
+          <table class="data-table">
+            <thead><tr><th>Donor</th><th>Grant</th><th>Total (Cr)</th><th>Received</th><th>Next Tranche</th><th>Report Due</th></tr></thead>
+            <tbody>
+              <tr><td>IFAD</td><td>PACE-II (L-895-BD)</td><td>৳380 Cr</td><td>৳340 Cr</td><td>৳22 Cr · June</td><td><span class="badge badge-a">14 days</span></td></tr>
+              <tr><td>ADB</td><td>SFMF Loan</td><td>৳310 Cr</td><td>৳280 Cr</td><td>৳30 Cr · Aug</td><td><span class="badge badge-g">45 days</span></td></tr>
+              <tr><td>KfW/GIZ</td><td>Climate Resilience</td><td>৳210 Cr</td><td>৳165 Cr</td><td>৳45 Cr · Jul</td><td><span class="badge badge-a">30 days</span></td></tr>
+              <tr><td>World Bank/IDA</td><td>PKSF Microfinance</td><td>৳520 Cr</td><td>৳520 Cr</td><td>Fully disbursed</td><td><span class="badge badge-g">Annual only</span></td></tr>
+              <tr><td>GoB (Finance Ministry)</td><td>USSP Fund</td><td>৳680 Cr</td><td>৳580 Cr</td><td>৳100 Cr · Q4</td><td><span class="badge badge-g">Annual</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card card-lg">
+        <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">Donor Relationship Health</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span>IFAD</span><span class="badge badge-g">Strong</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:92%"></div></div>
+            <div style="font-size:9px;color:var(--tx3);margin-top:2px">Report on time · Site visit scheduled Jun · Tranche pending</div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span>ADB</span><span class="badge badge-g">Good</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:85%"></div></div>
+            <div style="font-size:9px;color:var(--tx3);margin-top:2px">All requirements met · Project review next quarter</div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span>KfW / GIZ</span><span class="badge badge-a">Monitor</span></div>
+            <div class="prog-bar"><div class="prog-fill prog-fill-am" style="width:68%"></div></div>
+            <div style="font-size:9px;color:var(--am);margin-top:2px">NCE request needed · Post-flood delays flagged</div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span>World Bank / IDA</span><span class="badge badge-g">Excellent</span></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:96%"></div></div>
+            <div style="font-size:9px;color:var(--tx3);margin-top:2px">Project completed successfully · Follow-up discussions ongoing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS TAB -->
+  <div id="ftab-transactions" style="display:none">
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">Recent Transactions</div>
+      <div class="ledger-row"><div class="lr-date">20 May 2026</div><div class="lr-ref">TRX-4821</div><div class="lr-desc">IFAD PACE-II — Q2 Utilisation Report Submission</div><div class="lr-cat"><span class="badge badge-g">Grant</span></div><div class="lr-amount lr-cr">+৳22,00,00,000</div></div>
+      <div class="ledger-row"><div class="lr-date">18 May 2026</div><div class="lr-ref">TRX-4820</div><div class="lr-desc">April Payroll — 612 Staff Members</div><div class="lr-cat"><span class="badge badge-b">Payroll</span></div><div class="lr-amount lr-dr">-৳4,82,00,000</div></div>
+      <div class="ledger-row"><div class="lr-date">15 May 2026</div><div class="lr-ref">TRX-4819</div><div class="lr-desc">USSP Field Operations — Dhaka Division Q3</div><div class="lr-cat"><span class="badge badge-p">Programme</span></div><div class="lr-amount lr-dr">-৳8,40,00,000</div></div>
+      <div class="ledger-row"><div class="lr-date">12 May 2026</div><div class="lr-ref">TRX-4818</div><div class="lr-desc">IT Equipment Procurement — Approved by Tenderboard</div><div class="lr-cat"><span class="badge">Procurement</span></div><div class="lr-amount lr-dr">-৳42,00,000</div></div>
+      <div class="ledger-row"><div class="lr-date">10 May 2026</div><div class="lr-ref">TRX-4817</div><div class="lr-desc">KfW Climate Adaptation — Tranche 3 Received</div><div class="lr-cat"><span class="badge badge-g">Grant</span></div><div class="lr-amount lr-cr">+৳45,00,00,000</div></div>
+      <div class="ledger-row"><div class="lr-date">08 May 2026</div><div class="lr-ref">TRX-4816</div><div class="lr-desc">ENRICH Programme — Mymensingh Division Activities</div><div class="lr-cat"><span class="badge badge-p">Programme</span></div><div class="lr-amount lr-dr">-৳6,20,00,000</div></div>
+    </div>
+  </div>
+
+  <!-- PAYROLL TAB -->
+  <div id="ftab-payroll" style="display:none">
+    <div class="freya-box" style="margin-bottom:14px">
+      <div class="freya-box-ic">🤖</div>
+      <div style="flex:1">
+        <div class="freya-box-label">Freya · Payroll Agent</div>
+        <div class="freya-box-text">April 2026 payroll for <strong>612 staff</strong> is ready. Total net payroll: <strong>৳4.82 crore</strong>. I found 3 anomalies: 2 leave balance discrepancies and 1 overtime calculation that need your review. All other 609 records are clean and ready.</div>
+      </div>
+      <div class="freya-box-acts">
+        <button class="btn btn-pri btn-sm" onclick="approvePayroll()">Approve &amp; Release</button>
+        <button class="btn btn-sec btn-sm" onclick="toast('Opening anomaly review...','⚠️','a')">Review Anomalies (3)</button>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">April 2026 Payroll Summary</div>
+      <div class="grid-4" style="margin-bottom:14px">
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--pri)">612</div><div style="font-size:10px;color:var(--tx3)">Staff Members</div></div>
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--pri)">৳4.82 Cr</div><div style="font-size:10px;color:var(--tx3)">Total Net Payroll</div></div>
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--am)">3</div><div style="font-size:10px;color:var(--tx3)">Anomalies Found</div></div>
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--pri)">609</div><div style="font-size:10px;color:var(--tx3)">Clean Records</div></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Department</th><th>Headcount</th><th>Gross (BDT)</th><th>Tax/PF</th><th>Net Pay (BDT)</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Senior Management</td><td>12</td><td>৳28,40,000</td><td>৳5,68,000</td><td>৳22,72,000</td><td><span class="badge badge-g">Ready</span></td></tr>
+          <tr><td>Programme Division</td><td>142</td><td>৳1,12,80,000</td><td>৳22,56,000</td><td>৳90,24,000</td><td><span class="badge badge-g">Ready</span></td></tr>
+          <tr><td>Finance &amp; Accounts</td><td>48</td><td>৳38,40,000</td><td>৳7,68,000</td><td>৳30,72,000</td><td><span class="badge badge-a">2 Flags</span></td></tr>
+          <tr><td>M&amp;E Division</td><td>38</td><td>৳30,40,000</td><td>৳6,08,000</td><td>৳24,32,000</td><td><span class="badge badge-g">Ready</span></td></tr>
+          <tr><td>Field Officers</td><td>288</td><td>৳2,01,60,000</td><td>৳40,32,000</td><td>৳1,61,28,000</td><td><span class="badge badge-a">1 Flag</span></td></tr>
+          <tr><td>Admin &amp; Support</td><td>84</td><td>৳58,80,000</td><td>৳11,76,000</td><td>৳47,04,000</td><td><span class="badge badge-g">Ready</span></td></tr>
+          <tr style="font-weight:700"><td>TOTAL</td><td>612</td><td>৳4.70 Cr</td><td>৳94,08,000</td><td>৳3.76 Cr</td><td></td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-pri" onclick="approvePayroll()">✅ Approve &amp; Initiate Transfer</button>
+        <button class="btn btn-sec" onclick="toast('Opening anomaly details...','⚠️','a')">⚠ Review 3 Anomalies First</button>
+      </div>
+    </div>
+  </div>
+
+</div></div></div>
+
+<!-- FREYA PANEL -->
+<div id="freya-panel">
+  <div class="fp-header"><div class="fp-avatar">🤖</div><div><div class="fp-name">Freya</div><div class="fp-status"><span class="status-dot sd-g"></span> Finance Intelligence · Online</div></div><button class="btn btn-sm btn-sec" style="margin-left:auto" onclick="closeFreya()">✕ Close</button></div>
+  <div class="fp-quick">
+    <button class="btn btn-sm btn-pri"  onclick="fpQuick('Give me a budget utilisation summary for all programmes')">💰 Budget Status</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('When is the next IFAD disbursement expected?')">🤝 IFAD Tranche</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Are we at risk of any budget overruns?')">⚠ Overruns?</button>
+  </div>
+  <div id="fp-msgs"></div>
+  <div class="fp-input-area"><div class="fp-input-row"><input class="fp-input" id="fp-input" type="text" placeholder="Ask about budget, grants, payroll…"><button class="btn btn-pri btn-sm" onclick="fpSend()">Send ↑</button></div></div>
+</div>
+
+<div id="output-modal"><div class="output-box"><div class="ob-header"><div><div class="ob-agent-label" id="ob-agent"></div><div class="ob-title" id="ob-title"></div></div><div class="ob-close" onclick="closeOutput()">✕</div></div><div class="ob-body" id="ob-body"></div><div class="ob-footer" id="ob-footer"></div></div></div>
+<div id="confirm-modal"><div class="confirm-box"><div class="confirm-title" id="confirm-title"></div><div class="confirm-body" id="confirm-body"></div><div class="confirm-acts"><button class="btn btn-sec btn-sm" onclick="closeConfirm()">Cancel</button><button class="btn btn-pri btn-sm" id="confirm-ok">Confirm</button></div></div></div>
+<div id="toast-container"></div>
+<script src="js/shared.js"></script>
+<script>
+function switchFTab(el, id) {
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['budget','grants','transactions','payroll'].forEach(t => {
+    document.getElementById('ftab-'+t).style.display = t === id ? '' : 'none';
+  });
+}
+function approvePayroll() {
+  showConfirm(
+    'Approve April 2026 Payroll?',
+    'This will initiate bank transfers for 612 staff members. Total net amount: BDT 4.82 crore. Note: 3 anomalies are pending review — Freya recommends resolving them first, but you can proceed.',
+    () => { toast('Payroll approved and transfers initiated for 609 staff. 3 flagged records sent back to HR.','✅','g'); },
+    'Approve & Release',
+    'btn-pri'
+  );
+}
+</script>
+</body>
+</html>

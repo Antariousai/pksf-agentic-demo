@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PKSF · Antarious AI — সহজ সংস্করণ</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="shell">
+  <header id="topbar">
+    <div class="tb-brand">
+      <div class="tb-logo" id="tb-logo"></div>
+      <div class="tb-brand-text">
+        <div class="tb-brand-main">PKSF · Antarious</div>
+        <div class="tb-brand-sub" id="brand-sub">AI সহায়ক প্ল্যাটফর্ম</div>
+      </div>
+    </div>
+
+    <div class="tb-freya-bar" onclick="App.openFreya()" id="freya-bar" title="">
+      <div class="tb-fa" id="tb-fa"></div>
+      <div class="tb-fstatus" id="freya-status-text">
+        <strong>Freya</strong> আপনার জন্য ৪টি কাজ প্রস্তুত করেছে — অনুমোদনের অপেক্ষায়
+      </div>
+      <div class="tb-fdot"></div>
+    </div>
+
+    <div class="tb-controls">
+      <div class="lang-toggle" id="lang-toggle" title="">
+        <button class="lang-btn on" data-lang="bn" onclick="App.setLang('bn', this)">বাং</button>
+        <button class="lang-btn" data-lang="en" onclick="App.setLang('en', this)">EN</button>
+      </div>
+      <div class="mode-toggle" id="mode-toggle" title="">
+        <button class="mode-btn" data-mode="manual" onclick="App.setMode('manual', this)" id="mode-manual">আমি করব</button>
+        <button class="mode-btn on" data-mode="semi" onclick="App.setMode('semi', this)" id="mode-semi">AI প্রস্তাব</button>
+        <button class="mode-btn" data-mode="full" onclick="App.setMode('full', this)" id="mode-full">AI স্বয়ং</button>
+      </div>
+      <button class="tb-icon-btn" id="theme-btn" onclick="App.toggleTheme()" title="থিম পরিবর্তন"></button>
+      <button class="tb-icon-btn" id="notif-btn" onclick="App.nav('tasks')" title="বিজ্ঞপ্তি">
+        <span class="tb-ndot"></span>
+      </button>
+      <div class="tb-user-wrap" id="user-wrap">
+        <div class="tb-user" id="user-switcher" onclick="App.toggleRoleMenu(event)" title="">
+          <div class="tb-av" id="user-av">রহ</div>
+          <div>
+            <div class="tb-uname" id="user-name">রহিমা বেগম</div>
+            <div class="tb-urole" id="user-role">প্রোগ্রাম ম্যানেজার</div>
+          </div>
+          <span class="tb-user-chevron" id="user-chevron"></span>
+        </div>
+        <div class="role-menu" id="role-menu"></div>
+      </div>
+    </div>
+  </header>
+
+  <nav id="sidebar">
+    <div class="sb-inner" id="nav-list"></div>
+    <div class="sb-footer">
+      <div class="sb-org">
+        <div class="sb-org-av" id="sb-org-av"></div>
+        <div>
+          <div class="sb-org-name">PKSF</div>
+          <div class="sb-org-type" id="org-type">পল্লী কর্ম-সহায়ক ফাউন্ডেশন</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content">
+    <div class="content-area" id="main-content"></div>
+  </main>
+</div>
+
+<!-- Output Modal -->
+<div id="output-modal">
+  <div class="output-box">
+    <div class="ob-header">
+      <div>
+        <div class="ob-agent-label" id="ob-agent"></div>
+        <div class="ob-title" id="ob-title"></div>
+      </div>
+      <button class="ob-close" onclick="App.closeOutput()" id="ob-close-btn"></button>
+    </div>
+    <div class="ob-body" id="ob-body"></div>
+    <div class="ob-footer" id="ob-footer"></div>
+  </div>
+</div>
+
+<!-- Freya Chat Panel -->
+<aside id="freya-panel">
+  <div class="fp-header">
+    <div class="fp-avatar" id="fp-avatar"></div>
+    <div>
+      <div class="fp-name" id="fp-name">Freya — আপনার AI সহকারী</div>
+      <div class="fp-status" id="fp-status"><span class="status-dot sd-g"></span> অনলাইন · বাংলা ও ইংরেজি বুঝে</div>
+    </div>
+    <button class="btn btn-sm btn-sec btn-icon-only" style="margin-left:auto" id="fp-close-btn" onclick="App.closeFreya()"></button>
+  </div>
+  <div class="fp-quick" id="fp-quick"></div>
+  <div id="fp-msgs"></div>
+  <div class="fp-input-area">
+    <div class="fp-input-row">
+      <input type="text" class="fp-input" id="fp-input" placeholder="" onkeydown="if(event.key==='Enter')App.fpSend()">
+      <button class="btn btn-pri btn-sm" id="fp-send-btn" onclick="App.fpSend()">পাঠান</button>
+    </div>
+  </div>
+</aside>
+
+<!-- Welcome Modal -->
+<div id="welcome-modal">
+  <div class="welcome-box">
+    <div class="welcome-box-ic" id="welcome-ic"></div>
+    <h2 id="welcome-title">PKSF Antarious AI-তে স্বাগতম</h2>
+    <p id="welcome-body">এটি একটি <strong>সহজ সংস্করণ</strong> — কোনো প্রযুক্তি জানার দরকার নেই। Freya AI আপনার কাজ প্রস্তুত করবে, আপনি শুধু <strong>দেখুন, তারপর অনুমোদন দিন</strong>।</p>
+    <button class="btn btn-pri btn-lg" id="welcome-start-btn" onclick="App.closeWelcome()">শুরু করুন</button>
+  </div>
+</div>
+
+<!-- Action Modal (download / email / sources / preview) -->
+<div id="action-modal">
+  <div class="action-box">
+    <div class="action-header">
+      <div>
+        <div class="action-label" id="action-label"></div>
+        <div class="action-title" id="action-title"></div>
+      </div>
+      <button class="ob-close" id="action-close-btn" onclick="App.closeActionModal()"></button>
+    </div>
+    <div class="action-body" id="action-body"></div>
+    <div class="action-footer" id="action-footer"></div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/icons.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/data.js"></script>
+<script src="js/screens.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

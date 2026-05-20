@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Antarious AI — Development Sector Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Inter',sans-serif;font-size:14px;overflow:hidden}
+:root{
+  --bg:#f0f4f8;--card:#fff;--card2:#f8fafc;--border:#e2e8f0;--border2:#cbd5e0;
+  --tx:#1a202c;--tx2:#4a5568;--tx3:#718096;--tx4:#a0aec0;
+  --pri:#047857;--pri2:#059669;--acc:#10b981;--acc2:#34d399;
+  --am:#d97706;--ambg:#fffbeb;--ambdr:#fbbf24;
+  --rd:#dc2626;--rdbg:#fef2f2;--rdbdr:#f87171;
+  --bl:#2563eb;--blbg:#eff6ff;--blbdr:#60a5fa;
+  --pu:#7c3aed;--pubg:#f5f3ff;
+  --mono:'JetBrains Mono',monospace;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.05);
+  --sh2:0 4px 16px rgba(0,0,0,.12),0 12px 40px rgba(0,0,0,.08);
+  --r:10px;--rl:16px;
+  --sbw:220px;--tbh:58px;
+}
+[data-theme="dark"]{
+  --bg:#0a0f1c;--card:#0f1824;--card2:#131d2e;--border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.13);
+  --tx:#e2e8f0;--tx2:#94a3b8;--tx3:#64748b;--tx4:#475569;
+  --pri:#10b981;--pri2:#34d399;--acc:#00d68f;--acc2:#6ee7b7;
+  --ambg:rgba(245,158,11,.1);--ambdr:rgba(245,158,11,.3);
+  --rdbg:rgba(239,68,68,.1);--rdbdr:rgba(239,68,68,.3);
+  --blbg:rgba(37,99,235,.1);--blbdr:rgba(96,165,250,.3);
+  --pubg:rgba(124,58,237,.1);
+  --sh:0 2px 8px rgba(0,0,0,.3);--sh2:0 8px 32px rgba(0,0,0,.5);
+}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+button{font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s}
+input,textarea,select{font-family:'Inter',sans-serif}
+
+/* SHELL */
+#shell{display:grid;grid-template-areas:"tb tb""sb main";grid-template-columns:var(--sbw) 1fr;grid-template-rows:var(--tbh) 1fr;height:100vh;overflow:hidden;background:var(--bg);color:var(--tx)}
+
+/* TOP BAR */
+#topbar{grid-area:tb;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;z-index:100;box-shadow:var(--sh)}
+.tb-brand{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:var(--tx);letter-spacing:-.5px;width:var(--sbw);border-right:1px solid var(--border);height:100%;padding-right:20px;flex-shrink:0}
+.tb-brand span{color:var(--pri)}
+.tb-logo-badge{background:var(--pri);color:#fff;font-family:var(--mono);font-size:7px;font-weight:700;padding:2px 5px;border-radius:3px;letter-spacing:1px}
+.tb-freya-bar{flex:1;display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px 14px;cursor:pointer;transition:all .15s}
+.tb-freya-bar:hover{border-color:var(--acc)}
+.tb-fa{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--acc));display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;box-shadow:0 0 8px rgba(16,185,129,.3)}
+.tb-fstatus{font-size:11px;color:var(--tx2);flex:1}
+.tb-fstatus strong{color:var(--pri);font-weight:600}
+.tb-fdot{width:6px;height:6px;border-radius:50%;background:var(--acc);box-shadow:0 0 4px var(--acc);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.tb-controls{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.mode-toggle{display:flex;background:var(--card2);border:1px solid var(--border);border-radius:25px;padding:3px;gap:2px}
+.mode-btn{padding:4px 11px;border-radius:20px;font-size:10px;font-weight:700;border:none;background:transparent;color:var(--tx3);letter-spacing:.3px;transition:all .15s;white-space:nowrap}
+.mode-btn.on{background:var(--pri);color:#fff;box-shadow:0 2px 6px rgba(4,120,87,.3)}
+.tb-theme{width:34px;height:34px;border-radius:8px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all .15s}
+.tb-theme:hover{background:var(--card);border-color:var(--pri)}
+.tb-notif{width:34px;height:34px;border-radius:8px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative}
+.tb-ndot{position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--rd);border:2px solid var(--card)}
+.tb-usr{display:flex;align-items:center;gap:8px;padding:5px 10px;border-radius:8px;cursor:pointer;background:var(--card2);border:1px solid var(--border)}
+.tb-av{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#1a5c3a,var(--pri));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff}
+.tb-uinfo{line-height:1.2}
+.tb-un{font-size:11px;font-weight:600;color:var(--tx)}
+.tb-uo{font-size:9px;color:var(--tx3)}
+
+/* SIDEBAR */
+#sidebar{grid-area:sb;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sb-inner{flex:1;overflow-y:auto;padding:12px 8px}
+.sb-sec-label{font-family:var(--mono);font-size:8px;font-weight:700;color:var(--tx4);letter-spacing:2px;text-transform:uppercase;padding:10px 8px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:1px;color:var(--tx2);font-size:12px;font-weight:500}
+.nav-item:hover{background:var(--card2);color:var(--tx)}
+.nav-item.on{background:rgba(4,120,87,.08);color:var(--pri);font-weight:600}
+[data-theme="dark"] .nav-item.on{background:rgba(16,185,129,.1)}
+.nav-ic{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--rd);color:#fff;font-size:9px;font-weight:700;border-radius:8px;padding:1px 5px;min-width:16px;text-align:center}
+.nav-badge-g{background:var(--pri)}
+.nav-badge-a{background:var(--am)}
+.sb-footer{padding:10px;border-top:1px solid var(--border);flex-shrink:0}
+.sb-org{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;background:var(--card2);border:1px solid var(--border)}
+.sb-org-av{width:32px;height:32px;border-radius:7px;background:linear-gradient(135deg,var(--pri),var(--acc));display:flex;align-items:center;justify-content:center;font-size:14px}
+.sb-on{font-size:11px;font-weight:700;color:var(--tx)}
+.sb-ot{font-size:9px;color:var(--tx3)}
+
+/* MAIN */
+#content{grid-area:main;overflow:hidden;display:flex;flex-direction:column}
+.content-area{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
+.card-lg{border-radius:var(--rl);padding:20px}
+.card-hover{transition:all .2s;cursor:pointer}
+.card-hover:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+
+/* PAGE HEADER */
+.page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.page-title{font-size:22px;font-weight:800;color:var(--tx);letter-spacing:-.5px}
+.page-sub{font-size:12px;color:var(--tx2);margin-top:3px}
+.page-sub strong{color:var(--pri)}
+.page-acts{display:flex;gap:8px;flex-wrap:wrap}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;border:none;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-pri{background:var(--pri);color:#fff}
+.btn-pri:hover{background:var(--pri2)}
+.btn-sec{background:var(--card);border:1px solid var(--border);color:var(--tx2)}
+.btn-sec:hover{background:var(--card2);color:var(--tx);border-color:var(--border2)}
+.btn-acc{background:var(--acc);color:#fff}
+.btn-acc:hover{background:var(--acc2)}
+.btn-warn{background:var(--ambg);color:var(--am);border:1px solid var(--ambdr)}
+.btn-warn:hover{background:#fef3c7}
+.btn-danger{background:var(--rdbg);color:var(--rd);border:1px solid var(--rdbdr)}
+.btn-sm{padding:5px 10px;font-size:11px;border-radius:6px}
+.btn-icon{width:32px;height:32px;border-radius:7px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
+.btn-icon:hover{background:var(--pri);color:#fff;border-color:var(--pri)}
+
+/* GRIDS */
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+
+/* STAT CARDS */
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--acc)}
+.stat-ic{font-size:20px;margin-bottom:6px}
+.stat-val{font-size:26px;font-weight:800;color:var(--tx);letter-spacing:-.5px;line-height:1}
+.stat-label{font-size:11px;color:var(--tx2);margin-top:4px;font-weight:500}
+.stat-change{font-size:10px;font-weight:600;margin-top:4px;display:flex;align-items:center;gap:3px}
+.chg-up{color:var(--acc)}.chg-dn{color:var(--rd)}.chg-nt{color:var(--am)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.badge-g{background:rgba(4,120,87,.08);color:var(--pri);border:1px solid rgba(4,120,87,.2)}
+.badge-a{background:var(--ambg);color:var(--am);border:1px solid var(--ambdr)}
+.badge-r{background:var(--rdbg);color:var(--rd);border:1px solid var(--rdbdr)}
+.badge-b{background:var(--blbg);color:var(--bl);border:1px solid var(--blbdr)}
+.badge-p{background:var(--pubg);color:var(--pu)}
+.badge-dot::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor}
+[data-theme="dark"] .badge-g{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.25)}
+
+/* TAGS */
+.tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:var(--card2);border:1px solid var(--border);color:var(--tx2)}
+
+/* TABLES */
+.data-table{width:100%;border-collapse:collapse;font-size:12px}
+.data-table th{text-align:left;padding:9px 14px;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;border-bottom:2px solid var(--border);background:var(--card2)}
+.data-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--tx2)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--card2)}
+.data-table td:first-child{font-weight:600;color:var(--tx)}
+
+/* PROGRESS BARS */
+.prog-bar{height:6px;background:var(--card2);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:var(--acc);transition:width .5s}
+.prog-fill-am{background:var(--am)}
+.prog-fill-rd{background:var(--rd)}
+
+/* FREYA INSIGHT BOX */
+.freya-box{background:linear-gradient(135deg,rgba(4,120,87,.06),rgba(16,185,129,.04));border:1px solid rgba(4,120,87,.2);border-radius:10px;padding:14px;display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+[data-theme="dark"] .freya-box{background:rgba(16,185,129,.05);border-color:rgba(16,185,129,.2)}
+.freya-box-ic{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--acc));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;box-shadow:0 0 8px rgba(4,120,87,.3)}
+.freya-box-label{font-family:var(--mono);font-size:8px;font-weight:700;color:var(--pri);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.freya-box-text{font-size:12px;color:var(--tx2);line-height:1.6}
+.freya-box-text strong{color:var(--tx)}
+.freya-box-acts{margin-left:auto;display:flex;flex-direction:column;gap:5px;flex-shrink:0}
+
+/* ALERT BOXES */
+.alert{padding:10px 14px;border-radius:8px;font-size:11px;display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+.alert-r{background:var(--rdbg);border:1px solid var(--rdbdr);color:var(--rd)}
+.alert-a{background:var(--ambg);border:1px solid var(--ambdr);color:#92400e}
+.alert-g{background:rgba(4,120,87,.06);border:1px solid rgba(4,120,87,.2);color:var(--pri)}
+.alert-b{background:var(--blbg);border:1px solid var(--blbdr);color:var(--bl)}
+
+/* OUTPUT MODAL */
+#output-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#output-modal.open{display:flex}
+.output-box{background:var(--card);border-radius:var(--rl);width:90%;max-width:800px;max-height:90vh;display:flex;flex-direction:column;box-shadow:var(--sh2);overflow:hidden}
+.ob-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.ob-agent-label{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:1px}
+.ob-title{font-size:15px;font-weight:800;color:var(--tx);margin-top:2px}
+.ob-close{margin-left:auto;width:30px;height:30px;border-radius:6px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
+.ob-body{flex:1;overflow-y:auto;padding:20px}
+.ob-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap}
+/* Output stats row */
+.out-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.out-stat{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center}
+.out-stat-val{font-size:22px;font-weight:800;color:var(--pri);line-height:1}
+.out-stat-val.red{color:var(--rd)}.out-stat-val.am{color:var(--am)}
+.out-stat-lbl{font-size:10px;color:var(--tx2);margin-top:3px;font-weight:500}
+.out-stat-sub{font-size:9px;color:var(--tx3);margin-top:1px}
+/* Output finding box */
+.out-finding{background:rgba(4,120,87,.04);border:1.5px solid rgba(4,120,87,.15);border-radius:8px;padding:14px;margin-bottom:12px}
+[data-theme="dark"] .out-finding{background:rgba(16,185,129,.04);border-color:rgba(16,185,129,.15)}
+.out-finding-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:10px;color:var(--tx3)}
+.out-finding-header strong{font-weight:600}
+.out-quote{font-size:12px;color:var(--tx);font-style:italic;line-height:1.6}
+/* Output item rows */
+.out-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border-radius:7px;margin-bottom:6px;border:1px solid var(--border);background:var(--card2);font-size:11px;color:var(--tx2)}
+.out-item-ic{flex-shrink:0;font-size:13px}
+.out-item strong{color:var(--tx);display:block;margin-bottom:1px}
+
+/* DOCUMENT VIEW (Word-like) */
+.doc-view{background:#fff;border:1px solid var(--border);border-radius:8px;padding:32px;font-family:'Times New Roman',serif;color:#1a1a2e;line-height:1.7;font-size:12px}
+.doc-header{background:#047857;color:#fff;padding:20px 24px;border-radius:4px;margin-bottom:24px}
+.doc-org{font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-bottom:4px}
+.doc-title{font-size:18px;font-weight:700;margin-bottom:8px;line-height:1.2}
+.doc-meta{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:10px;opacity:.9}
+.doc-warning{background:#1e3a5f;color:#fff;padding:6px 24px;font-size:9px;font-family:'JetBrains Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;border-radius:3px}
+.doc-section{margin-bottom:16px}
+.doc-section h2{font-size:12px;font-weight:700;color:var(--pri);text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid var(--pri);padding-bottom:4px;margin-bottom:8px}
+.doc-section p{margin-bottom:8px;text-align:justify}
+.doc-section ol,.doc-section ul{padding-left:20px}
+.doc-section li{margin-bottom:4px}
+
+/* SPREADSHEET VIEW */
+.sheet-view{overflow-x:auto}
+.sheet{border-collapse:collapse;font-size:11px;min-width:100%}
+.sheet th{background:#047857;color:#fff;padding:7px 12px;text-align:center;font-weight:600;white-space:nowrap;border:1px solid rgba(255,255,255,.2)}
+.sheet td{padding:6px 12px;border:1px solid var(--border);white-space:nowrap}
+.sheet tr:nth-child(even) td{background:var(--card2)}
+.sheet tr:hover td{background:rgba(4,120,87,.04)}
+.sheet .total td{background:rgba(4,120,87,.08);font-weight:700}
+.sheet .highlight td{background:rgba(220,38,38,.06);color:var(--rd)}
+
+/* COMMUNICATIONS - SLACK LIKE */
+.comms-layout{display:grid;grid-template-columns:200px 1fr 220px;height:100%;overflow:hidden}
+.comms-channels{border-right:1px solid var(--border);overflow-y:auto;padding:12px 8px}
+.channel-sec{font-family:var(--mono);font-size:8px;font-weight:700;color:var(--tx4);letter-spacing:2px;text-transform:uppercase;padding:8px 8px 3px}
+.channel-item{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:12px;color:var(--tx2);transition:all .15s;margin-bottom:1px}
+.channel-item:hover{background:var(--card2);color:var(--tx)}
+.channel-item.on{background:rgba(4,120,87,.08);color:var(--pri);font-weight:600}
+.channel-unread{margin-left:auto;background:var(--rd);color:#fff;font-size:9px;font-weight:700;border-radius:8px;padding:1px 5px;min-width:16px;text-align:center}
+.comms-main{display:flex;flex-direction:column;overflow:hidden}
+.comms-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.comms-msgs{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.msg-group{display:flex;gap:10px}
+.msg-av{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.msg-body{flex:1}
+.msg-header{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.msg-name{font-size:12px;font-weight:700;color:var(--tx)}
+.msg-time{font-size:10px;color:var(--tx3)}
+.msg-ai-badge{font-family:var(--mono);font-size:7px;font-weight:700;background:rgba(4,120,87,.1);color:var(--pri);padding:1px 5px;border-radius:3px}
+.msg-text{font-size:12px;color:var(--tx2);line-height:1.6}
+.msg-attachment{margin-top:6px;border:1px solid var(--border);border-radius:7px;padding:8px 12px;display:flex;align-items:center;gap:8px;background:var(--card2);cursor:pointer}
+.msg-att-ic{font-size:18px}
+.msg-att-name{font-size:11px;font-weight:600;color:var(--tx)}
+.msg-att-size{font-size:10px;color:var(--tx3)}
+.msg-reactions{display:flex;gap:5px;margin-top:5px}
+.msg-reaction{font-size:11px;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:2px 7px;cursor:pointer}
+.comms-input{padding:10px 14px;border-top:1px solid var(--border);flex-shrink:0}
+.msg-input-area{border:1px solid var(--border2);border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px}
+.msg-input{flex:1;border:none;background:transparent;font-size:12px;color:var(--tx);outline:none}
+.msg-input::placeholder{color:var(--tx3)}
+.comms-members{border-left:1px solid var(--border);overflow-y:auto;padding:12px 8px}
+.member-item{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:6px;margin-bottom:2px}
+.member-av{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;position:relative}
+.member-online{position:absolute;bottom:-1px;right:-1px;width:7px;height:7px;border-radius:50%;background:var(--acc);border:1.5px solid var(--card)}
+.member-name{font-size:11px;color:var(--tx2)}
+.member-role{font-size:9px;color:var(--tx3)}
+
+/* PROJECTS - TRELLO LIKE */
+.board-layout{display:flex;gap:16px;height:100%;overflow-x:auto;padding-bottom:8px}
+.board-col{min-width:260px;max-width:260px;background:var(--card2);border-radius:10px;display:flex;flex-direction:column;max-height:100%}
+.board-col-header{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.board-col-title{font-size:12px;font-weight:700;color:var(--tx);display:flex;align-items:center;gap:6px}
+.board-col-count{background:var(--border2);color:var(--tx3);font-size:10px;font-weight:700;border-radius:10px;padding:1px 7px}
+.board-col-body{padding:0 8px 8px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:8px}
+.board-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;cursor:pointer;transition:all .15s}
+.board-card:hover{box-shadow:var(--sh2);border-color:var(--pri)}
+.bc-labels{display:flex;gap:4px;margin-bottom:7px;flex-wrap:wrap}
+.bc-label{height:4px;width:28px;border-radius:2px}
+.bc-title{font-size:12px;font-weight:600;color:var(--tx);margin-bottom:7px;line-height:1.4}
+.bc-desc{font-size:10px;color:var(--tx3);margin-bottom:8px;line-height:1.4}
+.bc-footer{display:flex;align-items:center;justify-content:space-between}
+.bc-assignees{display:flex;gap:-4px}
+.bc-assignee{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;border:2px solid var(--card)}
+.bc-due{font-size:9px;color:var(--tx3)}
+.bc-due.overdue{color:var(--rd);font-weight:600}
+.bc-meta{display:flex;align-items:center;gap:8px}
+.bc-meta span{font-size:9px;color:var(--tx3)}
+
+/* HR FEATURES */
+.attendance-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.att-day{padding:4px;text-align:center;border-radius:5px;font-size:10px;cursor:pointer;transition:all .15s}
+.att-day-hdr{font-family:var(--mono);font-size:8px;font-weight:700;color:var(--tx3);text-transform:uppercase;padding:4px;text-align:center}
+.att-present{background:rgba(4,120,87,.1);color:var(--pri)}
+.att-absent{background:var(--rdbg);color:var(--rd)}
+.att-leave{background:var(--ambg);color:var(--am)}
+.att-weekend{background:var(--card2);color:var(--tx4)}
+.att-today{ring:2px;box-shadow:0 0 0 2px var(--pri);font-weight:700}
+
+/* FINANCE */
+.ledger-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:12px}
+.ledger-row:last-child{border-bottom:none}
+.lr-date{font-family:var(--mono);font-size:10px;color:var(--tx3);width:80px;flex-shrink:0}
+.lr-desc{flex:1;color:var(--tx)}
+.lr-cat{margin-left:auto}
+.lr-amount{font-weight:700;text-align:right;min-width:80px}
+.lr-dr{color:var(--rd)}.lr-cr{color:var(--pri)}
+
+/* PROCUREMENT */
+.proc-stage{display:flex;align-items:center;gap:0;margin-bottom:20px;overflow-x:auto}
+.proc-step{display:flex;align-items:center}
+.proc-step-inner{padding:8px 16px;background:var(--card2);border:1px solid var(--border);font-size:11px;font-weight:600;color:var(--tx2);text-align:center;white-space:nowrap}
+.proc-step.done .proc-step-inner{background:rgba(4,120,87,.08);color:var(--pri);border-color:rgba(4,120,87,.2)}
+.proc-step.active .proc-step-inner{background:var(--pri);color:#fff;border-color:var(--pri)}
+.proc-step-arr{color:var(--border2);font-size:14px;flex-shrink:0}
+
+/* MICROCREDIT */
+.psych-chart{display:flex;justify-content:center;margin:16px 0}
+.spider-label{font-size:9px;color:var(--tx3);text-anchor:middle;dominant-baseline:middle}
+.credit-score-ring{width:120px;height:120px;border-radius:50%;border:8px solid var(--card2);border-top-color:var(--pri);border-right-color:var(--pri);border-bottom-color:var(--pri);display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative}
+.csr-val{font-size:24px;font-weight:800;color:var(--pri)}
+.csr-lbl{font-size:9px;color:var(--tx3)}
+
+/* TOAST */
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:2000;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;box-shadow:var(--sh2);display:flex;align-items:center;gap:10px;max-width:320px;font-size:12px;animation:slideInRight .3s ease;color:var(--tx)}
+.toast-g{border-left:3px solid var(--acc)}.toast-r{border-left:3px solid var(--rd)}.toast-a{border-left:3px solid var(--am)}
+@keyframes slideInRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.toast-ic{font-size:18px;flex-shrink:0}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px;gap:2px}
+.tab-item{padding:8px 14px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;border-radius:6px 6px 0 0}
+.tab-item:hover{color:var(--tx);background:var(--card2)}
+.tab-item.on{color:var(--pri);border-bottom-color:var(--pri)}
+
+/* MISC */
+.divider{height:1px;background:var(--border);margin:16px 0}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;text-align:center;color:var(--tx3)}
+.empty-state-ic{font-size:48px;margin-bottom:12px;opacity:.5}
+.empty-state-title{font-size:14px;font-weight:600;color:var(--tx2);margin-bottom:4px}
+.empty-state-desc{font-size:12px}
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;flex:1}
+.search-bar input{border:none;background:transparent;flex:1;font-size:12px;color:var(--tx);outline:none}
+.search-bar input::placeholder{color:var(--tx3)}
+.avatar{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.sd-g{background:var(--acc)}.sd-a{background:var(--am)}.sd-r{background:var(--rd)}.sd-gr{background:var(--tx4)}
+.lbl{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--tx3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+
+/* INTEGRATIONS */
+.int-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:8px;background:var(--card2);border:1px solid var(--border);margin-bottom:8px}
+.int-logo{width:36px;height:36px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.int-name{font-size:12px;font-weight:700;color:var(--tx)}
+.int-desc{font-size:10px;color:var(--tx3)}
+.int-toggle{margin-left:auto;width:36px;height:20px;border-radius:10px;cursor:pointer;position:relative;transition:background .2s}
+.int-toggle.on{background:var(--pri)}
+.int-toggle.off{background:var(--border2)}
+.int-toggle::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:2px;transition:left .2s}
+.int-toggle.on::after{left:18px}
+.int-toggle.off::after{left:2px}
+
+/* Responsive grid adjustments */
+@media(max-width:1200px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.grid-3{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div id="shell">
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="tb-brand">
+    <span>∧ntarious <span>AI</span></span>
+    <span class="tb-logo-badge">NGO</span>
+  </div>
+  <div class="tb-freya-bar" onclick="openFreya()">
+    <div class="tb-fa">🤖</div>
+    <div class="tb-fstatus" id="freya-status-text">
+      <strong>Freya</strong> is running M&amp;E Report Generator — Q3 World Bank draft 78% complete
+    </div>
+    <div class="tb-fdot"></div>
+  </div>
+  <div class="tb-controls">
+    <div class="mode-toggle">
+      <button class="mode-btn" onclick="setMode('manual',this)">Manual</button>
+      <button class="mode-btn on" onclick="setMode('semi',this)">Semi-Auto</button>
+      <button class="mode-btn" onclick="setMode('full',this)">Full Auto</button>
+    </div>
+    <div class="tb-theme" onclick="toggleTheme()" title="Toggle dark/light mode" id="theme-btn">🌙</div>
+    <div class="tb-notif" onclick="nav('notifications')"><span>🔔</span><div class="tb-ndot"></div></div>
+    <div class="tb-usr" onclick="nav('profile')">
+      <div class="tb-av">AD</div>
+      <div class="tb-uinfo"><div class="tb-un">Amara Diallo</div><div class="tb-uo">Programme Director</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-inner">
+    <div class="sb-sec-label">Overview</div>
+    <div class="nav-item on" id="ni-dashboard" onclick="nav('dashboard')"><span class="nav-ic">🏠</span>Dashboard</div>
+    
+    <div class="sb-sec-label">Programmes</div>
+    <div class="nav-item" id="ni-programmes" onclick="nav('programmes')"><span class="nav-ic">📋</span>Programmes</div>
+    <div class="nav-item" id="ni-field" onclick="nav('field')"><span class="nav-ic">🗺</span>Field Operations</div>
+    <div class="nav-item" id="ni-impact" onclick="nav('impact')"><span class="nav-ic">📊</span>Impact &amp; M&E</div>
+    <div class="nav-item" id="ni-reports" onclick="nav('reports')"><span class="nav-ic">📄</span>Reports</div>
+    
+    <div class="sb-sec-label">Resources</div>
+    <div class="nav-item" id="ni-donors" onclick="nav('donors')"><span class="nav-ic">🤝</span>Donors &amp; Grants</div>
+    <div class="nav-item" id="ni-finance" onclick="nav('finance')"><span class="nav-ic">💰</span>Finance <span class="nav-badge nav-badge-a" style="font-size:8px">2</span></div>
+    <div class="nav-item" id="ni-hr" onclick="nav('hr')"><span class="nav-ic">👥</span>HR &amp; People</div>
+    <div class="nav-item" id="ni-logistics" onclick="nav('logistics')"><span class="nav-ic">🚚</span>Procurement</div>
+    
+    <div class="sb-sec-label">Credit</div>
+    <div class="nav-item" id="ni-microcredit" onclick="nav('microcredit')"><span class="nav-ic">🏦</span>Credit Programme</div>
+    
+    <div class="sb-sec-label">Collaboration</div>
+    <div class="nav-item" id="ni-comms" onclick="nav('comms')"><span class="nav-ic">💬</span>Communications <span class="nav-badge" style="font-size:8px">5</span></div>
+    <div class="nav-item" id="ni-projects" onclick="nav('projects')"><span class="nav-ic">📌</span>Projects</div>
+    
+    <div class="sb-sec-label">Intelligence</div>
+    <div class="nav-item" id="ni-agents" onclick="nav('agents')"><span class="nav-ic">🤖</span>AI Agents</div>
+    <div class="nav-item" id="ni-knowledge" onclick="nav('knowledge')"><span class="nav-ic">🔍</span>Knowledge Base</div>
+    
+    <div class="sb-sec-label">Account</div>
+    <div class="nav-item" id="ni-settings" onclick="nav('settings')"><span class="nav-ic">⚙</span>Settings</div>
+    <div class="nav-item" id="ni-profile" onclick="nav('profile')"><span class="nav-ic">👤</span>My Profile</div>
+  </div>
+  <div class="sb-footer">
+    <div class="sb-org">
+      <div class="sb-org-av">🌍</div>
+      <div><div class="sb-on">HopeReach Foundation</div><div class="sb-ot">NGO · IMPACT Plan</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="content">
+  <div class="content-area" id="main-content"></div>
+</div>
+
+</div><!-- /shell -->
+
+<!-- OUTPUT MODAL -->
+<div id="output-modal">
+  <div class="output-box">
+    <div class="ob-header">
+      <div>
+        <div class="ob-agent-label" id="ob-agent"></div>
+        <div class="ob-title" id="ob-title"></div>
+      </div>
+      <div class="ob-close" onclick="closeOutput()">✕</div>
+    </div>
+    <div class="ob-body" id="ob-body"></div>
+    <div class="ob-footer" id="ob-footer"></div>
+  </div>
+</div>
+
+<!-- FREYA CHAT PANEL -->
+<div id="freya-panel" style="position:fixed;top:0;right:0;bottom:0;width:400px;background:var(--card);border-left:1px solid var(--border);z-index:500;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s;box-shadow:var(--sh2)">
+  <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0">
+    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--acc));display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 0 10px rgba(4,120,87,.3)">🤖</div>
+    <div><div style="font-size:14px;font-weight:800;color:var(--tx)">Freya</div><div style="font-size:10px;color:var(--pri);display:flex;align-items:center;gap:4px"><span class="status-dot sd-g"></span> AI Programme Intelligence · Online</div></div>
+    <button class="btn btn-sm btn-sec" style="margin-left:auto" onclick="closeFreya()">✕ Close</button>
+  </div>
+  <div style="display:flex;border-bottom:1px solid var(--border);padding:8px;gap:4px;flex-shrink:0">
+    <button class="btn btn-sm btn-pri" onclick="fpQuick('Review my queue')">📋 My Queue</button>
+    <button class="btn btn-sm btn-sec" onclick="fpQuick('What is Freya running now')">⚡ Status</button>
+    <button class="btn btn-sm btn-sec" onclick="fpQuick('Generate morning brief')">📊 Brief</button>
+  </div>
+  <div id="fp-msgs" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px"></div>
+  <div style="padding:10px;border-top:1px solid var(--border);flex-shrink:0">
+    <div style="display:flex;gap:8px">
+      <input type="text" id="fp-input" placeholder="Ask Freya anything…" style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--tx);outline:none" onkeydown="if(event.key==='Enter')fpSend()">
+      <button class="btn btn-pri btn-sm" onclick="fpSend()">Send</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let currentScreen = 'dashboard';
+let currentMode = 'semi';
+let currentTheme = 'light';
+let currentChannel = 'general';
+let fp_open = false;
+let freya_replies_idx = 0;
+
+const FREYA_REPLIES = [
+  "I'm currently running <strong>6 concurrent tasks</strong> across your programmes. The World Bank Q3 report draft is 78% complete — I'll have it ready for your review in about 8 minutes. Region 3 still needs your attention on the corrective memo.",
+  "Based on my analysis of this week's field submissions, <strong>Region 3 (Taiz) remains the primary concern</strong>. Dropout rate is 31% — I've prepared a field officer reallocation plan that would recover approximately 340 beneficiaries before Q3 close. Want me to put that in your review queue?",
+  "Your next critical deadline is the <strong>World Bank Q3 report in 14 days</strong>. I have the DLI tables auto-populated from live data. I still need your input on two narrative sections (sections 4.2 and 5.1) before I can finalise it.",
+  "USAID IND-07 (Nutrition Outcomes) is currently at 72% against the 85% target. I've drafted a corrective action memo for your approval. If you approve it today, there's still time to recover the indicator by quarterly close.",
+  "I've identified a <strong>procurement efficiency opportunity</strong>: 3 of your active suppliers have submitted quotes for similar vehicle maintenance items. I can run a comparative analysis and recommend consolidating to the lowest-cost supplier — estimated saving of $4,200.",
+  "Your payroll for <strong>47 staff members</strong> is due in 3 days. I've cross-checked attendance records and leave applications — there are 2 anomalies I need you to review before I generate the payment files.",
+  "Looking at your microfinance portfolio, PAR30 has improved from 6.2% to 5.8% this month. The 3 at-risk borrowers from Khulna district have completed their repayment restructuring. I recommend scheduling a follow-up field visit.",
+  "I've drafted this month's <strong>donor newsletter</strong> for HopeReach stakeholders. It covers the Yemen programme achievements, East Africa food security update, and the new South Sudan education initiative. Want to review it?"
+];
+
+// ═══════════════════════════════════════════════════════
+// THEME + MODE
+// ═══════════════════════════════════════════════════════
+function toggleTheme(){
+  currentTheme = currentTheme==='light'?'dark':'light';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  document.getElementById('theme-btn').textContent = currentTheme==='light'?'🌙':'☀️';
+  toast('Switched to '+(currentTheme==='dark'?'Dark':'Light')+' Mode','ℹ️','a');
+}
+function setMode(m,btn){
+  currentMode=m;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const labels={'full':'Full Auto — Freya executes all tasks automatically','semi':'Semi-Auto — Freya proposes, you approve before execution','manual':'Manual Mode — You control everything, Freya assists on request'};
+  toast(labels[m],'⚡','g');
+  updateFreyaStatus();
+}
+function updateFreyaStatus(){
+  const s=document.getElementById('freya-status-text');
+  if(!s) return;
+  if(currentMode==='full') s.innerHTML='<strong>Freya</strong> is running in Full Auto — 6 tasks executing autonomously';
+  else if(currentMode==='semi') s.innerHTML='<strong>Freya</strong> is running M&E Report Generator — Q3 World Bank draft 78% complete';
+  else s.innerHTML='<strong>Freya</strong> is on standby — Manual Mode active. Click to ask for help.';
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function nav(id){
+  currentScreen=id;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
+  const ni=document.getElementById('ni-'+id);
+  if(ni) ni.classList.add('on');
+  renderScreen(id);
+}
+
+// ═══════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════
+function toast(msg, ic, type='g'){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className=`toast toast-${type}`;
+  t.innerHTML=`<span class="toast-ic">${ic}</span><div>${msg}</div>`;
+  c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(20px)';t.style.transition='all .3s';setTimeout(()=>t.remove(),300)},3500);
+}
+
+// ═══════════════════════════════════════════════════════
+// OUTPUT MODAL
+// ═══════════════════════════════════════════════════════
+function showOutput(type){
+  const d=OUTPUT_DATA[type];
+  if(!d){toast('Loading output...','📄','g');return;}
+  document.getElementById('ob-agent').textContent=d.agent;
+  document.getElementById('ob-title').textContent=d.title;
+  document.getElementById('ob-body').innerHTML=d.body;
+  document.getElementById('ob-footer').innerHTML=d.footer||`
+    <button class="btn btn-pri btn-sm" onclick="showFullDoc('${type}')">📄 Full Report</button>
+    <button class="btn btn-sec btn-sm" onclick="toast('Opening sources...','🔗','g')">🔗 Access Sources</button>
+    <button class="btn btn-sec btn-sm" onclick="showDownload()">⬇ Download</button>
+    <button class="btn btn-sec btn-sm" onclick="toast('Sending via WhatsApp...','📱','g')">📱 WhatsApp</button>
+    <button class="btn btn-sec btn-sm" onclick="toast('Email drafted and queued.','✉','g')">✉ Email</button>`;
+  document.getElementById('output-modal').classList.add('open');
+}
+function closeOutput(){document.getElementById('output-modal').classList.remove('open')}
+function showFullDoc(type){
+  const d=OUTPUT_DATA[type];
+  if(d&&d.fullDoc){document.getElementById('ob-body').innerHTML=d.fullDoc;}
+  else toast('Full document generated — opening in new view','📄','g');
+}
+function showDownload(){
+  document.getElementById('ob-footer').innerHTML=`
+    <div style="width:100%"><div class="lbl" style="margin-bottom:8px">Choose Format</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-sec btn-sm" onclick="toast('Downloading as Word (.docx)...','📝','g');closeOutput()">📝 Word (.docx)</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Generating PDF...','📕','g');closeOutput()">📕 PDF</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Exporting Excel (.xlsx)...','📊','g');closeOutput()">📊 Excel (.xlsx)</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Exporting PNG chart...','🖼','g');closeOutput()">🖼 PNG Chart</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Generating CSV...','📋','g');closeOutput()">📋 CSV</button>
+    </div></div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// FREYA CHAT
+// ═══════════════════════════════════════════════════════
+function openFreya(){
+  fp_open=true;
+  document.getElementById('freya-panel').style.transform='translateX(0)';
+  if(document.getElementById('fp-msgs').children.length===0) addFreyaMsg('system',"Ready. How can I help you today? I'm managing <strong>6 active tasks</strong> across your programmes.");
+}
+function closeFreya(){
+  fp_open=false;
+  document.getElementById('freya-panel').style.transform='translateX(100%)';
+}
+function addFreyaMsg(role, text){
+  const c=document.getElementById('fp-msgs');
+  const div=document.createElement('div');
+  if(role==='system'){
+    div.innerHTML=`<div style="margin-bottom:4px"><span style="font-family:var(--mono);font-size:8px;font-weight:700;color:var(--pri)">FREYA</span></div><div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--tx2);line-height:1.6">${text}</div>`;
+  } else {
+    div.innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:4px"><span style="font-family:var(--mono);font-size:8px;font-weight:700;color:var(--tx3)">YOU</span></div><div style="background:rgba(4,120,87,.08);border:1px solid rgba(4,120,87,.2);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--tx);line-height:1.6;text-align:right">${text}</div>`;
+  }
+  c.appendChild(div);
+  c.scrollTop=c.scrollHeight;
+}
+function fpSend(){
+  const inp=document.getElementById('fp-input');
+  const msg=inp.value.trim();
+  if(!msg) return;
+  addFreyaMsg('user',msg);
+  inp.value='';
+  setTimeout(()=>addFreyaMsg('system',FREYA_REPLIES[freya_replies_idx++ % FREYA_REPLIES.length]),700);
+}
+function fpQuick(q){addFreyaMsg('user',q);setTimeout(()=>addFreyaMsg('system',FREYA_REPLIES[freya_replies_idx++ % FREYA_REPLIES.length]),600);}
+
+// ═══════════════════════════════════════════════════════
+// OUTPUT DATA LIBRARY
+// ═══════════════════════════════════════════════════════
+const OUTPUT_DATA = {
+  'field-synthesis': {
+    agent:'FIELD DATA ANALYST · GROUND SYNTHESIS',
+    title:'Field Data Synthesis — PO-KHL-04 & KHL-09',
+    body:`
+      <div class="out-stats">
+        <div class="out-stat"><div class="out-stat-val">8</div><div class="out-stat-lbl">Field reports reviewed</div><div class="out-stat-sub">PO-KHL-04 & KHL-09</div></div>
+        <div class="out-stat"><div class="out-stat-val am">3</div><div class="out-stat-lbl">Flood-affected unions</div><div class="out-stat-sub">Spatial overlap confirmed</div></div>
+        <div class="out-stat"><div class="out-stat-val red">-340</div><div class="out-stat-lbl">Borrowers income-shocked</div><div class="out-stat-sub">Estimated (cohort proxy)</div></div>
+      </div>
+      <div class="out-finding">
+        <div class="out-finding-header">ℹ️ <strong>Field Officer Log · PO-KHL-04 · March 2026</strong></div>
+        <div class="out-quote">"Significant flooding in Dumuria, Batiaghata, and Dacope sub-districts. Approximately 340 borrowers experienced temporary income disruption due to livestock and paddy crop losses. Group meetings suspended for 3 weeks."</div>
+      </div>
+      <div class="out-item"><span class="out-item-ic">ℹ️</span><div><strong>KHL-04 root cause:</strong> Environmental (flooding)</div></div>
+      <div class="out-item"><span class="out-item-ic" style="color:var(--pri)">✅</span><div><strong>Recommended action:</strong> Temporary repayment grace window (8 weeks)</div></div>
+      <div class="out-item"><span class="out-item-ic">⚠️</span><div><strong>KHL-09 root cause:</strong> Mixed signals — pending compliance audit</div></div>
+      <div class="out-item"><span class="out-item-ic" style="color:var(--pri)">✅</span><div><strong>Management failure?</strong> Not indicated for KHL-04</div></div>
+    `,
+    fullDoc:`<div class="doc-view">
+      <div class="doc-header"><div class="doc-org">HopeReach Foundation · Programme Intelligence System</div><div class="doc-title">Field Data Synthesis — PO-KHL-04 & KHL-09</div><div class="doc-meta"><span>Prepared by: <b>Field Data Analyst</b></span><span>Role: Ground synthesis</span><span>Date: 12 May 2026</span><span>Document Ref: HR-KHL-Q1-2026/FLD/004</span></div></div>
+      <div class="doc-warning">INTERNAL — HR USE ONLY · ANTARIOUS AI · PROGRAMME INTELLIGENCE SYSTEM</div>
+      <div class="doc-section"><h2>1. Executive Summary</h2><p>This report presents findings of the field intelligence investigation conducted for Khulna Division Q1 2026, focusing on two statistically outlying partner organisations: PO-KHL-04 (Narikel MFI) and PO-KHL-09 (Shapla Credit). Field evidence confirms that the repayment rate declines are primarily attributable to a flooding event affecting Dacope and Koyra sub-districts. Approximately 1,240 borrower households across both POs reported full or partial destruction of productive assets.</p></div>
+      <div class="doc-section"><h2>2. Background and Context</h2><p>Following the statistical outlier identification in the portfolio health stage, protocol requires a field intelligence investigation before any adverse performance determination. Both POs had PAR30 rates exceeding 12% — well above the 5% programme threshold. Initial portfolio data suggested possible management failure, making ground-truth verification essential.</p></div>
+      <div class="doc-section"><h2>3. Key Findings</h2><ol><li>Flooding confirmed in 3 of 5 unions served by KHL-04 (December 2025)</li><li>~340 borrowers in KHL-04 income-shocked; crop and livestock losses documented</li><li>KHL-09 shows mixed signals — 2 of 4 branches affected by flooding; 2 branches require compliance review</li><li>No evidence of management failure in KHL-04; inconclusive for KHL-09</li></ol></div>
+      <div class="doc-section"><h2>4. Recommendations</h2><ul><li>Grant 8-week repayment grace window to all KHL-04 borrowers in affected unions</li><li>Initiate compliance audit for KHL-09 branches 3 and 4</li><li>Activate humanitarian root-cause classification for KHL-04</li><li>Schedule follow-up field visit in Week 12</li></ul></div>
+    </div>`
+  },
+  'loan-portfolio': {
+    agent:'LOAN & PORTFOLIO MONITOR · FINANCE INTELLIGENCE',
+    title:'Loan Portfolio Health Report — Q1 2026',
+    body:`
+      <div class="out-stats">
+        <div class="out-stat"><div class="out-stat-val">$2.84M</div><div class="out-stat-lbl">Active Portfolio</div><div class="out-stat-sub">1,240 borrowers</div></div>
+        <div class="out-stat"><div class="out-stat-val am">5.8%</div><div class="out-stat-lbl">PAR30</div><div class="out-stat-sub">Target: &lt;5%</div></div>
+        <div class="out-stat"><div class="out-stat-val">2.1%</div><div class="out-stat-lbl">PAR90</div><div class="out-stat-sub">Within tolerance</div></div>
+      </div>
+      <div class="sheet-view">
+        <table class="sheet">
+          <tr><th>Partner Org</th><th>Active Loans</th><th>Portfolio ($)</th><th>PAR30</th><th>PAR90</th><th>Status</th></tr>
+          <tr><td>Narikel MFI (KHL-04)</td><td>284</td><td>$420k</td><td style="color:var(--rd)">12.4%</td><td>4.2%</td><td><span class="badge badge-r">⚠ At Risk</span></td></tr>
+          <tr><td>Shapla Credit (KHL-09)</td><td>196</td><td>$310k</td><td style="color:var(--rd)">9.8%</td><td>3.1%</td><td><span class="badge badge-a">Monitor</span></td></tr>
+          <tr><td>Delta MFI (KHL-02)</td><td>312</td><td>$480k</td><td style="color:var(--pri)">2.1%</td><td>0.8%</td><td><span class="badge badge-g">Healthy</span></td></tr>
+          <tr><td>Sundarban Credit (KHL-07)</td><td>448</td><td>$680k</td><td style="color:var(--pri)">3.4%</td><td>1.2%</td><td><span class="badge badge-g">Healthy</span></td></tr>
+          <tr class="total"><td>TOTAL</td><td>1,240</td><td>$1.89M</td><td>5.8%</td><td>2.1%</td><td></td></tr>
+        </table>
+      </div>
+    `
+  },
+  'psychometric': {
+    agent:'REPAYMENT BEHAVIOUR INDICATOR · CREDIT INTELLIGENCE',
+    title:'Psychometric Credit Assessment — Applicant #2891',
+    body:`
+      <div class="out-stats">
+        <div class="out-stat"><div class="out-stat-val">79/100</div><div class="out-stat-lbl">Assessment Score</div><div class="out-stat-sub">Recommended for review</div></div>
+        <div class="out-stat"><div class="out-stat-val">14 mo</div><div class="out-stat-lbl">Recommended Tenure</div><div class="out-stat-sub">Officer decision pending</div></div>
+        <div class="out-stat"><div class="out-stat-val am">$800</div><div class="out-stat-lbl">Suggested Loan Amount</div><div class="out-stat-sub">Staged disbursement</div></div>
+      </div>
+      <div class="out-finding">
+        <div class="out-finding-header">🧠 <strong>Freya Analysis</strong></div>
+        <div class="out-quote">Risk appetite and financial discipline profile suggest staged disbursement with close monitoring. Entrepreneurial intelligence score is strong (84/100) but financial behaviour score is moderate (67/100) — likely first-time borrower. Social capital is high, indicating strong community ties that correlate with repayment.</div>
+      </div>
+      <div style="margin-bottom:12px"><div class="lbl">7-DIMENSION BREAKDOWN</div>
+        ${[['Entrepreneurial Intelligence','84'],['Financial Behaviour','67'],['Business Viability','76'],['Risk Appetite','71'],['Social Capital','88'],['Resilience','79'],['Motivation','82']].map(([l,v])=>`
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:11px">
+          <div style="width:160px;color:var(--tx2)">${l}</div>
+          <div class="prog-bar" style="flex:1"><div class="prog-fill" style="width:${v}%"></div></div>
+          <div style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--pri);width:30px;text-align:right">${v}</div>
+        </div>`).join('')}
+      </div>
+      <div class="alert alert-g">✅ <div><strong>Recommendation:</strong> Approve with staged disbursement — $400 at signing, $400 at Month 6 conditional on satisfactory repayment record.</div></div>
+    `
+  },
+  'salary-report': {
+    agent:'HR PAYROLL AGENT · MONTHLY DISBURSEMENT',
+    title:'April 2026 Salary Processing Report',
+    body:`
+      <div class="out-stats">
+        <div class="out-stat"><div class="out-stat-val">47</div><div class="out-stat-lbl">Staff Members</div><div class="out-stat-sub">All departments</div></div>
+        <div class="out-stat"><div class="out-stat-val">$84,200</div><div class="out-stat-lbl">Total Net Payroll</div><div class="out-stat-sub">After deductions</div></div>
+        <div class="out-stat"><div class="out-stat-val am">2</div><div class="out-stat-lbl">Anomalies Flagged</div><div class="out-stat-sub">Require review</div></div>
+      </div>
+      <div class="sheet-view"><table class="sheet">
+        <tr><th>Employee</th><th>Department</th><th>Gross</th><th>Tax/Deductions</th><th>Net Pay</th><th>Status</th></tr>
+        <tr><td>Amara Diallo</td><td>Management</td><td>$3,200</td><td>$480</td><td>$2,720</td><td><span class="badge badge-g">Ready</span></td></tr>
+        <tr><td>Ibrahim Hassan</td><td>Field Ops</td><td>$1,800</td><td>$270</td><td>$1,530</td><td><span class="badge badge-g">Ready</span></td></tr>
+        <tr><td>Fatima Al-Said</td><td>Finance</td><td>$2,100</td><td>$315</td><td>$1,785</td><td><span class="badge badge-g">Ready</span></td></tr>
+        <tr><td>John Okoro</td><td>M&E</td><td>$1,950</td><td>$293</td><td>$1,657</td><td><span class="badge badge-a">⚠ Leave Query</span></td></tr>
+        <tr><td>Maria Santos</td><td>Logistics</td><td>$1,600</td><td>$240</td><td>$1,360</td><td><span class="badge badge-a">⚠ OT Pending</span></td></tr>
+        <tr class="total"><td colspan="4">TOTAL (47 staff)</td><td>$84,200</td><td></td></tr>
+      </table></div>
+    `
+  },
+  'procurement-analysis': {
+    agent:'LOGISTICS & PROCUREMENT AGENT · VENDOR ANALYSIS',
+    title:'Vehicle Maintenance — Vendor Comparative Analysis',
+    body:`
+      <div class="out-stats">
+        <div class="out-stat"><div class="out-stat-val">4</div><div class="out-stat-lbl">Quotes Received</div><div class="out-stat-sub">Of 6 invited</div></div>
+        <div class="out-stat"><div class="out-stat-val">$12,400</div><div class="out-stat-lbl">Lowest Quote</div><div class="out-stat-sub">Rahim Auto Services</div></div>
+        <div class="out-stat"><div class="out-stat-val am">$4,200</div><div class="out-stat-lbl">Potential Saving</div><div class="out-stat-sub">vs current supplier</div></div>
+      </div>
+      <div class="sheet-view"><table class="sheet">
+        <tr><th>Vendor</th><th>Quote</th><th>Lead Time</th><th>Warranty</th><th>Past Rating</th><th>Rec.</th></tr>
+        <tr><td>Rahim Auto Services</td><td style="color:var(--pri);font-weight:700">$12,400</td><td>3 days</td><td>6 months</td><td>⭐⭐⭐⭐ 4.2</td><td><span class="badge badge-g">✓ Recommended</span></td></tr>
+        <tr><td>Dhaka Vehicle Works</td><td>$14,800</td><td>5 days</td><td>3 months</td><td>⭐⭐⭐ 3.8</td><td><span class="badge">Consider</span></td></tr>
+        <tr><td>Current Supplier (Apex)</td><td>$16,600</td><td>2 days</td><td>12 months</td><td>⭐⭐⭐⭐ 4.5</td><td><span class="badge badge-a">Higher Cost</span></td></tr>
+        <tr><td>Motijheel Motors</td><td>$13,200</td><td>7 days</td><td>4 months</td><td>⭐⭐⭐ 3.5</td><td><span class="badge">Possible</span></td></tr>
+      </table></div>
+      <div class="alert alert-g">✅ <strong>Freya Recommendation:</strong> Award to Rahim Auto Services. Quality acceptable, cost saving significant, and delivery time meets programme requirements.</div>
+    `
+  },
+  'budget-report': {
+    agent:'FINANCE INTELLIGENCE AGENT · BUDGET ANALYSIS',
+    title:'Q1 2026 Budget Utilisation Report',
+    body:`
+      <div class="out-stats">
+        <div class="out-stat"><div class="out-stat-val">$2.33M</div><div class="out-stat-lbl">Total Budget</div><div class="out-stat-sub">FY 2026</div></div>
+        <div class="out-stat"><div class="out-stat-val">78%</div><div class="out-stat-lbl">Utilised (Q1-Q2)</div><div class="out-stat-sub">On track</div></div>
+        <div class="out-stat"><div class="out-stat-val am">$84k</div><div class="out-stat-lbl">Variance</div><div class="out-stat-sub">Within 5% tolerance</div></div>
+      </div>
+      <div class="sheet-view"><table class="sheet">
+        <tr><th>Cost Centre</th><th>Budget</th><th>Actual</th><th>Variance</th><th>% Used</th></tr>
+        <tr><td>Programme Operations</td><td>$840,000</td><td>$692,000</td><td style="color:var(--pri)">+$148k under</td><td>82%</td></tr>
+        <tr><td>Field Staff</td><td>$420,000</td><td>$398,000</td><td style="color:var(--pri)">+$22k under</td><td>95%</td></tr>
+        <tr><td>HQ Operations</td><td>$180,000</td><td>$188,000</td><td style="color:var(--rd)">-$8k over</td><td>104%</td></tr>
+        <tr><td>Logistics/Transport</td><td>$240,000</td><td>$212,000</td><td style="color:var(--pri)">+$28k under</td><td>88%</td></tr>
+        <tr><td>M&E Activities</td><td>$96,000</td><td>$84,000</td><td style="color:var(--pri)">+$12k under</td><td>88%</td></tr>
+        <tr class="total"><td>TOTAL</td><td>$1,776,000</td><td>$1,574,000</td><td style="color:var(--pri)">+$202k under</td><td>89%</td></tr>
+      </table></div>
+    `
+  },
+  'attendance-report': {
+    agent:'HR MANAGEMENT AGENT · ATTENDANCE TRACKING',
+    title:'April 2026 Attendance Summary Report',
+    body:`
+      <div class="out-stats">
+        <div class="out-stat"><div class="out-stat-val">96.2%</div><div class="out-stat-lbl">Overall Attendance</div><div class="out-stat-sub">47 staff, 22 working days</div></div>
+        <div class="out-stat"><div class="out-stat-val am">4</div><div class="out-stat-lbl">Late Arrivals</div><div class="out-stat-sub">This month</div></div>
+        <div class="out-stat"><div class="out-stat-val">12</div><div class="out-stat-lbl">Leave Days Approved</div><div class="out-stat-sub">Across all staff</div></div>
+      </div>
+      <div class="sheet-view"><table class="sheet">
+        <tr><th>Department</th><th>Staff</th><th>Present Days</th><th>Absent Days</th><th>Leave Days</th><th>% Attendance</th></tr>
+        <tr><td>Management</td><td>5</td><td>108</td><td>1</td><td>1</td><td>98%</td></tr>
+        <tr><td>Field Operations</td><td>18</td><td>388</td><td>4</td><td>4</td><td>97%</td></tr>
+        <tr><td>Finance</td><td>6</td><td>128</td><td>2</td><td>2</td><td>97%</td></tr>
+        <tr><td>M&E</td><td>8</td><td>170</td><td>4</td><td>2</td><td>95%</td></tr>
+        <tr><td>HR</td><td>4</td><td>86</td><td>0</td><td>2</td><td>100%</td></tr>
+        <tr><td>Logistics</td><td>6</td><td>128</td><td>2</td><td>1</td><td>97%</td></tr>
+        <tr class="total"><td>TOTAL</td><td>47</td><td>1,008</td><td>13</td><td>12</td><td>96.2%</td></tr>
+      </table></div>
+    `
+  },
+  'donor-report': {
+    agent:'M&E REPORT GENERATOR · WORLD BANK PDO',
+    title:'Q3 Programme Performance Report — World Bank',
+    body:`
+      <div class="out-stats">
+        <div class="out-stat"><div class="out-stat-val">18,420</div><div class="out-stat-lbl">Beneficiaries Reached</div><div class="out-stat-sub">94% of Q3 DLI target</div></div>
+        <div class="out-stat"><div class="out-stat-val">11/12</div><div class="out-stat-lbl">DLI Indicators Met</div><div class="out-stat-sub">DLI-07 at 74%</div></div>
+        <div class="out-stat"><div class="out-stat-val am">14 days</div><div class="out-stat-lbl">To Submission Deadline</div><div class="out-stat-sub">Draft 78% complete</div></div>
+      </div>
+      <div class="out-finding">
+        <div class="out-finding-header">📊 <strong>Freya Draft Narrative (Section 3.1)</strong></div>
+        <div class="out-quote">"This quarter, our mobile health clinics reached 18,420 beneficiaries across 6 conflict-affected zones, representing 94% of our Q3 DLI target. Region 2 and Region 5 exceeded targets by 12% and 8% respectively, while Region 3 has been flagged for corrective intervention pending field officer reallocation..."</div>
+      </div>
+      <div class="sheet-view"><table class="sheet">
+        <tr><th>DLI Indicator</th><th>Target</th><th>Actual</th><th>% Achievement</th><th>Status</th></tr>
+        <tr><td>DLI-01: Beneficiary Reach</td><td>19,600</td><td>18,420</td><td>94%</td><td><span class="badge badge-g">Met</span></td></tr>
+        <tr><td>DLI-04: Health Outcomes</td><td>80%</td><td>88%</td><td>110%</td><td><span class="badge badge-g">Exceeded</span></td></tr>
+        <tr><td>DLI-07: Gender Parity</td><td>50%</td><td>52.3%</td><td>105%</td><td><span class="badge badge-g">Met</span></td></tr>
+        <tr><td>DLI-09: Partner Compliance</td><td>90%</td><td>74%</td><td>82%</td><td><span class="badge badge-a">Partial</span></td></tr>
+      </table></div>
+    `
+  },
+  'compliance-audit': {
+    agent:'COMPLIANCE & RISK SENTINEL · AUDIT PREPARATION',
+    title:'USAID Annual Compliance Evidence Portfolio',
+    body:`
+      <div class="out-stats">
+        <div class="out-stat"><div class="out-stat-val">86</div><div class="out-stat-lbl">Evidence Items</div><div class="out-stat-sub">Indexed and tagged</div></div>
+        <div class="out-stat"><div class="out-stat-val">92%</div><div class="out-stat-lbl">Compliance Score</div><div class="out-stat-sub">1 gap identified</div></div>
+        <div class="out-stat"><div class="out-stat-val am">28 days</div><div class="out-stat-lbl">To Review Date</div><div class="out-stat-sub">Pack ready for review</div></div>
+      </div>
+      ${[['✅','ESS Documentation','42 items indexed, all current'],['✅','Grievance Register','18 cases logged, all resolved, documentation complete'],['✅','Safeguarding Records','Training completion: 97% staff certified'],['⚠️','IND-07 Nutrition Outcomes','Currently at 72% vs 85% target — corrective memo drafted'],['✅','Financial Utilisation','71% disbursed, within approved budget tolerance'],['✅','Beneficiary Data Protection','GDPR Article 22 compliance confirmed']].map(([ic,t,d])=>`<div class="out-item"><span class="out-item-ic">${ic}</span><div><strong>${t}</strong>${d}</div></div>`).join('')}
+    `
+  },
+  'crisis-brief': {
+    agent:'CRISIS RESPONSE COORDINATOR · SITUATION BRIEF',
+    title:'Crisis Response Brief — Region 3 (Taiz)',
+    body:`
+      <div class="alert alert-r">🚨 <strong>CRITICAL — Immediate Action Required:</strong> 31% beneficiary dropout in Region 3. Field officer intervention needed within 48 hours.</div>
+      <div class="out-stats">
+        <div class="out-stat"><div class="out-stat-val red">1,480</div><div class="out-stat-lbl">Beneficiaries at Risk</div><div class="out-stat-sub">Region 3, Taiz</div></div>
+        <div class="out-stat"><div class="out-stat-val red">3</div><div class="out-stat-lbl">Partners Underperforming</div><div class="out-stat-sub">Corrective memos drafted</div></div>
+        <div class="out-stat"><div class="out-stat-val am">2</div><div class="out-stat-lbl">Field Officers Needed</div><div class="out-stat-sub">Reallocation from Region 2</div></div>
+      </div>
+      <div class="out-finding"><div class="out-finding-header">⚡ <strong>Freya Response Plan</strong></div>
+        <div class="out-quote">Immediate: Reallocate 2 officers from Region 2 (stable, 103% target) to Region 3. Week 1: Partner support visits to all 3 underperforming organisations. Week 2: Re-enrollment drive targeting 340 dropped beneficiaries. Expected recovery: 82% of dropouts by Q3 close.</div>
+      </div>
+      ${[['🔴','Taiz Community Health — 3 days late on submission, attendance 62%'],['🔴','Southern Yemen Cooperative — 2nd missed submission, follow-up required'],['🟡','Red Sea Medical Access — partial submission, data quality 84%']].map(([ic,t])=>`<div class="out-item"><span class="out-item-ic">${ic}</span><div>${t}</div></div>`).join('')}
+    `
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+// SCREEN RENDERERS
+// ═══════════════════════════════════════════════════════
+function renderScreen(id){
+  const el=document.getElementById('main-content');
+  const renderers = {
+    dashboard, programmes, field, impact, reports, donors, finance, hr, logistics, microcredit, comms, projects, agents, knowledge, settings, profile, notifications
+  };
+  el.innerHTML = renderers[id] ? renderers[id]() : `<div class="empty-state"><div class="empty-state-ic">🚧</div><div class="empty-state-title">Coming soon</div></div>`;
+}
+
+// ── DASHBOARD ──────────────────────────────────────────
+function dashboard(){ return `
+<div class="page-hd">
+  <div><div class="page-title">🏠 Good morning, Amara</div><div class="page-sub">Tuesday 12 May 2026 · <strong>6 agents active</strong> · Semi-Auto Mode</div></div>
+  <div class="page-acts">
+    <button class="btn btn-sec" onclick="openFreya()">🤖 Ask Freya</button>
+    <button class="btn btn-pri" onclick="showOutput('donor-report')">📊 Morning Brief</button>
+  </div>
+</div>
+<div class="freya-box">
+  <div class="freya-box-ic">🤖</div>
+  <div><div class="freya-box-label">Freya — Active Now</div>
+    <div class="freya-box-text">I'm running <strong>6 tasks right now</strong>. The World Bank Q3 report draft is almost ready. Region 3 needs your attention — I've prepared a corrective action memo. Also, 2 payroll anomalies need your review before Friday's disbursement.</div>
+  </div>
+  <div class="freya-box-acts">
+    <button class="btn btn-pri btn-sm" onclick="nav('reports')">Review Queue (4)</button>
+    <button class="btn btn-sec btn-sm" onclick="openFreya()">Talk to Freya</button>
+  </div>
+</div>
+<div class="grid-4" style="margin-bottom:20px">
+  <div class="stat-card card-hover" onclick="nav('impact')"><div class="stat-ic">👥</div><div class="stat-val">24,847</div><div class="stat-label">Total Beneficiaries</div><div class="stat-change chg-up">↑ +1,240 this week</div></div>
+  <div class="stat-card card-hover" onclick="nav('finance')" style="--acc:var(--bl)"><div class="stat-ic">💰</div><div class="stat-val">$2.1M</div><div class="stat-label">Budget Deployed</div><div class="stat-change chg-up">↑ 78% utilisation</div></div>
+  <div class="stat-card card-hover" onclick="nav('donors')" style="--acc:var(--am)"><div class="stat-ic">🤝</div><div class="stat-val">7</div><div class="stat-label">Active Donors</div><div class="stat-change chg-nt">⏰ 3 reports due soon</div></div>
+  <div class="stat-card card-hover" onclick="nav('microcredit')" style="--acc:var(--pu)"><div class="stat-ic">🏦</div><div class="stat-val">1,240</div><div class="stat-label">Active Loans</div><div class="stat-change chg-nt">⚠ PAR30: 5.8%</div></div>
+</div>
+<div class="grid-2" style="margin-bottom:20px">
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-size:13px;font-weight:700;color:var(--tx)">🔴 Urgent Actions</div><span class="badge badge-r">4 items</span></div>
+      ${[['⚠️','Region 3 dropout +31%','Corrective memo ready — approve to send','crisis-brief'],['📋','World Bank Q3 draft','14 days to deadline — 78% complete','donor-report'],['💰','Payroll anomalies (2)','Review before Friday disbursement','salary-report'],['🛡','USAID IND-07 below target','Corrective action note drafted','compliance-audit']].map(([ic,t,d,out])=>`
+        <div class="alert alert-r" style="cursor:pointer" onclick="showOutput('${out}')"><span style="flex-shrink:0">${ic}</span><div><div style="font-weight:600">${t}</div><div style="font-size:10px;margin-top:1px">${d}</div></div><button class="btn btn-danger btn-sm" style="margin-left:auto;flex-shrink:0">Review →</button></div>`).join('')}
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">📅 Upcoming Deadlines</div>
+      ${[['14 days','World Bank Q3 Report','rd'],['28 days','USAID Annual Review','am'],['3 days','Staff Payroll','rd'],['8 days','Q3 Field Data Cutoff','am'],['45 days','FCDO Annual Review','g'],['2 days','Partner Submissions Due','rd']].map(([d,t,c])=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:11px"><span class="badge badge-${c}" style="min-width:56px;justify-content:center">${d}</span><span style="color:var(--tx)">${t}</span></div>`).join('')}
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">🤖 Freya Activity Feed</div>
+      ${[['✅ Done','M&E Report Draft','World Bank Q3 — 14 pages, DLI tables populated','09:15','#10b981'],['✅ Done','Partner Consolidation','280 submissions merged, 12 duplicates removed','08:45','#10b981'],['🔄 Running','Compliance Check','USAID portfolio — checking IND-07 trajectory','Now','var(--am)'],['⏳ Queued','Psychometric Assessment','Borrower #2891 — Khulna district','Next','var(--bl)'],['⏳ Queued','Salary Processing','47 staff, anomaly check in progress','Pending','var(--bl)']].map(([s,t,d,tm,c])=>`
+        <div style="display:flex;gap:10px;margin-bottom:10px;font-size:11px"><div style="width:4px;background:${c};border-radius:2px;flex-shrink:0"></div><div style="flex:1"><div style="font-weight:600;color:var(--tx)">${t}</div><div style="color:var(--tx2)">${d}</div></div><div style="font-family:var(--mono);font-size:9px;color:var(--tx3);flex-shrink:0">${tm}</div></div>`).join('')}
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">📊 Programme Health</div>
+      ${[['Yemen Health Response','82%','#10b981'],['East Africa Food Security','69%','#10b981'],['MENA Microfinance','61%','var(--am)'],['South Sudan Education','88%','#10b981'],['Bangladesh WASH','73%','#10b981']].map(([n,p,c])=>`
+        <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:var(--tx)">${n}</span><span style="font-family:var(--mono);font-size:10px;color:var(--tx2)">${p}</span></div><div class="prog-bar"><div class="prog-fill" style="width:${p};background:${c}"></div></div></div>`).join('')}
+    </div>
+  </div>
+</div>
+<div class="card"><div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">⚡ Quick Actions</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    ${[['📊','Generate Report','reports'],['👥','View Beneficiaries','impact'],['💰','Finance Overview','finance'],['🤝','Donor Dashboard','donors'],['📋','HR Dashboard','hr'],['🚚','Procurement','logistics'],['🏦','Credit Portfolio','microcredit'],['💬','Team Chat','comms'],['📌','Projects','projects'],['🤖','AI Agents','agents']].map(([ic,t,sc])=>`<button class="btn btn-sec" onclick="nav('${sc}')">${ic} ${t}</button>`).join('')}
+  </div>
+</div>
+`;}
+
+// ── PROGRAMMES ──────────────────────────────────────────
+function programmes(){return `
+<div class="page-hd">
+  <div><div class="page-title">📋 Programme Operations</div><div class="page-sub">6 active · $2.1M deployed · <strong>24,847 beneficiaries</strong></div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="toast('Running all programmes...','⚡','g')">⚡ Run All</button><button class="btn btn-pri" onclick="toast('New programme setup started','📋','g')">+ New Programme</button></div>
+</div>
+<div class="freya-box">
+  <div class="freya-box-ic">🤖</div>
+  <div><div class="freya-box-label">Freya Insight — Action Required</div>
+    <div class="freya-box-text"><strong>Region 3 dropout rate at 31%</strong> — partner support critical. Reallocate 2 field officers from Region 2 (stable, 103% target) to Region 3. Estimated recovery: +340 beneficiaries before Q3 close.</div>
+  </div>
+  <div class="freya-box-acts"><button class="btn btn-pri btn-sm" onclick="toast('Reallocation memo approved and sent!','✅','g')">Apply Now</button><button class="btn btn-sec btn-sm" onclick="showOutput('crisis-brief')">Review Impact</button></div>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+  ${['All Programmes','Active','Launching','Suspended'].map((t,i)=>`<button class="btn ${i===0?'btn-pri':'btn-sec'} btn-sm" onclick="this.parentElement.querySelectorAll('.btn').forEach(b=>b.className='btn btn-sec btn-sm');this.className='btn btn-pri btn-sm'">${t}</button>`).join('')}
+</div>
+<div class="grid-3">
+  ${[
+    {n:'Yemen Health Response',s:'ACTIVE',c:'g',tags:['Healthcare','Emergency','Field'],b:'$840k',ben:'8,240',cpb:'$102',imp:'4.1×',tr:'+14%',trc:'up',goal:82,ag:'M&E Agent — drafting Q3 narrative',out:'donor-report'},
+    {n:'East Africa Food Security',s:'ACTIVE',c:'g',tags:['Food/Nutrition','USAID'],b:'$620k',ben:'6,180',cpb:'$100',imp:'3.8×',tr:'On track',trc:'nt',goal:69,ag:'Programme Intel — KPI dashboard',out:'donor-report'},
+    {n:'MENA Microfinance Initiative',s:'WARNING',c:'a',tags:['Credit','Microfinance'],b:'$380k',ben:'1,240',cpb:'$306',imp:'4.2%',tr:'-6%',trc:'dn',goal:61,ag:'Loan Monitor — 3 at-risk borrowers',out:'loan-portfolio'},
+    {n:'South Sudan Education',s:'ACTIVE',c:'g',tags:['Education','UNICEF'],b:'$290k',ben:'4,820',cpb:'$60',imp:'5.2×',tr:'+22%',trc:'up',goal:88,ag:'Beneficiary Analytics — enrollment',out:'donor-report'},
+    {n:'Bangladesh WASH Programme',s:'ACTIVE',c:'g',tags:['WASH','FCDO'],b:'$240k',ben:'3,180',cpb:'$75',imp:'4.8×',tr:'On track',trc:'nt',goal:73,ag:'Field Analyst — WASH coverage',out:'field-synthesis'},
+    {n:'Syrian Refugee Integration',s:'ACTIVE',c:'g',tags:['Humanitarian','EU ECHO'],b:'$190k',ben:'1,187',cpb:'$160',imp:'3.1×',tr:'+5%',trc:'up',goal:71,ag:'Document Drafting — EU report',out:'donor-report'}
+  ].map(p=>`
+    <div class="card card-hover" style="position:relative;overflow:hidden" onclick="showOutput('${p.out}')">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--acc)"></div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+        <div style="font-size:12px;font-weight:700;color:var(--tx)">${p.n}</div>
+        <span class="badge badge-${p.c} badge-dot" style="flex-shrink:0">${p.s}</span>
+      </div>
+      <div style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px">
+        ${[['Budget',p.b],['Benef.',p.ben],['CPB',p.cpb],['Impact',p.imp]].map(([l,v])=>`<div style="text-align:center"><div style="font-size:12px;font-weight:700;color:var(--tx)">${v}</div><div style="font-family:var(--mono);font-size:8px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px">${l}</div></div>`).join('')}
+      </div>
+      <div style="font-size:10px;font-weight:700;margin-bottom:4px;color:${p.trc==='up'?'var(--acc)':p.trc==='dn'?'var(--rd)':'var(--am)'}">${p.tr}</div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px"><span style="font-family:var(--mono);color:var(--tx3);text-transform:uppercase">Q3 GOAL</span><span style="color:var(--acc);font-weight:700">${p.goal}% to goal</span></div>
+      <div class="prog-bar" style="margin-bottom:10px"><div class="prog-fill ${p.trc==='dn'?'prog-fill-am':''}" style="width:${p.goal}%"></div></div>
+      <div style="display:flex;align-items:center;gap:5px;padding:6px 8px;border-radius:5px;background:var(--card2);font-size:9px;color:var(--tx2)">
+        <div class="status-dot sd-g"></div><span style="font-weight:600;color:var(--pri)">${p.ag.split('—')[0]}</span><span>${p.ag.split('—')[1]}</span>
+        <span style="margin-left:auto;color:var(--tx3)">View →</span>
+      </div>
+    </div>`).join('')}
+</div>`;}
+
+// ── FIELD OPERATIONS ──────────────────────────────────────────
+function field(){return `
+<div class="page-hd">
+  <div><div class="page-title">🗺 Field Operations</div><div class="page-sub">14 partner organisations · 6 regions · <strong>Real-time monitoring</strong></div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="showOutput('field-synthesis')">📊 Field Synthesis</button><button class="btn btn-pri" onclick="toast('Field data consolidation started!','📁','g')">⚡ Consolidate All</button></div>
+</div>
+<div class="freya-box"><div class="freya-box-ic">🤖</div>
+  <div><div class="freya-box-label">Field Data Analyst — Active</div>
+    <div class="freya-box-text">Validated <strong>280 submissions</strong> this week. Removed 12 duplicates. Region 3 (Taiz) flagged with 31% dropout — corrective action memo prepared. Southern Yemen Cooperative has 2nd consecutive missed submission.</div>
+  </div>
+  <div class="freya-box-acts"><button class="btn btn-pri btn-sm" onclick="showOutput('field-synthesis')">Show Output</button></div>
+</div>
+<div class="grid-2" style="margin-bottom:16px">
+  <div>
+    <div class="lbl" style="margin-bottom:8px">Regional Status</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${[['Region 1 — Sana\'a','2,840 beneficiaries · 4 partners','96% to target','g','96%'],['Region 2 — Aden','3,120 beneficiaries · 3 partners','Stable — 103% of target','g','100%'],['Region 3 — Taiz','1,480 beneficiaries · 3 partners','⚠ DROPOUT +31% — Field follow-up needed','r','62%'],['Region 4 — Hodeidah','2,240 beneficiaries · 2 partners','⚡ Slipped on 2 indicators','a','77%'],['East Africa — Nairobi','6,180 beneficiaries · 8 partners','3 weeks ahead of schedule','g','91%'],['South Sudan — Juba','4,820 beneficiaries · 5 partners','On track — strong enrollment','g','88%']].map(([n,s,st,c,p])=>`
+      <div class="card" style="padding:12px;display:flex;gap:10px;cursor:pointer" onclick="showOutput('field-synthesis')">
+        <div style="width:6px;background:var(--${c==='g'?'acc':c==='r'?'rd':'am'});border-radius:3px;flex-shrink:0"></div>
+        <div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--tx);margin-bottom:2px">${n}</div>
+        <div style="font-size:10px;color:var(--tx2);margin-bottom:4px">${s}</div>
+        <div style="font-size:10px;font-weight:600;color:var(--${c==='g'?'pri':c==='r'?'rd':'am'});margin-bottom:4px">${st}</div>
+        <div class="prog-bar" style="height:4px"><div class="prog-fill ${c==='r'?'prog-fill-rd':c==='a'?'prog-fill-am':''}" style="width:${p}"></div></div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+  <div>
+    <div class="lbl" style="margin-bottom:8px">Partner Submissions</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="data-table">
+        <tr><th>Partner</th><th>Beneficiaries</th><th>Quality</th><th>Status</th></tr>
+        ${[['Al-Amal Health Foundation','840','98%','On Time','g'],['Yemen Relief Network','1,240','96%','On Time','g'],['Taiz Community Health','480','72%','3 Days Late','a'],['S. Yemen Cooperative','—','N/A','Missing','r'],['Red Sea Medical Access','960','84%','Partial','b'],['East Africa Food Network','2,840','99%','On Time','g'],['Juba Education Consortium','1,820','94%','On Time','g']].map(([n,b,q,s,c])=>`<tr onclick="showOutput('field-synthesis')" style="cursor:pointer"><td>${n}</td><td>${b}</td><td style="color:var(--${c==='g'?'pri':c==='r'?'rd':'am'})">${q}</td><td><span class="badge badge-${c} badge-dot">${s}</span></td></tr>`).join('')}
+      </table>
+    </div>
+    <div class="card" style="margin-top:14px"><div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:12px">📊 Week Summary</div>
+      <div class="grid-2">
+        ${[['280','Submissions','tx'],['94%','On Time','pri'],['12','Dupes Removed','am'],['3','Missing','rd']].map(([v,l,c])=>`<div style="text-align:center;padding:10px;background:var(--card2);border-radius:7px"><div style="font-size:18px;font-weight:800;color:var(--${c})">${v}</div><div style="font-size:10px;color:var(--tx3);margin-top:2px">${l}</div></div>`).join('')}
+      </div>
+    </div>
+  </div>
+</div>`;}
+
+// ── IMPACT ──────────────────────────────────────────
+function impact(){return `
+<div class="page-hd">
+  <div><div class="page-title">📊 Impact & M&E</div><div class="page-sub">Live analytics · <strong>Analyst last synced 4 mins ago</strong></div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="toast('Attribution analysis started','📊','g')">Attribution Analysis</button><button class="btn btn-pri" onclick="showOutput('donor-report')">📊 Full Analysis</button></div>
+</div>
+<div class="grid-4" style="margin-bottom:16px">
+  <div class="stat-card"><div class="stat-ic">👥</div><div class="stat-val">24,847</div><div class="stat-label">Total Beneficiaries</div><div class="stat-change chg-up">↑ +1,240 this week</div></div>
+  <div class="stat-card" style="--acc:var(--bl)"><div class="stat-ic">💰</div><div class="stat-val">$2.1M</div><div class="stat-label">Budget Deployed</div><div class="stat-change chg-up">↑ 78% of total</div></div>
+  <div class="stat-card" style="--acc:var(--am)"><div class="stat-ic">💲</div><div class="stat-val">$84</div><div class="stat-label">Cost per Beneficiary</div><div class="stat-change chg-up">↓ -$4 this week</div></div>
+  <div class="stat-card" style="--acc:var(--pu)"><div class="stat-ic">📈</div><div class="stat-val">84%</div><div class="stat-label">KPI Achievement</div><div class="stat-change chg-up">↑ +2.1% this week</div></div>
+</div>
+<div class="grid-2">
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-size:13px;font-weight:700">Agent Intelligence Feed</div><span class="badge badge-g badge-dot">LIVE</span></div>
+      ${[['CRITICAL','Region 3 dropout +31% — immediate field intervention required','Beneficiary attendance declining 3 consecutive weeks. Officer reallocation memo ready.','r','9:14 AM','crisis-brief'],['WARNING','USAID IND-07 tracking 12% below Q3 target','Corrective action memo drafted. Awaiting your approval.','a','8:48 AM','compliance-audit'],['INFO','East Africa food security 3 weeks ahead of enrollment target','$40k budget surplus available — consider reallocation.','g','8:15 AM','budget-report'],['INFO','World Bank Q3 report window opens in 14 days','Draft 78% complete. Director narrative review needed.','g','7:50 AM','donor-report']].map(([t,h,d,c,tm,out])=>`
+      <div class="alert alert-${c}" style="cursor:pointer;margin-bottom:6px" onclick="showOutput('${out}')"><div><div style="font-family:var(--mono);font-size:8px;font-weight:700;margin-bottom:3px">${t} · ${tm}</div><div style="font-weight:600;margin-bottom:2px">${h}</div><div style="font-size:10px;opacity:.8">${d}</div></div><button class="btn btn-sm btn-sec" style="margin-left:auto;flex-shrink:0">View →</button></div>`).join('')}
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">KPI Achievement by Programme</div>
+      ${[['Yemen Health Response','94%','var(--pri)'],['South Sudan Education','88%','var(--pri)'],['Bangladesh WASH','84%','var(--pri)'],['East Africa Food Security','78%','var(--pri)'],['Syrian Refugee Integration','76%','var(--pri)'],['MENA Microfinance','61%','var(--am)']].map(([n,v,c])=>`
+      <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span>${n}</span><span style="font-family:var(--mono);font-size:10px;font-weight:700;color:${c}">${v}</span></div><div class="prog-bar"><div class="prog-fill" style="width:${v};background:${c}"></div></div></div>`).join('')}
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">📈 Beneficiary Trend — 30 Days</div>
+      <svg width="100%" height="160" viewBox="0 0 460 160" preserveAspectRatio="none">
+        <defs><linearGradient id="ig" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981" stop-opacity=".15"/><stop offset="100%" stop-color="#10b981" stop-opacity="0"/></linearGradient></defs>
+        <line x1="0" y1="40" x2="460" y2="40" stroke="var(--border)" stroke-width="1"/>
+        <line x1="0" y1="80" x2="460" y2="80" stroke="var(--border)" stroke-width="1"/>
+        <line x1="0" y1="120" x2="460" y2="120" stroke="var(--border)" stroke-width="1"/>
+        <polygon points="0,140 58,128 115,120 172,125 230,105 287,90 345,76 402,62 460,50 460,155 0,155" fill="url(#ig)"/>
+        <polyline points="0,140 58,128 115,120 172,125 230,105 287,90 345,76 402,62 460,50" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle cx="230" cy="105" r="4" fill="#10b981"/><circle cx="460" cy="50" r="4" fill="#10b981"/>
+        <text x="0" y="158" font-size="9" fill="var(--tx3)" font-family="JetBrains Mono">Apr 3</text>
+        <text x="210" y="158" font-size="9" fill="var(--tx3)" font-family="JetBrains Mono">Apr 15</text>
+        <text x="420" y="158" font-size="9" fill="var(--tx3)" font-family="JetBrains Mono">Apr 28</text>
+        <text x="0" y="42" font-size="9" fill="var(--tx3)" font-family="JetBrains Mono">25k</text>
+        <text x="0" y="82" font-size="9" fill="var(--tx3)" font-family="JetBrains Mono">23k</text>
+        <text x="0" y="122" font-size="9" fill="var(--tx3)" font-family="JetBrains Mono">21k</text>
+      </svg>
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">Gender Disaggregation</div>
+      <div class="grid-2" style="margin-bottom:12px">
+        <div style="text-align:center;padding:12px;background:var(--card2);border-radius:8px"><div style="font-size:20px;font-weight:800;color:var(--pri)">52.3%</div><div style="font-size:10px;color:var(--tx3)">Female</div></div>
+        <div style="text-align:center;padding:12px;background:var(--card2);border-radius:8px"><div style="font-size:20px;font-weight:800;color:var(--bl)">47.7%</div><div style="font-size:10px;color:var(--tx3)">Male</div></div>
+      </div>
+      <button class="btn btn-sec" style="width:100%" onclick="showOutput('donor-report')">📊 Full Impact Report</button>
+    </div>
+  </div>
+</div>`;}
+
+// ── REPORTS ──────────────────────────────────────────
+function reports(){return `
+<div class="page-hd">
+  <div><div class="page-title">📄 Reports & M&E</div><div class="page-sub">M&E Agent · <strong>28 reports this quarter</strong> · 4 pending approval</div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="toast('M&E Agent triggered','📊','g')">📊 Trigger M&E Agent</button><button class="btn btn-pri" onclick="toast('Compliance review started','🛡','g')">🛡 Compliance Review</button></div>
+</div>
+<div class="tabs">
+  ${['All Reports','Donor Reports','Field Reports','Compliance','Letters & Memos'].map((t,i)=>`<div class="tab-item ${i===0?'on':''}" onclick="this.parentElement.querySelectorAll('.tab-item').forEach(x=>x.classList.remove('on'));this.classList.add('on')">${t}</div>`).join('')}
+</div>
+<div style="display:flex;gap:14px;height:calc(100% - 160px)">
+  ${[['Draft','4'],['In Review','3'],['Approved','4'],['Submitted','8']].map(([col,cnt],ci)=>`
+  <div style="flex:1;background:var(--card2);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+    <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;font-weight:700;color:var(--tx)">${col}</span>
+      <span style="background:var(--border2);color:var(--tx2);font-size:9px;font-weight:700;padding:1px 6px;border-radius:8px">${cnt}</span>
+      ${ci===1?'<span class="badge badge-a" style="margin-left:auto;font-size:8px">Reviewing</span>':''}
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:8px">
+      ${[...Array(parseInt(cnt))].map((_,i)=>{
+        const items=[['Q3 World Bank PDO Report','M&E Agent','Report','donor-report'],['Field Visit Report: Region 3','M&E Agent','Field','field-synthesis'],['UNICEF Quarterly Narrative','Document Agent','Donor','donor-report'],['EU Mid-term Report','Document Agent','Donor','compliance-audit'],['Beneficiary Analytics Brief','Analyst','Report','donor-report'],['USAID Compliance Pack','Compliance Sentinel','Compliance','compliance-audit'],['Emergency Relief Story','Document Agent','Donor','donor-report'],['WASH Progress Report','M&E Agent','Report','donor-report']];
+        const [t,ag,tp,out]=items[Math.min(i+(ci*2),7)];
+        const btn=ci===0?`<button class="btn btn-sec btn-sm" onclick="toast('Sent for review!','📤','g')">Send for Review</button>`:ci===1?`<button class="btn btn-sec btn-sm" onclick="showOutput('${out}')">My Review</button>`:ci===2?`<button class="btn btn-acc btn-sm" onclick="toast('Submitted to donor!','📤','g')">Submit to Donor</button>`:`<button class="btn btn-sec btn-sm" onclick="showOutput('${out}')">View Analytics →</button>`;
+        return `<div style="background:var(--card);border:1px solid var(--border);border-radius:7px;padding:10px;cursor:pointer" onclick="showOutput('${out}')">
+          <div style="font-family:var(--mono);font-size:7px;font-weight:700;color:var(--tx3);margin-bottom:5px">PROG-00${i+1}-${tp.toUpperCase()}-0${ci+1}</div>
+          <div style="font-size:11px;font-weight:600;color:var(--tx);margin-bottom:5px">${t}</div>
+          <div style="font-size:9px;color:var(--tx3);margin-bottom:7px">📊 ${ag}</div>
+          ${btn}
+        </div>`;}).join('')}
+    </div>
+  </div>`).join('')}
+</div>`;}
+
+// ── DONORS ──────────────────────────────────────────
+function donors(){return `
+<div class="page-hd">
+  <div><div class="page-title">🤝 Donors & Grants</div><div class="page-sub">Grant pipeline · Compliance · Reporting deadlines</div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="showOutput('compliance-audit')">🛡 Compliance Check</button><button class="btn btn-pri" onclick="toast('Adding new donor...','🤝','g')">+ Add Donor</button></div>
+</div>
+<div class="grid-4" style="margin-bottom:16px">
+  <div class="stat-card"><div class="stat-ic">💰</div><div class="stat-val">$2.33M</div><div class="stat-label">Total Active Grants</div><div class="stat-change chg-up">↑ +$380k vs Q2</div></div>
+  <div class="stat-card" style="--acc:var(--bl)"><div class="stat-ic">🤝</div><div class="stat-val">7</div><div class="stat-label">Active Donors</div><div class="stat-change chg-nt">3 reports due soon</div></div>
+  <div class="stat-card" style="--acc:var(--am)"><div class="stat-ic">🛡</div><div class="stat-val">92%</div><div class="stat-label">Overall Compliance</div><div class="stat-change chg-dn">⚠ 1 indicator at risk</div></div>
+  <div class="stat-card" style="--acc:var(--rd)"><div class="stat-ic">⏰</div><div class="stat-val">14 days</div><div class="stat-label">Next Deadline</div><div class="stat-change" style="color:var(--rd)">World Bank Q3</div></div>
+</div>
+<div class="grid-2">
+  <div>
+    ${[{n:'World Bank',id:'GRANT-2024-WB-001',prog:'Yemen Health Programme',total:'$840k',dis:'$620k (74%)',ben:'8,240/9,000',kpi:'11/12',s:'On Track',sc:'g',dl:'14 days',out:'donor-report'},
+       {n:'USAID',id:'AID-2024-US-007',prog:'East Africa Food Security',total:'$620k',dis:'$440k (71%)',ben:'6,180/6,500',kpi:'8/9',s:'Attention Needed',sc:'a',dl:'28 days',out:'compliance-audit'},
+       {n:'FCDO (UK Aid)',id:'FCDO-2024-BD-003',prog:'Bangladesh WASH',total:'$380k',dis:'$190k (50%)',ben:'3,180/4,000',kpi:'6/6',s:'Pack Ready',sc:'b',dl:'45 days',out:'compliance-audit'},
+       {n:'EU ECHO',id:'EU-ECHO-2024-SY-002',prog:'Syrian Refugee Integration',total:'$260k',dis:'$120k (46%)',ben:'1,187/1,400',kpi:'7/8',s:'Mid-term Review',sc:'p',dl:'60 days',out:'donor-report'}
+    ].map(d=>`
+    <div class="card card-hover" style="margin-bottom:12px" onclick="showOutput('${d.out}')">
+      <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+        <div><div style="font-size:14px;font-weight:700;color:var(--tx)">${d.n}</div><div style="font-size:9px;font-family:var(--mono);color:var(--tx3)">${d.id} · ${d.prog}</div></div>
+        <span class="badge badge-${d.sc}">${d.s}</span>
+      </div>
+      <div class="grid-4" style="margin-bottom:10px">
+        ${[['Total',d.total],['Disbursed',d.dis],['Beneficiaries',d.ben],['KPI',d.kpi]].map(([l,v])=>`<div><div style="font-size:9px;color:var(--tx3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px">${l}</div><div style="font-size:12px;font-weight:700;color:var(--tx)">${v}</div></div>`).join('')}
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border)">
+        <div style="font-size:10px;color:var(--tx2)">Report due: <strong>${d.dl}</strong></div>
+        <div style="display:flex;gap:6px"><button class="btn btn-sec btn-sm" onclick="event.stopPropagation();toast('Opening grant details...','📄','g')">View</button><button class="btn btn-pri btn-sm" onclick="event.stopPropagation();showOutput('${d.out}')">Review Draft →</button></div>
+      </div>
+    </div>`).join('')}
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">📅 Reporting Calendar</div>
+      ${[['#ef4444','World Bank Q3 Report','14 days'],['#f59e0b','USAID IND-07 Corrective Memo','Urgent'],['#f59e0b','USAID Annual Review','28 days'],['#2563eb','FCDO Annual Review','45 days'],['#7c3aed','EU ECHO Mid-term','60 days'],['#6b7280','UNICEF Progress Report','72 days']].map(([c,t,d])=>`
+      <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:11px"><div class="status-dot" style="background:${c}"></div><span style="flex:1;color:var(--tx)">${t}</span><span style="font-family:var(--mono);font-size:9px;color:var(--tx2)">${d}</span></div>`).join('')}
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:8px">💬 Donor Communication</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="btn btn-sec" style="width:100%;justify-content:flex-start" onclick="toast('Opening donor newsletter draft...','📧','g')">📧 Draft Donor Newsletter</button>
+        <button class="btn btn-sec" style="width:100%;justify-content:flex-start" onclick="toast('Opening quarterly update...','📊','g')">📊 Quarterly Programme Update</button>
+        <button class="btn btn-sec" style="width:100%;justify-content:flex-start" onclick="toast('Loading impact story...','📸','g')">📸 Impact Story for Donors</button>
+        <button class="btn btn-sec" style="width:100%;justify-content:flex-start" onclick="toast('Opening World Bank portal...','🌐','g')">🌐 Submit to World Bank Portal</button>
+      </div>
+    </div>
+  </div>
+</div>`;}
+
+// ── FINANCE ──────────────────────────────────────────
+function finance(){return `
+<div class="page-hd">
+  <div><div class="page-title">💰 Finance & Accounts</div><div class="page-sub">Budget · Payroll · Tax · Bills · <strong>Freya Finance Agent Active</strong></div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="showOutput('budget-report')">📊 Budget Report</button><button class="btn btn-pri" onclick="toast('Opening finance wizard...','💰','g')">+ New Transaction</button></div>
+</div>
+<div class="grid-4" style="margin-bottom:16px">
+  <div class="stat-card"><div class="stat-ic">💰</div><div class="stat-val">$2.33M</div><div class="stat-label">Annual Budget</div><div class="stat-change chg-up">↑ 78% utilised</div></div>
+  <div class="stat-card" style="--acc:var(--am)"><div class="stat-ic">💳</div><div class="stat-val">$84.2k</div><div class="stat-label">Monthly Payroll</div><div class="stat-change chg-nt">⚠ 2 anomalies to review</div></div>
+  <div class="stat-card" style="--acc:var(--rd)"><div class="stat-ic">🏦</div><div class="stat-val">$12,400</div><div class="stat-label">VAT/Tax Due</div><div class="stat-change" style="color:var(--rd)">⏰ Due in 18 days</div></div>
+  <div class="stat-card" style="--acc:var(--bl)"><div class="stat-ic">📋</div><div class="stat-val">14</div><div class="stat-label">Bills Pending</div><div class="stat-change chg-nt">$28,400 total</div></div>
+</div>
+<div class="tabs">
+  ${['Overview','Budget','Transactions','Payroll','VAT & Tax','Bills & Invoices'].map((t,i)=>`<div class="tab-item ${i===0?'on':''}" onclick="switchFinTab(this,'${i}')">${t}</div>`).join('')}
+</div>
+<div id="fin-content">
+<div class="grid-2">
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">Budget Overview</div>
+      ${[['Programme Operations','$840k','$692k','82%','var(--pri)'],['Field Staff','$420k','$398k','95%','var(--pri)'],['HQ Operations','$180k','$188k','104%','var(--rd)'],['Logistics/Transport','$240k','$212k','88%','var(--pri)'],['M&E Activities','$96k','$84k','88%','var(--pri)']].map(([n,b,a,p,c])=>`
+      <div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:var(--tx)">${n}</span><span style="color:var(--tx2)">${a} / ${b}</span></div><div class="prog-bar"><div class="prog-fill" style="width:${p};background:${c}"></div></div></div>`).join('')}
+      <button class="btn btn-sec btn-sm" style="margin-top:8px" onclick="showOutput('budget-report')">📊 Full Budget Report</button>
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">💳 Payroll Summary</div>
+      <div style="display:flex;justify-content:space-between;padding:8px;background:var(--card2);border-radius:7px;margin-bottom:8px;font-size:11px"><span>Total Staff</span><strong>47</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:8px;background:var(--card2);border-radius:7px;margin-bottom:8px;font-size:11px"><span>Gross Payroll</span><strong>$98,700</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:8px;background:var(--card2);border-radius:7px;margin-bottom:8px;font-size:11px"><span>Deductions (Tax/Provident)</span><strong style="color:var(--rd)">-$14,500</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:10px;background:rgba(4,120,87,.08);border:1px solid rgba(4,120,87,.2);border-radius:7px;margin-bottom:12px;font-size:12px;font-weight:700"><span>Net Payroll</span><strong style="color:var(--pri)">$84,200</strong></div>
+      <div class="alert alert-a">⚠ <div>2 anomalies flagged — review before disbursement on Friday</div></div>
+      <button class="btn btn-pri btn-sm" style="margin-top:8px;width:100%" onclick="showOutput('salary-report')">📊 Review & Approve Payroll</button>
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">📋 Recent Transactions</div>
+      ${[['May 10','Salary - Field Officers (18 staff)','Programme Ops','-$32,400','dr'],['May 09','USAID Disbursement Received','Income','+$88,000','cr'],['May 08','Vehicle Maintenance - 6 units','Transport','-$16,600','dr'],['May 07','Office Supplies & Equipment','Admin','-$2,400','dr'],['May 06','World Bank Grant Tranche','Income','+$140,000','cr'],['May 05','Partner Organisation Advances','Programme','-$24,800','dr']].map(([d,t,c,a,tp])=>`
+      <div class="ledger-row" style="cursor:pointer" onclick="toast('Opening transaction details...','📋','g')">
+        <div class="lr-date">${d}</div><div class="lr-desc">${t}<div style="font-size:9px;color:var(--tx3)">${c}</div></div>
+        <div class="lr-amount ${tp==='cr'?'lr-cr':'lr-dr'}">${a}</div>
+      </div>`).join('')}
+      <button class="btn btn-sec btn-sm" style="margin-top:12px;width:100%" onclick="toast('Loading full ledger...','📋','g')">View Full Ledger →</button>
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">🏦 VAT & Tax</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${[['Q2 2026 VAT Filing','Due June 30, 2026','$8,400','a'],['Income Tax Provision','Quarterly estimate','$4,000','g'],['Donor Grant Tax Exemption','Certificate valid till Dec 2026','Exempt','g']].map(([t,d,a,c])=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--card2);border-radius:7px;font-size:11px;cursor:pointer" onclick="toast('Opening tax document...','🏦','g')">
+          <div><div style="font-weight:600;color:var(--tx)">${t}</div><div style="color:var(--tx3)">${d}</div></div>
+          <span class="badge badge-${c}">${a}</span>
+        </div>`).join('')}
+        <button class="btn btn-sec btn-sm" style="margin-top:4px" onclick="toast('VAT report generated!','🏦','g')">📊 Generate VAT Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>`;}
+function switchFinTab(el,idx){el.parentElement.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('on'));el.classList.add('on');}
+
+// ── HR ──────────────────────────────────────────
+function hr(){return `
+<div class="page-hd">
+  <div><div class="page-title">👥 HR & People Management</div><div class="page-sub">47 staff · 12 volunteers · <strong>HR Agent monitoring</strong></div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="showOutput('attendance-report')">📊 Attendance Report</button><button class="btn btn-pri" onclick="toast('Opening HR wizard...','👤','g')">+ Add Staff</button></div>
+</div>
+<div class="grid-4" style="margin-bottom:16px">
+  <div class="stat-card"><div class="stat-ic">👥</div><div class="stat-val">47</div><div class="stat-label">Total Staff</div><div class="stat-change chg-nt">12 volunteers</div></div>
+  <div class="stat-card" style="--acc:var(--am)"><div class="stat-ic">📅</div><div class="stat-val">96.2%</div><div class="stat-label">Attendance (This Month)</div><div class="stat-change chg-up">↑ +1.2%</div></div>
+  <div class="stat-card" style="--acc:var(--bl)"><div class="stat-ic">🌴</div><div class="stat-val">8</div><div class="stat-label">On Leave Today</div><div class="stat-change chg-nt">6 annual, 2 sick</div></div>
+  <div class="stat-card" style="--acc:var(--rd)"><div class="stat-ic">⏰</div><div class="stat-val">2</div><div class="stat-label">HR Issues Pending</div><div class="stat-change" style="color:var(--rd)">Payroll anomalies</div></div>
+</div>
+<div class="tabs">
+  ${['Staff Directory','Attendance','Leave Management','Payroll','Volunteers','Performance'].map((t,i)=>`<div class="tab-item ${i===0?'on':''}" onclick="this.parentElement.querySelectorAll('.tab-item').forEach(x=>x.classList.remove('on'));this.classList.add('on')">${t}</div>`).join('')}
+</div>
+<div class="grid-2">
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><div style="font-size:13px;font-weight:700">Staff Directory</div><div class="search-bar" style="max-width:180px"><input placeholder="Search staff..."></div></div>
+      <table class="data-table">
+        <tr><th>Name</th><th>Role</th><th>Dept</th><th>Status</th><th></th></tr>
+        ${[['Amara Diallo','Programme Director','Management','Present','AD','#047857'],['Ibrahim Hassan','Field Supervisor','Field Ops','Present','IH','#2563eb'],['Fatima Al-Said','Finance Officer','Finance','Present','FA','#7c3aed'],['John Okoro','M&E Specialist','M&E','On Leave','JO','#d97706'],['Maria Santos','Logistics Officer','Logistics','Present','MS','#ef4444'],['Ahmed Karim','Field Officer','Field Ops','Present','AK','#10b981'],['Sara Ndiaye','HR Officer','HR','Present','SN','#6366f1'],['David Chen','IT Support','IT','Present','DC','#0891b2']].map(([n,r,d,s,av,c])=>`
+        <tr style="cursor:pointer" onclick="toast('Opening profile for '+\`${n}\`+'...','👤','g')">
+          <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:28px;height:28px;background:${c};font-size:10px">${av}</div>${n}</div></td>
+          <td style="font-weight:400">${r}</td><td style="font-weight:400">${d}</td>
+          <td><span class="badge ${s==='Present'?'badge-g':s==='On Leave'?'badge-a':'badge-r'} badge-dot">${s}</span></td>
+          <td><button class="btn btn-sec btn-sm" onclick="event.stopPropagation();toast('Opening ${n} profile...','👤','g')">View</button></td>
+        </tr>`).join('')}
+      </table>
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">📅 May 2026 Attendance</div>
+      <div class="attendance-grid">
+        ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="att-day-hdr">${d}</div>`).join('')}
+        ${Array(31).fill(0).map((_,i)=>{
+          const day=i+1;const dow=(day+1)%7;
+          const cls=dow>=5?'att-weekend':day===12?'att-today att-present':Math.random()>.1?'att-present':Math.random()>.5?'att-leave':'att-absent';
+          return `<div class="att-day ${cls}" title="Day ${day}" onclick="toast('Day ${day}: '+(\`${cls}\`.includes('present')?'Present':\`${cls}\`.includes('leave')?'Annual Leave':'Absent'),'📅','g')">${day}</div>`;}).join('')}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        ${[['Present','att-present','Present days'],['Absent','att-absent','Absent'],['Leave','att-leave','On leave']].map(([l,c,tt])=>`<div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--tx2)"><div class="att-day ${c}" style="width:16px;height:16px;border-radius:3px;font-size:8px;display:flex;align-items:center;justify-content:center"></div>${l}</div>`).join('')}
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:10px">🌴 Leave Requests</div>
+      ${[['John Okoro','Annual Leave','May 12-16','Approved','g'],['Sara Ndiaye','Sick Leave','May 12','Approved','g'],['Ahmed Karim','Annual Leave','May 20-22','Pending','a'],['David Chen','Annual Leave','May 26-30','Pending','a']].map(([n,t,d,s,c])=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:7px;background:var(--card2);margin-bottom:6px;font-size:11px">
+        <div style="flex:1"><div style="font-weight:600">${n}</div><div style="color:var(--tx3)">${t} · ${d}</div></div>
+        <span class="badge badge-${c}">${s}</span>
+        ${s==='Pending'?`<button class="btn btn-sm btn-pri" onclick="toast('${n} leave approved!','✅','g');this.parentElement.querySelector('.badge').textContent='Approved';this.parentElement.querySelector('.badge').className='badge badge-g'">Approve</button>`:''}
+      </div>`).join('')}
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:10px">👐 Volunteers (12 active)</div>
+      ${[['Volunteer Payment','May batch — 12 volunteers','$2,400 total','salary-report'],['Skills Database','12 volunteers mapped','View profiles','attendance-report'],['Schedule Management','View May schedule','Assign shifts','attendance-report']].map(([t,d,a,out])=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:9px;background:var(--card2);border-radius:7px;margin-bottom:6px;font-size:11px;cursor:pointer" onclick="showOutput('${out}')"><div><div style="font-weight:600">${t}</div><div style="color:var(--tx3)">${d}</div></div><button class="btn btn-sec btn-sm" onclick="event.stopPropagation();showOutput('${out}')">${a} →</button></div>`).join('')}
+    </div>
+  </div>
+</div>`;}
+
+// ── LOGISTICS ──────────────────────────────────────────
+function logistics(){return `
+<div class="page-hd">
+  <div><div class="page-title">🚚 Procurement & Logistics</div><div class="page-sub">Procurement · Inventory · Assets · <strong>Logistics Agent Active</strong></div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="showOutput('procurement-analysis')">📊 Vendor Analysis</button><button class="btn btn-pri" onclick="toast('Opening procurement request...','🚚','g')">+ New Request</button></div>
+</div>
+<div class="grid-4" style="margin-bottom:16px">
+  <div class="stat-card"><div class="stat-ic">📋</div><div class="stat-val">8</div><div class="stat-label">Active Procurements</div><div class="stat-change chg-nt">3 awaiting approval</div></div>
+  <div class="stat-card" style="--acc:var(--am)"><div class="stat-ic">📦</div><div class="stat-val">142</div><div class="stat-label">Inventory Items</div><div class="stat-change chg-dn">4 low stock alerts</div></div>
+  <div class="stat-card" style="--acc:var(--bl)"><div class="stat-ic">🏗</div><div class="stat-val">86</div><div class="stat-label">Registered Assets</div><div class="stat-change chg-nt">Annual count due soon</div></div>
+  <div class="stat-card" style="--acc:var(--pu)"><div class="stat-ic">🤝</div><div class="stat-val">24</div><div class="stat-label">Active Suppliers</div><div class="stat-change chg-up">↑ 3 new this quarter</div></div>
+</div>
+<div class="tabs">
+  ${['Procurement Pipeline','Inventory','Asset Register','Suppliers','Market Assessment'].map((t,i)=>`<div class="tab-item ${i===0?'on':''}" onclick="this.parentElement.querySelectorAll('.tab-item').forEach(x=>x.classList.remove('on'));this.classList.add('on')">${t}</div>`).join('')}
+</div>
+<div class="freya-box"><div class="freya-box-ic">🤖</div>
+  <div><div class="freya-box-label">Logistics Agent — Recommendation</div>
+    <div class="freya-box-text">Vehicle maintenance quotes received from 4 vendors. <strong>Rahim Auto Services</strong> offers $4,200 saving over current supplier with acceptable quality. I've prepared a comparative analysis.</div>
+  </div>
+  <div class="freya-box-acts"><button class="btn btn-pri btn-sm" onclick="showOutput('procurement-analysis')">View Analysis</button></div>
+</div>
+<div class="proc-stage">
+  ${['Purchase Request','Market Assessment','Bidding/Quotation','Evaluation','Approval','Work Order','Delivery & Invoice','Closure'].map((s,i)=>`
+  <div class="proc-step ${i<4?'done':i===4?'active':''}"><div class="proc-step-inner">${s}</div></div>${i<7?'<div class="proc-step-arr">›</div>':''}`).join('')}
+</div>
+<div class="grid-2">
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">Active Procurement Items</div>
+      <table class="data-table">
+        <tr><th>Item</th><th>Stage</th><th>Amount</th><th>Action</th></tr>
+        ${[['Vehicle Maintenance (6 units)','Approval','$12,400','procurement-analysis'],['Medical Supplies — Yemen Q3','Quotation','$28,600','procurement-analysis'],['Field Equipment Upgrade','Evaluation','$8,200','procurement-analysis'],['Office Furniture','Work Order','$3,400','procurement-analysis'],['Generator Fuel — 3 months','Delivery','$4,800','procurement-analysis']].map(([n,s,a,out])=>`
+        <tr onclick="showOutput('${out}')" style="cursor:pointer"><td>${n}</td><td><span class="badge badge-${s==='Approval'?'r':s==='Delivery'?'g':'a'}">${s}</span></td><td>${a}</td><td><button class="btn btn-sec btn-sm" onclick="event.stopPropagation();showOutput('${out}')">View →</button></td></tr>`).join('')}
+      </table>
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">📦 Inventory Alerts</div>
+      ${[['Medical Gloves — Yemen','24 units remaining','Reorder threshold: 50','r'],['Field Data Collection Tablets','6 units','3 damaged, repair order raised','a'],['First Aid Kits','12 kits','Restock for Q3 field programme','a'],['Printer Paper (A4)','2 reams','Weekly office consumption','r']].map(([n,s,d,c])=>`
+      <div class="alert alert-${c}" style="margin-bottom:6px"><div><div style="font-weight:600">${n} — ${s}</div><div style="font-size:10px;margin-top:2px">${d}</div></div><button class="btn btn-sm btn-sec" style="margin-left:auto;flex-shrink:0" onclick="toast('Reorder request created for '+\`${n}\`,'📦','g')">Reorder</button></div>`).join('')}
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">🏗 Asset Register (Recent)</div>
+      <table class="data-table">
+        <tr><th>Asset</th><th>Value</th><th>Location</th><th>Condition</th></tr>
+        ${[['Toyota Land Cruiser #YEM-01','$48,000','Yemen/Region 1','Good'],['Generator 50KVA','$12,400','HQ','Good'],['Field Laptops (12)','$14,400','Field Teams','Fair'],['Medical Equipment Set','$28,000','Yemen Clinic','Good'],['Office Server','$8,200','HQ IT Room','Good']].map(([n,v,l,c])=>`
+        <tr style="cursor:pointer" onclick="toast('Opening asset record...','🏗','g')"><td>${n}</td><td>${v}</td><td>${l}</td><td><span class="badge badge-${c==='Good'?'g':'a'}">${c}</span></td></tr>`).join('')}
+      </table>
+      <button class="btn btn-sec btn-sm" style="margin-top:8px" onclick="toast('Annual asset count initiated by Freya Logistics Agent','📊','g')">📊 Start Annual Asset Count</button>
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:10px">🤝 Top Suppliers</div>
+      ${[['Rahim Auto Services','Vehicles & Maintenance','Rating: 4.2 ⭐','Active'],['MedSupply BD','Medical Equipment','Rating: 4.5 ⭐','Active'],['TechCare Solutions','IT Equipment','Rating: 4.0 ⭐','Active'],['Dhaka Stationery Co.','Office Supplies','Rating: 3.8 ⭐','Review']].map(([n,c,r,s])=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:7px;background:var(--card2);margin-bottom:6px;font-size:11px;cursor:pointer" onclick="toast('Opening supplier profile...','🤝','g')">
+        <div style="flex:1"><div style="font-weight:600">${n}</div><div style="color:var(--tx3)">${c}</div></div>
+        <div style="text-align:right"><div style="font-size:10px;color:var(--tx3)">${r}</div><span class="badge badge-${s==='Active'?'g':'a'}">${s}</span></div>
+      </div>`).join('')}
+    </div>
+  </div>
+</div>`;}
+
+// ── MICROCREDIT ──────────────────────────────────────────
+function microcredit(){return `
+<div class="page-hd">
+  <div><div class="page-title">🏦 Credit Programme</div><div class="page-sub">Loan management · Psychometric scoring · Portfolio health</div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="showOutput('loan-portfolio')">📊 Portfolio Report</button><button class="btn btn-pri" onclick="toast('Opening new loan application...','🏦','g')">+ New Application</button></div>
+</div>
+<div class="grid-4" style="margin-bottom:16px">
+  <div class="stat-card"><div class="stat-ic">🏦</div><div class="stat-val">$2.84M</div><div class="stat-label">Active Portfolio</div><div class="stat-change chg-up">1,240 borrowers</div></div>
+  <div class="stat-card" style="--acc:var(--am)"><div class="stat-ic">📊</div><div class="stat-val">5.8%</div><div class="stat-label">PAR30 Rate</div><div class="stat-change chg-dn">Target: &lt;5%</div></div>
+  <div class="stat-card" style="--acc:var(--bl)"><div class="stat-ic">📈</div><div class="stat-val">2.1%</div><div class="stat-label">PAR90 Rate</div><div class="stat-change chg-up">Within tolerance</div></div>
+  <div class="stat-card" style="--acc:var(--pu)"><div class="stat-ic">🧠</div><div class="stat-val">23</div><div class="stat-label">Psych. Assessments</div><div class="stat-change chg-up">This week</div></div>
+</div>
+<div class="tabs">
+  ${['Portfolio Overview','Loan Applications','Psychometric Scoring','At-Risk Borrowers','Field Reports','Repayment Tracking'].map((t,i)=>`<div class="tab-item ${i===0?'on':''}" onclick="this.parentElement.querySelectorAll('.tab-item').forEach(x=>x.classList.remove('on'));this.classList.add('on')">${t}</div>`).join('')}
+</div>
+<div class="grid-2">
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">📋 Loan Applications Pipeline</div>
+      ${[{n:'Applicant #2891 — Khulna',s:'Psychometric In Progress',sc:79,c:'a',out:'psychometric'},
+         {n:'Applicant #2892 — Barisal',s:'Field Verification Pending',sc:null,c:'b',out:'field-synthesis'},
+         {n:'Applicant #2893 — Dhaka',s:'Approved — Awaiting Disbursement',sc:84,c:'g',out:'psychometric'},
+         {n:'Applicant #2890 — Chittagong',s:'Rejected — Insufficient score',sc:42,c:'r',out:'psychometric'}
+      ].map(a=>`
+      <div class="card card-hover" style="margin-bottom:8px" onclick="showOutput('${a.out}')">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">👤</div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:600">${a.n}</div><div style="font-size:10px;color:var(--tx2)">${a.s}</div></div>
+          ${a.sc!=null?`<div style="text-align:center"><div style="font-size:16px;font-weight:800;color:var(--${a.c==='g'?'pri':a.c==='r'?'rd':'am'})">${a.sc}</div><div style="font-size:8px;color:var(--tx3)">Score</div></div>`:''}
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">🧠 Psychometric Assessment</div>
+      <div style="font-size:11px;color:var(--tx2);margin-bottom:12px">7-dimension behavioural assessment — no formal credit history required. Human approval always retained.</div>
+      <div class="freya-box" style="margin-bottom:12px">
+        <div class="freya-box-ic">🤖</div>
+        <div><div class="freya-box-label">Repayment Behaviour Indicator</div>
+          <div class="freya-box-text">Applicant #2891 assessed. Score: <strong>79/100</strong>. Strong entrepreneurial spirit, moderate financial behaviour. Recommend: staged disbursement.</div>
+        </div>
+        <div class="freya-box-acts"><button class="btn btn-pri btn-sm" onclick="showOutput('psychometric')">View Full Assessment</button></div>
+      </div>
+      <button class="btn btn-acc" style="width:100%" onclick="toast('Launching psychometric assessment tool...','🧠','g')">🧠 Start New Assessment</button>
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">⚠ At-Risk Borrowers</div>
+      ${[['KHL-04 — Narikel MFI','340 borrowers income-shocked','Flooding — grace window recommended','field-synthesis'],['KHL-09 — Shapla Credit','Mixed signals — audit pending','Compliance review in progress','compliance-audit'],['BAR-12 — Barisal South','PAR30 elevated: 8.2%','Monitor — no root cause found','loan-portfolio']].map(([n,d,r,out])=>`
+      <div class="alert alert-a" style="margin-bottom:8px;cursor:pointer" onclick="showOutput('${out}')"><div><div style="font-weight:600">${n}</div><div style="font-size:10px">${d}</div><div style="font-size:10px;color:var(--tx3)">${r}</div></div><button class="btn btn-sm btn-sec" style="flex-shrink:0" onclick="event.stopPropagation();showOutput('${out}')">Investigate →</button></div>`).join('')}
+    </div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px">Partner Portfolio Health</div>
+      ${[['Delta MFI (KHL-02)','2.1% PAR30','$480k','Healthy','g'],['Sundarban Credit (KHL-07)','3.4% PAR30','$680k','Healthy','g'],['Narikel MFI (KHL-04)','12.4% PAR30','$420k','At Risk','r'],['Shapla Credit (KHL-09)','9.8% PAR30','$310k','Monitor','a']].map(([n,p,v,s,c])=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:9px;border-radius:7px;background:var(--card2);margin-bottom:6px;cursor:pointer;font-size:11px" onclick="showOutput('loan-portfolio')">
+        <div style="flex:1"><div style="font-weight:600">${n}</div><div style="color:var(--tx3)">${p} · ${v}</div></div>
+        <span class="badge badge-${c}">${s}</span>
+      </div>`).join('')}
+      <button class="btn btn-sec btn-sm" style="margin-top:4px;width:100%" onclick="showOutput('loan-portfolio')">📊 Full Portfolio Report</button>
+    </div>
+  </div>
+</div>`;}
+
+// ── COMMUNICATIONS ──────────────────────────────────────────
+const CHANNELS = {
+  general:{name:'general',icon:'💬',desc:'Organisation-wide announcements',msgs:[{u:'Amara Diallo',av:'AD',c:'#047857',t:'Great news — East Africa food security programme is now 3 weeks ahead of schedule! 🎉',tm:'9:42 AM',react:['👍 12','🎉 8']},{u:'Freya AI',av:'🤖',c:'#10b981',t:'<strong>Morning Programme Brief ready</strong> — 24,847 beneficiaries reached this week. World Bank Q3 draft 78% complete. Region 3 needs immediate attention. <a href="#" onclick="nav(\'field\');return false;" style="color:var(--pri)">View Field Operations →</a>',tm:'8:00 AM',react:['✅ 15'],ai:true},{u:'Ibrahim Hassan',av:'IH',c:'#2563eb',t:'Team — please submit your field reports by Thursday EOD for the Q3 consolidation. Freya will auto-validate and flag any issues.',tm:'Yesterday'}]},
+  field_updates:{name:'field-updates',icon:'🗺',desc:'Field team updates',msgs:[{u:'Ibrahim Hassan',av:'IH',c:'#2563eb',t:'Region 3 update: Meeting with Taiz Community Health today. Dropout rate still elevated but improving. Partner has committed to daily reporting this week.',tm:'10:15 AM',react:['👍 5']},{u:'Freya AI',av:'🤖',c:'#10b981',t:'<strong>Alert:</strong> Southern Yemen Cooperative has missed 2nd consecutive submission. Corrective action memo prepared and waiting in your approval queue.',tm:'9:30 AM',ai:true}]},
+  finance_team:{name:'finance-team',icon:'💰',desc:'Finance department',msgs:[{u:'Fatima Al-Said',av:'FA',c:'#7c3aed',t:'Payroll review for May complete. 2 anomalies flagged by Freya — John Okoro (leave days discrepancy) and Maria Santos (overtime not approved). Need director sign-off.',tm:'11:00 AM',react:['👍 3']}]},
+  donor_comms:{name:'donor-comms',icon:'🤝',desc:'External donor communications',msgs:[{u:'Amara Diallo',av:'AD',c:'#047857',t:'World Bank Q3 report draft is ready for review. Freya has auto-populated all DLI tables. Two narrative sections still need our input.',tm:'9:00 AM'},{u:'Freya AI',av:'🤖',c:'#10b981',t:'<strong>Draft ready for review:</strong> Q3 Programme Performance Report — World Bank PDO format. 14 pages, DLI tables complete, beneficiary data sourced from live MIS.',tm:'8:58 AM',ai:true,attach:{name:'Q3_WB_PDO_Report_Draft.docx',size:'2.4 MB',out:'donor-report'}}]},
+  crisis:{name:'crisis',icon:'🚨',desc:'Crisis response coordination',msgs:[{u:'Freya AI',av:'🤖',c:'#10b981',t:'<strong>CRITICAL — Region 3 (Taiz):</strong> Dropout rate reached 31%. I have prepared a crisis response brief with intervention options. Immediate field officer reallocation recommended.',tm:'9:14 AM',ai:true,attach:{name:'Crisis_Brief_Region3_Taiz.pdf',size:'840 KB',out:'crisis-brief'}},{u:'Amara Diallo',av:'AD',c:'#047857',t:'Acknowledged. Review the brief and let\'s discuss at 2pm. Ibrahim — can you arrange an emergency call with the Taiz partners today?',tm:'9:20 AM'}]},
+  hr_team:{name:'hr-team',icon:'👥',desc:'HR department channel',msgs:[{u:'Sara Ndiaye',av:'SN',c:'#6366f1',t:'Leave applications for May have been processed. Attendance for April: 96.2% overall. Full report attached.',tm:'10:30 AM',attach:{name:'April_Attendance_Report.xlsx',size:'1.2 MB',out:'attendance-report'}}]}
+};
+let activeChannel='general';
+function comms(){
+  return `<div class="comms-layout" style="height:calc(100vh - ${58+44+40}px)">
+    <div class="comms-channels">
+      <div style="padding:8px;font-size:11px;font-weight:700;color:var(--tx);border-bottom:1px solid var(--border);margin-bottom:8px">HopeReach</div>
+      <div class="channel-sec">Internal</div>
+      ${['general','field_updates','finance_team','hr_team'].map(ch=>`<div class="channel-item ${ch===activeChannel?'on':''}" onclick="switchChannel('${ch}')"><span>${CHANNELS[ch].icon}</span># ${CHANNELS[ch].name} ${ch==='crisis'?'<span class="channel-unread">!</span>':''}</div>`).join('')}
+      <div class="channel-sec">External</div>
+      ${['donor_comms','crisis'].map(ch=>`<div class="channel-item ${ch===activeChannel?'on':''}" onclick="switchChannel('${ch}')"><span>${CHANNELS[ch].icon}</span>${ch==='donor_comms'?'Donor Comms':'🚨 Crisis'}${ch==='crisis'?'<span class="channel-unread">1</span>':''}</div>`).join('')}
+      <div class="channel-sec">Direct Messages</div>
+      ${[['Ibrahim Hassan','IH','#2563eb','Field Supervisor'],['Fatima Al-Said','FA','#7c3aed','Finance'],['Sara Ndiaye','SN','#6366f1','HR'],['Freya AI','🤖','#10b981','AI Co-pilot']].map(([n,av,c,r])=>`
+      <div class="channel-item" onclick="toast('Opening DM with ${n}...','💬','g')"><div class="member-av" style="background:${c};width:20px;height:20px;font-size:8px">${av}</div>${n.split(' ')[0]}</div>`).join('')}
+    </div>
+    <div class="comms-main" id="comms-main-area">${renderChannel(activeChannel)}</div>
+    <div class="comms-members">
+      <div style="padding:6px 8px;font-size:10px;font-weight:700;color:var(--tx3);border-bottom:1px solid var(--border);margin-bottom:8px">MEMBERS — 18</div>
+      ${[['Amara Diallo','AD','#047857','Director',true],['Ibrahim Hassan','IH','#2563eb','Field Sup.',true],['Fatima Al-Said','FA','#7c3aed','Finance',true],['John Okoro','JO','#d97706','M&E',false],['Freya AI','🤖','#10b981','AI Agent',true],['Sara Ndiaye','SN','#6366f1','HR',true],['Maria Santos','MS','#ef4444','Logistics',false],['Ahmed Karim','AK','#10b981','Field',true]].map(([n,av,c,r,online])=>`
+      <div class="member-item"><div class="member-av" style="background:${c}">${av}${online?`<div class="member-online"></div>`:''}</div><div><div class="member-name">${n.split(' ')[0]}</div><div class="member-role">${r}</div></div></div>`).join('')}
+    </div>
+  </div>`;}
+function renderChannel(ch){
+  const c=CHANNELS[ch];
+  return `
+  <div class="comms-header">
+    <span style="font-size:18px">${c.icon}</span>
+    <div><div style="font-size:13px;font-weight:700;color:var(--tx)"># ${c.name}</div><div style="font-size:10px;color:var(--tx3)">${c.desc}</div></div>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <button class="btn btn-sec btn-sm" onclick="toast('Search opened','🔍','g')">🔍 Search</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Pinned messages','📌','g')">📌</button>
+    </div>
+  </div>
+  <div class="comms-msgs">
+    ${c.msgs.map(m=>`
+    <div class="msg-group">
+      <div class="msg-av" style="background:${m.c}">${m.av}</div>
+      <div class="msg-body">
+        <div class="msg-header"><span class="msg-name">${m.u}</span>${m.ai?'<span class="msg-ai-badge">AI Agent</span>':''}<span class="msg-time">${m.tm}</span></div>
+        <div class="msg-text">${m.t}</div>
+        ${m.attach?`<div class="msg-attachment" onclick="showOutput('${m.attach.out}')"><span class="msg-att-ic">📄</span><div><div class="msg-att-name">${m.attach.name}</div><div class="msg-att-size">${m.attach.size}</div></div><button class="btn btn-sec btn-sm" style="margin-left:auto">View</button></div>`:''}
+        ${m.react?`<div class="msg-reactions">${m.react.map(r=>`<div class="msg-reaction">${r}</div>`).join('')}</div>`:''}
+      </div>
+    </div>`).join('')}
+  </div>
+  <div class="comms-input">
+    <div class="msg-input-area">
+      <span style="font-size:14px">➕</span>
+      <input class="msg-input" placeholder="Message #${c.name}…" id="channel-input-${ch}" onkeydown="if(event.key==='Enter'){sendChannelMsg('${ch}',this)}">
+      <span style="font-size:14px;cursor:pointer" onclick="toast('Emoji picker opened','😊','g')">😊</span>
+      <span style="font-size:14px;cursor:pointer" onclick="toast('File attached','📎','g')">📎</span>
+      <button class="btn btn-pri btn-sm" onclick="sendChannelMsg('${ch}',document.getElementById('channel-input-${ch}'))">Send</button>
+    </div>
+  </div>`;}
+function switchChannel(ch){
+  activeChannel=ch;
+  document.getElementById('comms-main-area').innerHTML=renderChannel(ch);
+}
+function sendChannelMsg(ch,input){
+  const msg=input.value.trim();if(!msg) return;
+  const msgsEl=document.querySelector('.comms-msgs');
+  const div=document.createElement('div');div.className='msg-group';
+  div.innerHTML=`<div class="msg-av" style="background:#047857">AD</div><div class="msg-body"><div class="msg-header"><span class="msg-name">Amara Diallo</span><span class="msg-time">Just now</span></div><div class="msg-text">${msg}</div></div>`;
+  msgsEl.appendChild(div);input.value='';msgsEl.scrollTop=msgsEl.scrollHeight;
+  setTimeout(()=>{
+    const r=document.createElement('div');r.className='msg-group';
+    r.innerHTML=`<div class="msg-av" style="background:#10b981">🤖</div><div class="msg-body"><div class="msg-header"><span class="msg-name">Freya</span><span class="msg-ai-badge">AI Agent</span><span class="msg-time">Just now</span></div><div class="msg-text">Got it! I've noted that and updated the programme log. <span style="color:var(--pri)">I can help you action this immediately</span> — shall I add it to the workflow queue?</div></div>`;
+    msgsEl.appendChild(r);msgsEl.scrollTop=msgsEl.scrollHeight;
+  },1200);
+}
+
+// ── PROJECTS ──────────────────────────────────────────
+const BOARDS = {
+  todo:[
+    {t:'Q4 Programme Planning',d:'Define targets and budgets for all 6 programmes',tags:['#10b981','#2563eb'],as:['AD','IH'],due:'May 25',due_class:''},
+    {t:'USAID IND-07 Recovery Plan',d:'Develop corrective action to recover indicator before Q3 close',tags:['#ef4444','#d97706'],as:['AD','FA'],due:'May 15',due_class:'overdue'},
+    {t:'Volunteer Induction Programme',d:'Onboard 8 new volunteers for field work',tags:['#7c3aed'],as:['SN'],due:'May 30',due_class:''},
+    {t:'Asset Verification Audit',d:'Annual count of all 86 registered assets',tags:['#6366f1'],as:['MS'],due:'Jun 5',due_class:''}
+  ],
+  inprogress:[
+    {t:'World Bank Q3 Report',d:'Freya drafting — 78% complete. Director narrative needed.',tags:['#047857','#10b981'],as:['AD','JO'],due:'May 26',due_class:''},
+    {t:'Field Officer Reallocation',d:'Moving 2 officers from Region 2 to Region 3',tags:['#ef4444'],as:['IH'],due:'May 14',due_class:'overdue'},
+    {t:'May Payroll Processing',d:'47 staff + volunteers. 2 anomalies pending.',tags:['#d97706'],as:['FA'],due:'May 15',due_class:'overdue'}
+  ],
+  review:[
+    {t:'USAID Compliance Pack',d:'Freya assembled 86 evidence items. Ready for director sign-off.',tags:['#2563eb','#047857'],as:['AD','FA'],due:'May 20',due_class:''},
+    {t:'Vehicle Maintenance Award',d:'Rahim Auto Services recommended. $4,200 saving.',tags:['#6366f1'],as:['MS'],due:'May 16',due_class:''}
+  ],
+  done:[
+    {t:'April Attendance Report','d':'Filed and sent to HR Director',tags:['#047857'],as:['SN'],due:'May 5',due_class:''},
+    {t:'Q1 Budget Reconciliation',d:'All cost centres reconciled — $202k under budget',tags:['#10b981'],as:['FA'],due:'Apr 30',due_class:''},
+    {t:'Partner Data Consolidation',d:'280 submissions merged, 12 duplicates removed',tags:['#10b981'],as:['JO','IH'],due:'Apr 28',due_class:''}
+  ]
+};
+function projects(){return `
+<div class="page-hd">
+  <div><div class="page-title">📌 Project Management</div><div class="page-sub">Task tracking · <strong>Freya auto-creates tasks from programme alerts</strong></div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="toast('Opening all boards...','📌','g')">View Boards</button><button class="btn btn-pri" onclick="addBoardCard()">+ Add Task</button></div>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:14px;align-items:center">
+  <div class="search-bar" style="max-width:240px"><input placeholder="Search tasks..."></div>
+  <span style="font-size:11px;color:var(--tx3)">Filter:</span>
+  ${['All','High Priority','My Tasks','Overdue'].map((t,i)=>`<button class="btn ${i===0?'btn-pri':'btn-sec'} btn-sm" onclick="this.parentElement.querySelectorAll('.btn').forEach(b=>b.className='btn btn-sec btn-sm');this.className='btn btn-pri btn-sm'">${t}</button>`).join('')}
+</div>
+<div class="board-layout">
+  ${[['todo','📋 To Do'],['inprogress','🔄 In Progress'],['review','👁 In Review'],['done','✅ Done']].map(([k,label])=>`
+  <div class="board-col">
+    <div class="board-col-header"><div class="board-col-title">${label}<span class="board-col-count">${BOARDS[k].length}</span></div>
+    <button class="btn-icon" style="width:24px;height:24px;font-size:12px" onclick="toast('Adding task...','📋','g')">+</button></div>
+    <div class="board-col-body">
+      ${BOARDS[k].map((c,i)=>`
+      <div class="board-card" onclick="showTaskDetail('${k}','${i}')">
+        <div class="bc-labels">${c.tags.map(t=>`<div class="bc-label" style="background:${t};width:${24+Math.random()*20}px"></div>`).join('')}</div>
+        <div class="bc-title">${c.t}</div>
+        <div class="bc-desc">${c.d}</div>
+        <div class="bc-footer">
+          <div class="bc-assignees">${c.as.map((a,ai)=>`<div class="bc-assignee" style="background:${['#047857','#2563eb','#7c3aed','#d97706','#ef4444','#10b981','#6366f1'][ai%7]}">${a}</div>`).join('')}</div>
+          <div class="bc-meta"><span class="bc-due ${c.due_class}">📅 ${c.due}</span></div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>`).join('')}
+</div>`;}
+function addBoardCard(){toast('New task created by Freya!','📌','g');}
+function showTaskDetail(k,i){
+  const c=BOARDS[k][parseInt(i)];
+  toast(`Opening task: ${c.t}`,'📌','g');
+}
+
+// ── AGENTS ──────────────────────────────────────────
+function agents(){
+  const agentList=[
+    {n:'Programme Intelligence',cat:'01 · CORE',ic:'🧠',d:'Answers any question about your programme operations. Morning briefs auto-compiled daily. Cross-domain synthesis of all data.',running:true,tasks:52},
+    {n:'M&E Report Generator',cat:'02 · REPORTING',ic:'📊',d:'Auto-drafts donor reports from live MIS data. World Bank PDO, USAID, DFID, EU formats. Multi-level approval built in.',running:true,tasks:18},
+    {n:'Partner Performance Monitor',cat:'03 · MONITORING',ic:'📡',d:'Real-time target vs. actual tracking for all partner organisations. Early warning alerts. Corrective action memos drafted.',running:false,tasks:34},
+    {n:'Field Data Analyst',cat:'04 · DATA',ic:'📁',d:'Ingests, validates, consolidates partner submissions. Excel, ODK, KoBoToolbox, SurveyCTO. Deduplication and quality flags.',running:true,tasks:28},
+    {n:'Beneficiary Analytics',cat:'05 · IMPACT',ic:'👥',d:'Tracks beneficiary journeys end-to-end. Gender disaggregation at every level. Dropout patterns in real time. Vulnerability mapping.',running:false,tasks:41},
+    {n:'Loan & Portfolio Monitor',cat:'06 · FINANCE',ic:'💰',d:'Real-time portfolio health — PAR30, PAR90, disbursement rates. Links repayment to training completion. Early warning on deterioration.',running:false,tasks:22},
+    {n:'Document Drafting Agent',cat:'07 · COMMS',ic:'📄',d:'Drafts donor updates, board briefings, field reports, success stories. All structured, data-sourced, routed for approval. No blank page.',running:false,tasks:67},
+    {n:'Compliance & Risk Sentinel',cat:'08 · COMPLIANCE',ic:'🛡',d:'Tracks all compliance obligations across every partner — ESS, grievances, safeguarding. Auto-compiles evidence portfolios.',running:true,tasks:19},
+    {n:'Programme Forecasting Agent',cat:'09 · PLANNING',ic:'🔭',d:'Predicts trajectory — beneficiary count, KPI probability, budget utilisation. 3-scenario modelling with confidence intervals.',running:false,tasks:8},
+    {n:'Repayment Behaviour Indicator',cat:'10 · CREDIT',ic:'⚖',d:'7-dimension psychometric credit assessment. No bureau history required. Produces loan recommendation for officer review.',running:false,tasks:23},
+    {n:'HR Management Agent',cat:'11 · HR',ic:'👤',d:'Attendance tracking, leave management, payroll anomaly detection, volunteer scheduling, performance flagging.',running:false,tasks:14},
+    {n:'Finance Intelligence Agent',cat:'12 · FINANCE',ic:'📈',d:'Budget variance analysis, VAT/tax calculations, bill processing, financial report generation, payroll processing.',running:false,tasks:31},
+    {n:'Logistics & Procurement Agent',cat:'13 · LOGISTICS',ic:'🚚',d:'Vendor comparative analysis, quotation evaluation, inventory monitoring, asset counting, work order generation.',running:false,tasks:17},
+    {n:'Communications Agent',cat:'14 · COMMS',ic:'💬',d:'Drafts letters to government officials, partner correspondence, beneficiary notifications, crisis communication briefs.',running:false,tasks:44},
+    {n:'Crisis Response Coordinator',cat:'15 · CRISIS',ic:'🚨',d:'Monitors early warning indicators, drafts crisis response briefs, coordinates multi-agency responses, updates stakeholders.',running:false,tasks:6}
+  ];
+  return `
+<div class="page-hd">
+  <div><div class="page-title">🤖 AI Agents</div><div class="page-sub"><strong>15 specialist agents</strong> · ${agentList.filter(a=>a.running).length} running · 847 tasks today</div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="openFreya()">🤖 Talk to Freya</button><button class="btn btn-pri" onclick="toast('Running all agents now!','⚡','g')">⚡ Run All Agents</button></div>
+</div>
+<div class="freya-box" style="margin-bottom:20px">
+  <div class="freya-box-ic">🤖</div>
+  <div><div class="freya-box-label">Freya — Programme Intelligence Orchestrator</div>
+    <div class="freya-box-text">I'm currently orchestrating <strong>6 active tasks</strong>. Running: M&E Report Generator (World Bank Q3, 78%), Field Data Analyst (Region 4 validation), Compliance Sentinel (USAID pack), HR Agent (payroll check). Estimated completion: 8 mins.</div>
+  </div>
+  <div class="freya-box-acts"><button class="btn btn-pri btn-sm" onclick="openFreya()">Ask Freya</button><button class="btn btn-sec btn-sm" onclick="toast('Viewing all active outputs...','⚡','g')">View Outputs</button></div>
+</div>
+<div class="card" style="margin-bottom:20px">
+  <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:4px">⚡ Run a Full Agentic Pipeline — See Every Output Live</div>
+  <div style="font-size:11px;color:var(--tx3);margin-bottom:14px">Click any pipeline to watch Freya orchestrate multiple specialist agents in sequence. Each agent produces a real output you can open, approve, and send.</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <div style="flex:1;min-width:180px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px">
+      <div style="font-size:22px;margin-bottom:6px">📊</div>
+      <div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:3px">Quarterly Donor Report</div>
+      <div style="font-size:10px;color:var(--tx3);margin-bottom:10px">9 agents · World Bank PDO format</div>
+      <button class="btn btn-pri btn-sm" style="width:100%" onclick="showWorkflowRun('quarterly-donor')">▶ Run Now →</button>
+    </div>
+    <div style="flex:1;min-width:180px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px">
+      <div style="font-size:22px;margin-bottom:6px">🧠</div>
+      <div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:3px">Credit Assessment</div>
+      <div style="font-size:10px;color:var(--tx3);margin-bottom:10px">5 agents · Psychometric + portfolio check</div>
+      <button class="btn btn-pri btn-sm" style="width:100%" onclick="showWorkflowRun('credit-assessment')">▶ Run Now →</button>
+    </div>
+    <div style="flex:1;min-width:180px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px">
+      <div style="font-size:22px;margin-bottom:6px">🚨</div>
+      <div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:3px">Crisis Response</div>
+      <div style="font-size:10px;color:var(--tx3);margin-bottom:10px">6 agents · Emergency brief + comms pack</div>
+      <button class="btn btn-pri btn-sm" style="width:100%" onclick="showWorkflowRun('crisis-response')">▶ Run Now →</button>
+    </div>
+  </div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
+  ${agentList.map(a=>`
+  <div class="card ${a.running?'':'card-hover'}" style="${a.running?'border-color:rgba(4,120,87,.3);background:rgba(4,120,87,.03)':''}">
+    <div style="font-family:var(--mono);font-size:8px;font-weight:700;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">${a.cat}</div>
+    <div style="font-size:24px;margin-bottom:6px">${a.ic}</div>
+    <div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:4px">${a.n}</div>
+    <div style="font-size:10px;color:var(--tx3);line-height:1.5;margin-bottom:10px">${a.d}</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:5px">
+        ${a.running?`<span class="badge badge-g badge-dot">RUNNING</span><span style="font-family:var(--mono);font-size:9px;color:var(--tx3)">${a.tasks} tasks</span>`:`<span style="font-family:var(--mono);font-size:9px;color:var(--tx3)">IDLE · ${a.tasks} tasks today</span>`}
+      </div>
+      <button class="btn btn-${a.running?'sec':'pri'} btn-sm" onclick="triggerAgent('${a.n}',this)">${a.running?'View Output':'▶ Trigger'}</button>
+    </div>
+  </div>`).join('')}
+</div>`;}
+function triggerAgent(name,btn){
+  btn.textContent='Running…';btn.disabled=true;
+  toast(`${name} triggered — check output shortly`,'⚡','g');
+  setTimeout(()=>{btn.textContent='View Output';btn.disabled=false;
+    const outputMap={'M&E Report Generator':'donor-report','Field Data Analyst':'field-synthesis','Compliance & Risk Sentinel':'compliance-audit','Loan & Portfolio Monitor':'loan-portfolio','Repayment Behaviour Indicator':'psychometric','HR Management Agent':'attendance-report','Finance Intelligence Agent':'budget-report','Logistics & Procurement Agent':'procurement-analysis','Crisis Response Coordinator':'crisis-brief'};
+    const out=outputMap[name];if(out) showOutput(out);else toast('Output ready — check Reports section','✅','g');
+  },1800);
+}
+
+// ── KNOWLEDGE BASE ──────────────────────────────────────────
+function knowledge(){return `
+<div class="page-hd">
+  <div><div class="page-title">🔍 Knowledge Base</div><div class="page-sub">Memory Health: <strong>91%</strong> · 224 indexed facts · 8 documents</div></div>
+  <div class="page-acts"><button class="btn btn-pri" onclick="toast('Indexing documents...','🔍','g')">📄 Index Documents</button></div>
+</div>
+<div class="grid-2">
+  <div>
+    <div class="card" style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:10px"><div style="font-size:13px;font-weight:700">Memory Health</div><div style="font-size:18px;font-weight:800;color:var(--pri)">91%</div></div>
+      <div class="prog-bar" style="height:8px;margin-bottom:16px"><div class="prog-fill" style="width:91%"></div></div>
+      <div class="grid-2">
+        ${[['Programme Data','94%','18 facts · Updated 1h ago'],['Beneficiary Records','88%','72 facts · Updated 30min ago'],['Donor Requirements','92%','46 facts · Updated 2h ago'],['Compliance & ESS','81%','88 facts · Updated 5h ago']].map(([n,p,s])=>`
+        <div style="padding:10px;background:var(--card2);border-radius:7px;cursor:pointer" onclick="toast('Opening ${n} namespace...','🔍','g')">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><div style="font-size:11px;font-weight:700">${n}</div><div style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--pri)">${p}</div></div>
+          <div class="prog-bar" style="margin-bottom:5px"><div class="prog-fill" style="width:${p}"></div></div>
+          <div style="font-size:9px;color:var(--tx3)">${s}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px">📄 Document Library</div>
+      <div style="border:2px dashed var(--border2);border-radius:8px;padding:20px;text-align:center;cursor:pointer;margin-bottom:12px" onclick="toast('File upload dialog opened','📄','g')">
+        <div style="font-size:24px;margin-bottom:5px">📄</div><div style="font-size:11px;color:var(--tx3)">Drop files here or <span style="color:var(--pri);cursor:pointer">click to upload</span> · Freya indexes automatically</div>
+      </div>
+      ${[['📊','HopeReach_Strategy_2024-2026.pdf','Indexed · 892 KB'],['📄','World_Bank_PDO_Requirements.docx','Indexed · 1.2 MB'],['📋','USAID_ADS_303_Field_Guide.pdf','Indexed · 2.4 MB'],['📊','ESS_Environmental_Standards.pdf','Syncing… · 640 KB']].map(([ic,n,s])=>`
+      <div style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--card2);border-radius:6px;margin-bottom:6px;font-size:11px;cursor:pointer" onclick="toast('Opening document...','📄','g')"><span style="font-size:16px">${ic}</span><div style="flex:1"><div style="font-weight:600">${n}</div><div style="font-size:9px;color:var(--tx3)">${s}</div></div></div>`).join('')}
+    </div>
+  </div>
+  <div>
+    <div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:10px">🧠 What Freya Knows About HopeReach</div>
+      <div style="font-size:11px;color:var(--tx3);margin-bottom:14px">224 indexed facts · 91% memory health</div>
+      ${[['🏢 Organisation',['Development NGO','Founded 2012','Emergency Healthcare','95% ops ratio','MENA focus','UN partner']],['📋 Programmes',['6 active programmes','24,847 beneficiaries','14 partner orgs','6 active regions','$2.33M budget']],['🤝 Donors',['World Bank PDO format','USAID ADS-303','FCDO compliant','EU ECHO partner','UNICEF grantee']],['🛡 Compliance',['ESS certified','Safeguarding policy','GDPR Article 22','Grievance mechanism']]].map(([s,tags])=>`
+      <div style="margin-bottom:12px"><div class="lbl" style="margin-bottom:6px">${s}</div><div style="display:flex;flex-wrap:wrap;gap:5px">${tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>`).join('')}
+      <button class="btn btn-sec btn-sm" style="width:100%;margin-top:6px" onclick="toast('Full knowledge map opened','🔍','g')">View Full Knowledge Map →</button>
+    </div>
+  </div>
+</div>`;}
+
+// ── SETTINGS ──────────────────────────────────────────
+function settings(){return `
+<div class="page-hd">
+  <div><div class="page-title">⚙ Settings</div><div class="page-sub">Organisation settings · Integrations · Users</div></div>
+  <div class="page-acts"><button class="btn btn-pri" onclick="toast('Settings saved!','✅','g')">Save Changes</button></div>
+</div>
+<div class="tabs">
+  ${['Organisation','Users & Access','Integrations','Notifications','AI & Automation','Billing'].map((t,i)=>`<div class="tab-item ${i===0?'on':''}" onclick="this.parentElement.querySelectorAll('.tab-item').forEach(x=>x.classList.remove('on'));this.classList.add('on')">${t}</div>`).join('')}
+</div>
+<div class="grid-2">
+  <div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="lbl" style="margin-bottom:10px">Organisation Details</div>
+      ${[['Organisation Name','HopeReach Foundation'],['Type','Non-Governmental Organisation (NGO)'],['Country','Bangladesh (HQ) · Yemen, Kenya, South Sudan (Operations)'],['Registration No.','NGO-BD-2012-4892'],['Tax ID / VAT','12-3456789'],['Plan','IMPACT — Active']].map(([l,v])=>`
+      <div style="margin-bottom:12px"><div style="font-size:10px;font-weight:600;color:var(--tx3);margin-bottom:3px">${l}</div><input style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:8px 12px;font-size:12px;color:var(--tx);outline:none" value="${v}"></div>`).join('')}
+    </div>
+    <div class="card"><div class="lbl" style="margin-bottom:10px">🤖 AI & Automation</div>
+      ${[['Default Mode','Semi-Auto'],['Approval Required for','All agent outputs'],['Auto-execute when','Confidence > 95% and mode = Full Auto'],['Report Language','English'],['Date/Time Zone','UTC+6 (Dhaka)']].map(([l,v])=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:11px">
+        <span style="color:var(--tx2)">${l}</span>
+        <span class="badge badge-g">${v}</span>
+      </div>`).join('')}
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:14px"><div class="lbl" style="margin-bottom:10px">🔗 Integrations</div>
+      ${[['📧','Email (Gmail/Outlook)','Send donor reports, notifications, letters','on'],['📱','WhatsApp Business','Field team updates, beneficiary comms','on'],['📊','KoBoToolbox','Field data collection & submission','on'],['📋','ODK (OpenDataKit)','Mobile data collection forms','on'],['💰','QuickBooks','Financial reporting & accounting','off'],['🌐','World Bank Portal','Direct report submission','on'],['📊','USAID ASIST','USAID reporting portal integration','off'],['💬','Slack','External team notifications','off'],['📊','PowerBI','Advanced analytics dashboards','off'],['🏦','MIS/ERP System','Core management information system','on']].map(([ic,n,d,s])=>`
+      <div class="int-card">
+        <div class="int-logo" style="background:var(--card);border:1px solid var(--border)">${ic}</div>
+        <div style="flex:1"><div class="int-name">${n}</div><div class="int-desc">${d}</div></div>
+        <div class="int-toggle ${s}" onclick="this.classList.toggle('on');this.classList.toggle('off');toast('Integration toggled!','🔗','g')"></div>
+      </div>`).join('')}
+    </div>
+  </div>
+</div>`;}
+
+// ── PROFILE ──────────────────────────────────────────
+function profile(){return `
+<div class="page-hd">
+  <div><div class="page-title">👤 My Profile</div><div class="page-sub">Account · Preferences · Security</div></div>
+  <div class="page-acts"><button class="btn btn-pri" onclick="toast('Profile saved!','✅','g')">Save Changes</button></div>
+</div>
+<div class="grid-2">
+  <div>
+    <div class="card" style="margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+        <div style="width:72px;height:72px;border-radius:16px;background:linear-gradient(135deg,var(--pri),var(--acc));display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff">AD</div>
+        <div><div style="font-size:18px;font-weight:800;color:var(--tx)">Amara Diallo</div><div style="font-size:12px;color:var(--tx2)">Programme Director</div><div style="font-size:11px;color:var(--tx3)">HopeReach Foundation · Impact Plan</div></div>
+        <button class="btn btn-sec btn-sm" style="margin-left:auto" onclick="toast('Opening photo upload...','📷','g')">Change Photo</button>
+      </div>
+      ${[['Full Name','Amara Diallo'],['Email','amara.diallo@hopereach.org'],['Phone','+880 17 1234 5678'],['Role','Programme Director'],['Department','Management'],['Location','Dhaka, Bangladesh']].map(([l,v])=>`
+      <div style="margin-bottom:12px"><div style="font-size:10px;font-weight:600;color:var(--tx3);margin-bottom:3px">${l}</div><input style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:8px 12px;font-size:12px;color:var(--tx);outline:none" value="${v}"></div>`).join('')}
+    </div>
+    <div class="card"><div class="lbl" style="margin-bottom:10px">Security</div>
+      <button class="btn btn-sec" style="width:100%;margin-bottom:8px;justify-content:flex-start" onclick="toast('Password reset email sent!','🔒','g')">🔒 Change Password</button>
+      <button class="btn btn-sec" style="width:100%;margin-bottom:8px;justify-content:flex-start" onclick="toast('2FA setup started...','📱','g')">📱 Enable Two-Factor Authentication</button>
+      <button class="btn btn-sec" style="width:100%;justify-content:flex-start" onclick="toast('Showing active sessions...','💻','g')">💻 Active Sessions (2)</button>
+    </div>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:14px"><div class="lbl" style="margin-bottom:10px">Preferences</div>
+      ${[['Interface Language','English'],['Date Format','DD/MM/YYYY'],['Currency','USD ($)'],['Notifications','All enabled'],['Email Digest','Daily (8:00 AM)']].map(([l,v])=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:11px">
+        <span style="color:var(--tx2)">${l}</span>
+        <select style="background:var(--card2);border:1px solid var(--border);border-radius:5px;padding:3px 8px;font-size:10px;color:var(--tx)"><option>${v}</option></select>
+      </div>`).join('')}
+    </div>
+    <div class="card"><div class="lbl" style="margin-bottom:10px">My Activity (This Week)</div>
+      ${[['Reports approved','12'],['Freya actions reviewed','24'],['Meetings','8'],['Tasks completed','18'],['Freya queries','47']].map(([l,v])=>`
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:11px">
+        <span style="color:var(--tx2)">${l}</span><strong style="color:var(--tx)">${v}</strong>
+      </div>`).join('')}
+    </div>
+  </div>
+</div>`;}
+
+// ── NOTIFICATIONS ──────────────────────────────────────────
+function notifications(){return `
+<div class="page-hd">
+  <div><div class="page-title">🔔 Notifications</div><div class="page-sub">5 unread notifications</div></div>
+  <div class="page-acts"><button class="btn btn-sec" onclick="toast('All marked as read','✅','g')">Mark all read</button></div>
+</div>
+<div style="max-width:600px">
+  ${[['🚨','CRITICAL: Region 3 dropout rate at 31%','Freya has prepared a corrective action memo. Review required.','2 min ago','r','crisis-brief'],['📊','World Bank Q3 Draft Ready','M&E Agent has completed 78% of the report draft. Your input needed on 2 sections.','8 min ago','g','donor-report'],['💰','Payroll Anomalies (2)','2 payroll items flagged before Friday disbursement. Review required.','15 min ago','a','salary-report'],['🛡','USAID IND-07 Below Target','Corrective action note drafted and awaiting approval.','1 hr ago','a','compliance-audit'],['📦','Low Inventory Alert','4 items below reorder threshold. Procurement request auto-generated.','2 hr ago','b','procurement-analysis']].map(([ic,t,d,tm,c,out])=>`
+  <div style="display:flex;gap:12px;padding:14px;border-left:3px solid var(--${c==='r'?'rd':c==='g'?'pri':c==='a'?'am':'bl'});background:var(--card);border-radius:0 8px 8px 0;margin-bottom:8px;border:1px solid var(--border);border-left-width:3px;cursor:pointer" onclick="showOutput('${out}')">
+    <span style="font-size:20px;flex-shrink:0">${ic}</span>
+    <div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:2px">${t}</div><div style="font-size:11px;color:var(--tx2);margin-bottom:4px">${d}</div><div style="font-size:10px;color:var(--tx3)">${tm}</div></div>
+    <button class="btn btn-sec btn-sm" onclick="event.stopPropagation();showOutput('${out}')">View →</button>
+  </div>`).join('')}
+</div>`;}
+
+// ── WORKFLOW EXECUTION OVERLAY ─────────────────────────
+// Shows live agent pipeline execution like the screenshots
+const WORKFLOW_PIPELINES = {
+  'quarterly-donor':{
+    name:'Quarterly Donor Report Pipeline',
+    desc:'Full end-to-end donor reporting workflow — from data pull to submission-ready pack',
+    agents:[
+      {n:'Programme Intelligence (Freya)',cat:'Specialist 01',sub:'Core · Orchestrator',ic:'🧠',out:'Orchestration Plan — Khulna Q1 2026',outKey:'donor-report'},
+      {n:'Partner Performance Monitor',cat:'Specialist 03',sub:'Tracking · alerts',ic:'📡',out:'PO Performance Roster — Khulna Q1 2026',outKey:'field-synthesis'},
+      {n:'Loan Portfolio Monitor',cat:'Specialist 06',sub:'Portfolio health',ic:'💰',out:'Loan Portfolio Health Report — Khulna Q1 2026',outKey:'loan-portfolio'},
+      {n:'Field Data Analyst',cat:'Specialist 04',sub:'Ground synthesis',ic:'📁',out:'Field Data Synthesis — PO-KHL-04 & KHL-09',outKey:'field-synthesis'},
+      {n:'Beneficiary Analytics',cat:'Specialist 05',sub:'Impact tracking',ic:'👥',out:'Beneficiary Impact Assessment — Flood Corridor',outKey:'donor-report'},
+      {n:'Compliance & Risk Sentinel',cat:'Specialist 08',sub:'Risk flagging',ic:'🛡',out:'Compliance Audit Report — PO-KHL-09',outKey:'compliance-audit'},
+      {n:'Document Drafting',cat:'Specialist 07',sub:'Memos · narratives',ic:'📄',out:'Board Memorandum Draft — HR/PI/KHL/Q1-2026',outKey:'donor-report'},
+      {n:'M&E Report Generator',cat:'Specialist 02',sub:'Monitoring & evaluation',ic:'📊',out:'M&E Indicator Consistency Check — Q1 2026',outKey:'donor-report'},
+      {n:'Programme Forecasting',cat:'Specialist 09',sub:'Scenario modelling',ic:'🔭',out:'Q2 2026 Programme Forecast — Khulna',outKey:'donor-report'}
+    ]
+  },
+  'credit-assessment':{
+    name:'Credit Assessment Pipeline',
+    desc:'Full borrower assessment — psychometric scoring through to loan recommendation',
+    agents:[
+      {n:'Programme Intelligence (Freya)',cat:'Specialist 01',sub:'Core · Orchestrator',ic:'🧠',out:'Assessment Orchestration Plan',outKey:'donor-report'},
+      {n:'Repayment Behaviour Indicator',cat:'Specialist 10',sub:'Psychometric scoring',ic:'⚖',out:'Psychometric Score Report — Applicant #2891',outKey:'psychometric'},
+      {n:'Loan Portfolio Monitor',cat:'Specialist 06',sub:'Portfolio health',ic:'💰',out:'Portfolio Risk Context — Khulna Q1',outKey:'loan-portfolio'},
+      {n:'Compliance & Risk Sentinel',cat:'Specialist 08',sub:'Risk flagging',ic:'🛡',out:'Borrower Compliance Check — #2891',outKey:'compliance-audit'},
+      {n:'Document Drafting',cat:'Specialist 07',sub:'Loan recommendation letter',ic:'📄',out:'Loan Recommendation — Applicant #2891',outKey:'donor-report'}
+    ]
+  },
+  'crisis-response':{
+    name:'Crisis Response Pipeline',
+    desc:'Emergency response workflow — from alert detection to intervention plan',
+    agents:[
+      {n:'Programme Intelligence (Freya)',cat:'Specialist 01',sub:'Core · Orchestrator',ic:'🧠',out:'Crisis Orchestration Brief — Region 3',outKey:'crisis-brief'},
+      {n:'Field Data Analyst',cat:'Specialist 04',sub:'Ground synthesis',ic:'📁',out:'Emergency Field Synthesis — Taiz Region',outKey:'field-synthesis'},
+      {n:'Beneficiary Analytics',cat:'Specialist 05',sub:'Impact tracking',ic:'👥',out:'At-Risk Beneficiary Assessment — 1,480 identified',outKey:'donor-report'},
+      {n:'Crisis Response Coordinator',cat:'Specialist 15',sub:'Emergency response',ic:'🚨',out:'Crisis Response Brief — Region 3 (Taiz)',outKey:'crisis-brief'},
+      {n:'Communications Agent',cat:'Specialist 14',sub:'Stakeholder alerts',ic:'💬',out:'Crisis Stakeholder Communication Pack',outKey:'donor-report'},
+      {n:'Document Drafting',cat:'Specialist 07',sub:'Corrective action memo',ic:'📄',out:'Corrective Action Memo — Region 3',outKey:'donor-report'}
+    ]
+  }
+};
+
+let wfRunActive = false;
+let wfRunPipeline = null;
+
+function showWorkflowRun(pipelineKey){
+  const pipeline = WORKFLOW_PIPELINES[pipelineKey];
+  if(!pipeline) return;
+  wfRunActive = true;
+  wfRunPipeline = pipeline;
+  
+  // Create overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'wf-run-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:900;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;backdrop-filter:blur(4px)';
+  
+  overlay.innerHTML = `
+    <div style="width:100%;max-width:720px;background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.4)">
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--acc));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 0 10px rgba(4,120,87,.3)">⚡</div>
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:800;color:var(--tx)">${pipeline.name}</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:2px">${pipeline.desc}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span id="wf-status-badge" style="background:rgba(4,120,87,.1);border:1px solid rgba(4,120,87,.3);color:var(--pri);font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 10px;border-radius:12px;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:var(--pri);animation:blink 1s infinite;display:inline-block"></span>RUNNING</span>
+          <button onclick="document.getElementById('wf-run-overlay').remove()" style="width:30px;height:30px;border-radius:6px;background:var(--card2);border:1px solid var(--border);cursor:pointer;font-size:14px">✕</button>
+        </div>
+      </div>
+      <div id="wf-agents-list" style="padding:0"></div>
+      <div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:center">
+        <div id="wf-progress-bar" style="flex:1;height:5px;background:var(--card2);border-radius:3px;overflow:hidden"><div id="wf-progress-fill" style="height:100%;background:var(--pri);border-radius:3px;width:0%;transition:width .4s ease"></div></div>
+        <span id="wf-progress-text" style="font-family:var(--mono);font-size:10px;color:var(--tx3);white-space:nowrap">0 / ${pipeline.agents.length} done</span>
+      </div>
+    </div>`;
+  
+  document.body.appendChild(overlay);
+  
+  // Animate agents running one by one
+  const agentsList = document.getElementById('wf-agents-list');
+  const agents = pipeline.agents;
+  
+  agents.forEach((ag,i) => {
+    const agDiv = document.createElement('div');
+    agDiv.id = `wf-agent-${i}`;
+    agDiv.style.cssText = 'border-bottom:1px solid var(--border);opacity:.35;transition:opacity .3s';
+    agDiv.innerHTML = `
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 24px;background:var(--card)">
+        <div style="width:40px;height:40px;border-radius:10px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${ag.ic}</div>
+        <div style="flex:1">
+          <div style="font-family:var(--mono);font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">${ag.cat}</div>
+          <div style="font-size:14px;font-weight:700;color:var(--tx)">${ag.n}</div>
+          <div style="font-size:11px;color:var(--tx3)">${ag.sub}</div>
+        </div>
+        <div id="wf-badge-${i}" style="background:var(--card2);border:1px solid var(--border);color:var(--tx3);font-family:var(--mono);font-size:10px;font-weight:700;padding:5px 14px;border-radius:20px;display:flex;align-items:center;gap:6px">◷ Waiting</div>
+      </div>
+      <div id="wf-output-${i}" style="display:none;padding:12px 24px 16px;background:rgba(4,120,87,.03);border-top:1px solid rgba(4,120,87,.1)">
+        <div style="font-family:var(--mono);font-size:8px;font-weight:700;color:var(--pri);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px">WHAT THIS SPECIALIST PRODUCED</div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:13px;font-weight:700;color:var(--tx)">${ag.out}</div>
+          <button class="btn btn-sec btn-sm" style="display:flex;align-items:center;gap:5px;border:1px solid var(--border);background:var(--card)" onclick="document.getElementById('wf-run-overlay').remove();showOutput('${ag.outKey}')">👁 Show Output</button>
+        </div>
+      </div>`;
+    agentsList.appendChild(agDiv);
+  });
+  
+  // Run agents sequentially with delays
+  let completedCount = 0;
+  agents.forEach((ag, i) => {
+    const delay = 600 + i * 900; // stagger each agent by 900ms
+    
+    // Start running
+    setTimeout(() => {
+      const agDiv = document.getElementById(`wf-agent-${i}`);
+      const badge = document.getElementById(`wf-badge-${i}`);
+      if(!agDiv) return;
+      agDiv.style.opacity = '1';
+      agDiv.style.background = 'rgba(4,120,87,.02)';
+      badge.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:var(--am);display:inline-block;animation:blink 1s infinite"></span> Running';
+      badge.style.background = 'rgba(245,158,11,.1)';
+      badge.style.borderColor = 'rgba(245,158,11,.3)';
+      badge.style.color = 'var(--am)';
+      agDiv.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }, delay);
+    
+    // Finish
+    setTimeout(() => {
+      const agDiv = document.getElementById(`wf-agent-${i}`);
+      const badge = document.getElementById(`wf-badge-${i}`);
+      const outDiv = document.getElementById(`wf-output-${i}`);
+      if(!agDiv) return;
+      badge.innerHTML = '✓ Done';
+      badge.style.background = 'rgba(4,120,87,.1)';
+      badge.style.borderColor = 'rgba(4,120,87,.25)';
+      badge.style.color = 'var(--pri)';
+      if(outDiv) outDiv.style.display = 'block';
+      completedCount++;
+      const pct = Math.round((completedCount / agents.length) * 100);
+      const pf = document.getElementById('wf-progress-fill');
+      const pt = document.getElementById('wf-progress-text');
+      if(pf) pf.style.width = pct + '%';
+      if(pt) pt.textContent = completedCount + ' / ' + agents.length + ' done';
+      if(completedCount === agents.length){
+        const sb = document.getElementById('wf-status-badge');
+        if(sb){ sb.innerHTML = '✓ COMPLETE'; sb.style.background='rgba(4,120,87,.1)';sb.style.borderColor='rgba(4,120,87,.3)';sb.style.color='var(--pri)'; }
+        toast('Pipeline complete! All ' + agents.length + ' agents finished.', '✅', 'g');
+      }
+    }, delay + 700);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+renderScreen('dashboard');
+
+// Freya status ticker
+const TICKER_MSGS = [
+  'Running M&E Report Generator — World Bank Q3 draft 78% complete',
+  'Field Data Analyst — validating 280 partner submissions',
+  'Compliance Sentinel — USAID portfolio check in progress',
+  'Partner Performance Monitor — Region 3 alert detected',
+  'Programme Intelligence — morning brief compiled and sent',
+  'Psychometric Assessment — Applicant #2891 scoring in progress'
+];
+let tickerIdx=0;
+setInterval(()=>{
+  const el=document.getElementById('freya-status-text');
+  if(el && currentMode==='semi'){el.innerHTML=`<strong>Freya</strong> is ${TICKER_MSGS[tickerIdx++%TICKER_MSGS.length]}`;}
+},6000);
+</script>
+</body>
+</html>

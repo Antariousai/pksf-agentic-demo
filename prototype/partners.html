@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Partner Organizations — PKSF AI</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+.po-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 16px;
+  cursor: pointer; transition: all .18s;
+  border-left: 4px solid transparent;
+}
+.po-card:hover { box-shadow: var(--sh2); transform: translateY(-2px); }
+.po-card.risk-high   { border-left-color: var(--rd); }
+.po-card.risk-medium { border-left-color: var(--am); }
+.po-card.risk-low    { border-left-color: var(--acc); }
+
+.po-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+.po-name   { font-size: 13px; font-weight: 700; color: var(--tx); }
+.po-id     { font-size: 9px; font-family: var(--mono); color: var(--tx3); margin-top: 2px; }
+.po-stats  { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 10px; }
+.po-stat-val { font-size: 15px; font-weight: 800; color: var(--tx); }
+.po-stat-lbl { font-size: 9px; color: var(--tx3); }
+
+.filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.filter-chip {
+  padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  border: 1.5px solid var(--border); background: var(--card);
+  color: var(--tx2); cursor: pointer; transition: all .15s;
+}
+.filter-chip:hover { border-color: var(--pri); color: var(--pri); }
+.filter-chip.active { background: var(--pri); color: #fff; border-color: var(--pri); }
+
+.detail-panel {
+  position: fixed; top: var(--tbh); right: 0; bottom: 0;
+  width: 480px; background: var(--card);
+  border-left: 1px solid var(--border);
+  z-index: 400; display: flex; flex-direction: column;
+  transform: translateX(100%); transition: transform .25s;
+  box-shadow: var(--sh2);
+}
+.detail-panel.open { transform: translateX(0); }
+.dp-header {
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.dp-body { flex: 1; overflow-y: auto; padding: 20px; }
+.dp-kpi  { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 16px; }
+.dp-kpi-item { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; }
+.dp-kpi-val  { font-size: 18px; font-weight: 800; color: var(--pri); }
+.dp-kpi-lbl  { font-size: 9px; color: var(--tx3); margin-top: 2px; }
+</style>
+</head>
+<body>
+<div id="shell">
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo">🏛</div>
+    <div class="tb-brand-text">
+      <div class="tb-brand-main">PKSF · Antarious AI</div>
+      <div class="tb-brand-sub">Intelligence Platform</div>
+    </div>
+  </div>
+  <div class="tb-freya-bar" onclick="openFreya()">
+    <div class="tb-fa">🤖</div>
+    <div class="tb-fstatus" id="freya-status-text">
+      <strong>Freya</strong> is monitoring <strong>276 partner organisations</strong> · 12 need your attention
+    </div>
+    <div class="tb-fdot"></div>
+  </div>
+  <div class="tb-controls">
+    <div class="mode-toggle">
+      <button class="mode-btn" data-mode="manual" onclick="setMode('manual')">Manual</button>
+      <button class="mode-btn on" data-mode="semi" onclick="setMode('semi')">Semi-Auto</button>
+      <button class="mode-btn" data-mode="full" onclick="setMode('full')">Full Auto</button>
+    </div>
+    <div class="tb-icon-btn" onclick="toggleTheme()" id="theme-btn">🌙</div>
+    <div class="tb-icon-btn">🔔<div class="tb-ndot"></div></div>
+    <div class="tb-user">
+      <div class="tb-av">AH</div>
+      <div><div class="tb-uname">Dr. Anisul Haque</div><div class="tb-urole">Managing Director</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-inner">
+    <div class="sb-section-label">Overview</div>
+    <a href="dashboard.html"><div class="nav-item"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
+    <div class="sb-section-label">Partner Network</div>
+    <a href="partners.html"><div class="nav-item active"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
+    <a href="portfolio.html"><div class="nav-item"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
+    <div class="sb-section-label">Programmes</div>
+    <a href="programs.html"><div class="nav-item"><span class="nav-ic">🌾</span>Active Programmes</div></a>
+    <a href="beneficiaries.html"><div class="nav-item"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
+    <div class="sb-section-label">Intelligence</div>
+    <a href="reports.html"><div class="nav-item"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
+    <a href="agents.html"><div class="nav-item"><span class="nav-ic">🤖</span>AI Agents</div></a>
+    <div class="sb-section-label">Operations</div>
+    <a href="finance.html"><div class="nav-item"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
+    <a href="hr.html"><div class="nav-item"><span class="nav-ic">👥</span>HR &amp; People</div></a>
+    <a href="notifications.html"><div class="nav-item"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
+    <div class="sb-section-label">Account</div>
+    <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+  </div>
+  <div class="sb-footer">
+    <div class="sb-org">
+      <div class="sb-org-av">🏛</div>
+      <div><div class="sb-org-name">PKSF</div><div class="sb-org-type">Apex MFI · Dhaka, Bangladesh</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+<div class="content-area">
+
+  <div class="page-hd">
+    <div>
+      <div class="page-title">Partner Organisations</div>
+      <div class="page-sub"><strong>276 active POs</strong> across 8 divisions · Last synced: Today 9:14 AM</div>
+    </div>
+    <div class="page-acts">
+      <button class="btn btn-sec" onclick="showOutput('partner-analysis')">🤖 Freya Analysis</button>
+      <button class="btn btn-pri" onclick="toast('Opening new PO onboarding wizard...','🏢','g')">+ Add Partner Org</button>
+    </div>
+  </div>
+
+  <!-- FREYA INSIGHT -->
+  <div class="freya-box">
+    <div class="freya-box-ic">🤖</div>
+    <div style="flex:1">
+      <div class="freya-box-label">Freya · Partner Performance Monitor</div>
+      <div class="freya-box-text">
+        <strong>12 Partner Organisations need attention</strong> this quarter. Of these, 3 are at critical risk (PAR30 &gt; 8%) — Shapla Credit Society has a governance concern requiring compliance audit. 7 POs are post-flood affected and qualify for the humanitarian reclassification protocol. 2 new POs are in normal growth trajectory.
+      </div>
+    </div>
+    <div class="freya-box-acts">
+      <button class="btn btn-pri btn-sm" onclick="showOutput('partner-analysis')">View Analysis</button>
+      <button class="btn btn-sec btn-sm" onclick="fpQuick('Draft remediation plan for top 3 at-risk partner organizations')">Draft Plan</button>
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="grid-4" style="margin-bottom:16px">
+    <div class="stat-card">
+      <div class="stat-ic">🏢</div>
+      <div class="stat-val">276</div>
+      <div class="stat-label">Total Active POs</div>
+      <div class="stat-change chg-up">↑ 4 new this quarter</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-ic">✅</div>
+      <div class="stat-val">258</div>
+      <div class="stat-label">Performing Well (PAR30 &lt;5%)</div>
+      <div class="stat-change chg-up">93.5% of portfolio</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-ic">⚠️</div>
+      <div class="stat-val">9</div>
+      <div class="stat-label">Monitor (PAR30 5–8%)</div>
+      <div class="stat-change chg-nt">Freya tracking closely</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-ic">🚨</div>
+      <div class="stat-val">3</div>
+      <div class="stat-label">Critical Risk (PAR30 &gt;8%)</div>
+      <div class="stat-change chg-dn">Immediate action needed</div>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div style="font-size:11px;color:var(--tx3);font-weight:600">Filter by:</div>
+    <div class="filter-chip active" onclick="filterPOs('all',this)">All (276)</div>
+    <div class="filter-chip" onclick="filterPOs('attention',this)">⚠ Needs Attention (12)</div>
+    <div class="filter-chip" onclick="filterPOs('critical',this)">🚨 Critical Risk (3)</div>
+    <div class="filter-chip" onclick="filterPOs('healthy',this)">✅ Healthy (258)</div>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <div class="search-bar" style="width:240px">
+        <span>🔍</span>
+        <input type="text" placeholder="Search partner name, ID, district..." oninput="searchPOs(this.value)">
+      </div>
+      <select class="btn btn-sec" style="padding:6px 12px;font-size:11px" onchange="filterDivision(this.value)">
+        <option>All Divisions</option>
+        <option>Dhaka</option><option>Chittagong</option><option>Rajshahi</option>
+        <option>Khulna</option><option>Sylhet</option><option>Barisal</option>
+        <option>Rangpur</option><option>Mymensingh</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab-item active" onclick="switchTab(this,'grid')">Grid View</div>
+    <div class="tab-item" onclick="switchTab(this,'table')">Table View</div>
+    <div class="tab-item" onclick="switchTab(this,'map')">Map View</div>
+  </div>
+
+  <!-- GRID VIEW -->
+  <div id="tab-grid">
+    <div class="grid-auto" id="po-grid">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+
+  <!-- TABLE VIEW -->
+  <div id="tab-table" style="display:none">
+    <div class="card" style="overflow:hidden">
+      <div class="sheet-view">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Partner Organization</th>
+              <th>Division</th>
+              <th>Active Borrowers</th>
+              <th>Portfolio (BDT Cr)</th>
+              <th>PAR30</th>
+              <th>PAR90</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="po-table-body">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAP VIEW -->
+  <div id="tab-map" style="display:none">
+    <div class="card" style="padding:0;overflow:hidden;min-height:400px;display:flex;align-items:center;justify-content:center;background:var(--card2)">
+      <div class="empty-state">
+        <div class="empty-state-ic">🗺</div>
+        <div class="empty-state-title">Bangladesh Division Map</div>
+        <div class="empty-state-desc">Interactive map showing all 276 partner organisations<br>by division · colour-coded by PAR30 performance</div>
+        <div style="margin-top:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center">
+          <div style="background:var(--card);border-radius:8px;padding:12px;border:1px solid var(--border)">
+            <div style="font-size:20px">📍</div>
+            <div style="font-size:11px;font-weight:700;color:var(--tx)">Dhaka</div>
+            <div style="font-size:9px;color:var(--tx3)">52 POs · PAR30 3.8%</div>
+            <div class="stat-change chg-up" style="font-size:9px;justify-content:center">Healthy</div>
+          </div>
+          <div style="background:var(--card);border-radius:8px;padding:12px;border:1px solid var(--border)">
+            <div style="font-size:20px">📍</div>
+            <div style="font-size:11px;font-weight:700;color:var(--tx)">Rangpur</div>
+            <div style="font-size:9px;color:var(--tx3)">32 POs · PAR30 6.1%</div>
+            <div class="stat-change chg-dn" style="font-size:9px;justify-content:center">At Risk</div>
+          </div>
+          <div style="background:var(--card);border-radius:8px;padding:12px;border:1px solid var(--border)">
+            <div style="font-size:20px">📍</div>
+            <div style="font-size:11px;font-weight:700;color:var(--tx)">Khulna</div>
+            <div style="font-size:9px;color:var(--tx3)">35 POs · PAR30 2.6%</div>
+            <div class="stat-change chg-up" style="font-size:9px;justify-content:center">Healthy</div>
+          </div>
+          <div style="background:var(--card);border-radius:8px;padding:12px;border:1px solid var(--border)">
+            <div style="font-size:20px">📍</div>
+            <div style="font-size:11px;font-weight:700;color:var(--tx)">Sylhet</div>
+            <div style="font-size:9px;color:var(--tx3)">28 POs · PAR30 4.4%</div>
+            <div class="stat-change chg-nt" style="font-size:9px;justify-content:center">Monitor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content-area -->
+</div><!-- /content -->
+</div><!-- /shell -->
+
+<!-- PO DETAIL PANEL -->
+<div class="detail-panel" id="po-detail">
+  <div class="dp-header">
+    <div>
+      <div style="font-size:9px;font-family:var(--mono);color:var(--tx3)" id="dp-id"></div>
+      <div style="font-size:16px;font-weight:800;color:var(--tx)" id="dp-name"></div>
+    </div>
+    <button class="btn btn-sec btn-sm" onclick="closeDetail()">✕</button>
+  </div>
+  <div class="dp-body" id="dp-body"></div>
+</div>
+
+<!-- FREYA PANEL -->
+<div id="freya-panel">
+  <div class="fp-header">
+    <div class="fp-avatar">🤖</div>
+    <div>
+      <div class="fp-name">Freya</div>
+      <div class="fp-status"><span class="status-dot sd-g"></span> Partner Performance Monitor · Online</div>
+    </div>
+    <button class="btn btn-sm btn-sec" style="margin-left:auto" onclick="closeFreya()">✕ Close</button>
+  </div>
+  <div class="fp-quick">
+    <button class="btn btn-sm btn-pri"  onclick="fpQuick('Which partner organizations need immediate attention?')">🚨 At-Risk POs</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Which POs qualify for humanitarian reclassification?')">🌊 Flood-Affected</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Draft a performance warning letter for Shapla Credit Society')">✍️ Draft Letter</button>
+  </div>
+  <div id="fp-msgs"></div>
+  <div class="fp-input-area">
+    <div class="fp-input-row">
+      <input class="fp-input" id="fp-input" type="text" placeholder="Ask about any partner org…">
+      <button class="btn btn-pri btn-sm" onclick="fpSend()">Send ↑</button>
+    </div>
+  </div>
+</div>
+
+<!-- OUTPUT MODAL -->
+<div id="output-modal">
+  <div class="output-box">
+    <div class="ob-header">
+      <div><div class="ob-agent-label" id="ob-agent"></div><div class="ob-title" id="ob-title"></div></div>
+      <div class="ob-close" onclick="closeOutput()">✕</div>
+    </div>
+    <div class="ob-body" id="ob-body"></div>
+    <div class="ob-footer" id="ob-footer"></div>
+  </div>
+</div>
+<div id="confirm-modal">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirm-title"></div>
+    <div class="confirm-body"  id="confirm-body"></div>
+    <div class="confirm-acts">
+      <button class="btn btn-sec btn-sm" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-pri btn-sm" id="confirm-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+
+<script src="js/shared.js"></script>
+<script>
+const PO_DATA = [
+  { id:'PO-RNG-01', name:'Meghna MFI', division:'Rangpur', district:'Rangpur Sadar', borrowers:18420, portfolio:38.2, par30:9.8, par90:3.1, status:'critical', cause:'Post-Flood', enrolled:1985 },
+  { id:'PO-JSS-03', name:'Shapla Credit Society', division:'Khulna', district:'Jessore', borrowers:12840, portfolio:28.5, par30:11.2, par90:4.2, status:'critical', cause:'Governance', enrolled:1992 },
+  { id:'PO-RNG-07', name:'Tista Unnayan Samiti', division:'Rangpur', district:'Kurigram', borrowers:9210, portfolio:19.4, par30:8.4, par90:2.8, status:'critical', cause:'Post-Flood', enrolled:1998 },
+  { id:'PO-RAJ-04', name:'Rajshahi Nari Sangstha', division:'Rajshahi', district:'Rajshahi City', borrowers:14200, portfolio:22.1, par30:7.1, par90:2.4, status:'monitor', cause:'Portfolio Growth', enrolled:1994 },
+  { id:'PO-KHL-09', name:'Sundarban Unnayan Sংসtha', division:'Khulna', district:'Satkhira', borrowers:16500, portfolio:31.8, par30:6.8, par90:2.2, status:'monitor', cause:'Seasonal', enrolled:1996 },
+  { id:'PO-SYL-02', name:'Surma Valley MFI', division:'Sylhet', district:'Moulvibazar', borrowers:11200, portfolio:18.9, par30:6.2, par90:2.0, status:'monitor', cause:'Seasonal', enrolled:2001 },
+  { id:'PO-DHK-12', name:'Ekota Nari Sangha', division:'Dhaka', district:'Narsingdi', borrowers:22400, portfolio:48.7, par30:2.8, par90:0.9, status:'healthy', cause:'-', enrolled:1991 },
+  { id:'PO-CTG-05', name:'Chittagong Hill Tracts Dev. Org.', division:'Chittagong', district:'Rangamati', borrowers:8900, portfolio:16.2, par30:2.1, par90:0.7, status:'healthy', cause:'-', enrolled:2003 },
+  { id:'PO-KHL-04', name:'Delta MFI Khulna', division:'Khulna', district:'Khulna City', borrowers:31200, portfolio:68.4, par30:2.6, par90:0.8, status:'healthy', cause:'-', enrolled:1990 },
+  { id:'PO-MYM-03', name:'Mymensingh Grameen Sangstha', division:'Mymensingh', district:'Mymensingh Sadar', borrowers:19800, portfolio:41.2, par30:3.1, par90:1.1, status:'healthy', cause:'-', enrolled:1993 },
+  { id:'PO-BAR-06', name:'Barisal Coastal MFI', division:'Barisal', district:'Barisal City', borrowers:14600, portfolio:27.8, par30:3.8, par90:1.4, status:'healthy', cause:'-', enrolled:1997 },
+  { id:'PO-RAJ-11', name:'Padma Bank-Shura Samiti', division:'Rajshahi', district:'Natore', borrowers:12100, portfolio:23.5, par30:3.4, par90:1.2, status:'healthy', cause:'-', enrolled:2000 },
+];
+
+function renderGrid(data) {
+  const grid = document.getElementById('po-grid');
+  grid.innerHTML = data.map(po => `
+    <div class="po-card risk-${po.status}" onclick="openDetail('${po.id}')">
+      <div class="po-header">
+        <div>
+          <div class="po-name">${po.name}</div>
+          <div class="po-id">${po.id} · ${po.district}</div>
+        </div>
+        ${po.status === 'critical' ? '<span class="badge badge-r">🚨 Critical</span>' :
+          po.status === 'monitor'  ? '<span class="badge badge-a">⚠ Monitor</span>' :
+          '<span class="badge badge-g">✓ Healthy</span>'}
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+        <span class="tag">${po.division}</span>
+        <span class="tag">Since ${po.enrolled}</span>
+        ${po.cause !== '-' ? `<span class="tag" style="color:var(--am)">${po.cause}</span>` : ''}
+      </div>
+      <div class="po-stats">
+        <div><div class="po-stat-val">${po.borrowers.toLocaleString()}</div><div class="po-stat-lbl">Borrowers</div></div>
+        <div><div class="po-stat-val">৳${po.portfolio} Cr</div><div class="po-stat-lbl">Portfolio</div></div>
+        <div>
+          <div class="po-stat-val" style="color:${po.par30 >= 8 ? 'var(--rd)' : po.par30 >= 5 ? 'var(--am)' : 'var(--pri)'}">
+            ${po.par30}%
+          </div>
+          <div class="po-stat-lbl">PAR30</div>
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:3px;font-size:9px;color:var(--tx3)">
+          <span>Repayment Health</span><span>${po.par30 >= 8 ? 'Critical' : po.par30 >= 5 ? 'Monitor' : 'Good'}</span>
+        </div>
+        <div class="prog-bar">
+          <div class="prog-fill ${po.par30 >= 8 ? 'prog-fill-rd' : po.par30 >= 5 ? 'prog-fill-am' : ''}"
+               style="width:${Math.max(5, 100 - po.par30*8)}%"></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('po-table-body');
+  tbody.innerHTML = data.map(po => `
+    <tr>
+      <td>${po.name}<div style="font-size:9px;color:var(--tx3);font-family:var(--mono)">${po.id}</div></td>
+      <td>${po.division}</td>
+      <td>${po.borrowers.toLocaleString()}</td>
+      <td>৳${po.portfolio} Cr</td>
+      <td style="color:${po.par30 >= 8 ? 'var(--rd)' : po.par30 >= 5 ? 'var(--am)' : 'var(--pri)'};font-weight:700">${po.par30}%</td>
+      <td>${po.par90}%</td>
+      <td>${po.status === 'critical' ? '<span class="badge badge-r">🚨 Critical</span>' : po.status === 'monitor' ? '<span class="badge badge-a">⚠ Monitor</span>' : '<span class="badge badge-g">✓ Healthy</span>'}</td>
+      <td><button class="btn btn-sec btn-sm" onclick="openDetail('${po.id}')">View →</button></td>
+    </tr>
+  `).join('');
+}
+
+function openDetail(id) {
+  const po = PO_DATA.find(p => p.id === id);
+  if (!po) return;
+  document.getElementById('dp-id').textContent = po.id + ' · ' + po.district + ' · Est. ' + po.enrolled;
+  document.getElementById('dp-name').textContent = po.name;
+  document.getElementById('dp-body').innerHTML = `
+    <div class="dp-kpi">
+      <div class="dp-kpi-item"><div class="dp-kpi-val">${po.borrowers.toLocaleString()}</div><div class="dp-kpi-lbl">Active Borrowers</div></div>
+      <div class="dp-kpi-item"><div class="dp-kpi-val">৳${po.portfolio} Cr</div><div class="dp-kpi-lbl">Loan Portfolio</div></div>
+      <div class="dp-kpi-item"><div class="dp-kpi-val" style="color:${po.par30>=8?'var(--rd)':po.par30>=5?'var(--am)':'var(--pri)'}">${po.par30}%</div><div class="dp-kpi-lbl">PAR30</div></div>
+      <div class="dp-kpi-item"><div class="dp-kpi-val">${po.par90}%</div><div class="dp-kpi-lbl">PAR90</div></div>
+    </div>
+    <div class="freya-box" style="margin-bottom:14px">
+      <div class="freya-box-ic">🤖</div>
+      <div>
+        <div class="freya-box-label">Freya Analysis</div>
+        <div class="freya-box-text">${po.status === 'critical'
+          ? `<strong>${po.name} requires immediate attention.</strong> PAR30 at ${po.par30}% is significantly above the 5% threshold. Root cause: <em>${po.cause}</em>. Freya recommends initiating a ${po.cause === 'Governance' ? 'compliance audit and field verification' : '8-week repayment grace window with livelihood support'}.`
+          : po.status === 'monitor'
+          ? `<strong>${po.name} is under close monitoring.</strong> PAR30 at ${po.par30}% is above threshold but improving. Root cause: <em>${po.cause}</em>. Expected to normalise within 2 quarters.`
+          : `<strong>${po.name} is performing well.</strong> PAR30 at ${po.par30}% is within acceptable range. Portfolio is healthy and growing consistently.`
+        }</div>
+      </div>
+    </div>
+    <div class="lbl">Performance Trend (Last 4 Quarters)</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      ${[po.par30+1.2, po.par30+0.6, po.par30+0.2, po.par30].map((v,i)=>`
+        <div style="flex:1;text-align:center">
+          <div style="height:${Math.max(8, v*4)}px;background:${v>=8?'var(--rd)':v>=5?'var(--am)':'var(--acc)'};border-radius:4px 4px 0 0;margin-bottom:4px"></div>
+          <div style="font-size:9px;font-weight:700;color:var(--tx)">${v.toFixed(1)}%</div>
+          <div style="font-size:8px;color:var(--tx3)">Q${i+1}</div>
+        </div>`).join('')}
+    </div>
+    <div class="lbl">Recommended Actions</div>
+    <div class="step-list">
+      ${po.status === 'critical' && po.cause === 'Governance' ? `
+        <div class="step-item"><div class="step-dot active">1</div><div class="step-content"><div class="step-title">Initiate Compliance Audit</div><div class="step-desc">Assign PKSF audit team — within 5 working days</div></div></div>
+        <div class="step-item"><div class="step-dot pending">2</div><div class="step-content"><div class="step-title">Field Verification Visit</div><div class="step-desc">Cross-check borrower records on-site</div></div></div>
+        <div class="step-item"><div class="step-dot pending">3</div><div class="step-content"><div class="step-title">Suspension Decision</div><div class="step-desc">If audit confirms governance failure, suspend new disbursements</div></div></div>` :
+      po.status === 'critical' ? `
+        <div class="step-item"><div class="step-dot active">1</div><div class="step-content"><div class="step-title">Activate Grace Period Protocol</div><div class="step-desc">8-week repayment grace for flood-affected borrowers</div></div></div>
+        <div class="step-item"><div class="step-dot pending">2</div><div class="step-content"><div class="step-title">Humanitarian Reclassification</div><div class="step-desc">Apply to Bangladesh Bank MRA for PAR reclassification</div></div></div>
+        <div class="step-item"><div class="step-dot pending">3</div><div class="step-content"><div class="step-title">Livelihood Support Package</div><div class="step-desc">Connect affected borrowers to USSP emergency package</div></div></div>` : `
+        <div class="step-item"><div class="step-dot done">✓</div><div class="step-content"><div class="step-title">Quarterly Review Completed</div><div class="step-desc">Performance within acceptable parameters</div></div></div>
+        <div class="step-item"><div class="step-dot active">2</div><div class="step-content"><div class="step-title">Continue Monitoring</div><div class="step-desc">Next review scheduled: ${new Date(Date.now()+30*24*3600000).toLocaleDateString('en-GB')}</div></div></div>`}
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-pri btn-sm" onclick="fpQuick('What are the details of ${po.name} and what should we do?')">🤖 Ask Freya</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Opening field visit scheduler...','📅','g')">📅 Schedule Visit</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Freya is drafting a letter...','✍️','g')">✍️ Draft Letter</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Generating full PO report...','📋','g')">📋 Full Report</button>
+    </div>
+  `;
+  document.getElementById('po-detail').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('po-detail').classList.remove('open');
+}
+
+function filterPOs(type, el) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  let data = PO_DATA;
+  if (type === 'critical')  data = PO_DATA.filter(p => p.status === 'critical');
+  if (type === 'attention') data = PO_DATA.filter(p => p.status !== 'healthy');
+  if (type === 'healthy')   data = PO_DATA.filter(p => p.status === 'healthy');
+  renderGrid(data);
+  renderTable(data);
+}
+
+function searchPOs(q) {
+  const data = PO_DATA.filter(p =>
+    p.name.toLowerCase().includes(q.toLowerCase()) ||
+    p.id.toLowerCase().includes(q.toLowerCase()) ||
+    p.district.toLowerCase().includes(q.toLowerCase())
+  );
+  renderGrid(data);
+  renderTable(data);
+}
+
+function filterDivision(div) {
+  const data = div === 'All Divisions' ? PO_DATA : PO_DATA.filter(p => p.division === div);
+  renderGrid(data);
+  renderTable(data);
+}
+
+function switchTab(el, tab) {
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-grid').style.display  = tab === 'grid'  ? '' : 'none';
+  document.getElementById('tab-table').style.display = tab === 'table' ? '' : 'none';
+  document.getElementById('tab-map').style.display   = tab === 'map'   ? '' : 'none';
+}
+
+// Init
+renderGrid(PO_DATA);
+renderTable(PO_DATA);
+</script>
+</body>
+</html>

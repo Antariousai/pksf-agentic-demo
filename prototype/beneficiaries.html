@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beneficiaries — PKSF AI</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="shell">
+<div id="topbar">
+  <div class="tb-brand"><div class="tb-logo">🏛</div><div class="tb-brand-text"><div class="tb-brand-main">PKSF · Antarious AI</div><div class="tb-brand-sub">Intelligence Platform</div></div></div>
+  <div class="tb-freya-bar" onclick="openFreya()"><div class="tb-fa">🤖</div><div class="tb-fstatus" id="freya-status-text"><strong>Freya</strong> tracking 42 lakh programme beneficiaries · 89% food security achieved · USSP on track</div><div class="tb-fdot"></div></div>
+  <div class="tb-controls">
+    <div class="mode-toggle">
+      <button class="mode-btn" data-mode="manual" onclick="setMode('manual')">Manual</button>
+      <button class="mode-btn on" data-mode="semi" onclick="setMode('semi')">Semi-Auto</button>
+      <button class="mode-btn" data-mode="full" onclick="setMode('full')">Full Auto</button>
+    </div>
+    <div class="tb-icon-btn" onclick="toggleTheme()" id="theme-btn">🌙</div>
+    <div class="tb-icon-btn">🔔<div class="tb-ndot"></div></div>
+    <div class="tb-user"><div class="tb-av">AH</div><div><div class="tb-uname">Dr. Anisul Haque</div><div class="tb-urole">Managing Director</div></div></div>
+  </div>
+</div>
+<div id="sidebar">
+  <div class="sb-inner">
+    <div class="sb-section-label">Overview</div>
+    <a href="dashboard.html"><div class="nav-item"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
+    <div class="sb-section-label">Partner Network</div>
+    <a href="partners.html"><div class="nav-item"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
+    <a href="portfolio.html"><div class="nav-item"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
+    <div class="sb-section-label">Programmes</div>
+    <a href="programs.html"><div class="nav-item"><span class="nav-ic">🌾</span>Active Programmes</div></a>
+    <a href="beneficiaries.html"><div class="nav-item active"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
+    <div class="sb-section-label">Intelligence</div>
+    <a href="reports.html"><div class="nav-item"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
+    <a href="agents.html"><div class="nav-item"><span class="nav-ic">🤖</span>AI Agents</div></a>
+    <div class="sb-section-label">Operations</div>
+    <a href="finance.html"><div class="nav-item"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
+    <a href="hr.html"><div class="nav-item"><span class="nav-ic">👥</span>HR &amp; People</div></a>
+    <a href="notifications.html"><div class="nav-item"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
+    <div class="sb-section-label">Account</div>
+    <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+  </div>
+  <div class="sb-footer"><div class="sb-org"><div class="sb-org-av">🏛</div><div><div class="sb-org-name">PKSF</div><div class="sb-org-type">Apex MFI · Dhaka, Bangladesh</div></div></div></div>
+</div>
+
+<div id="content">
+<div class="content-area">
+
+  <div class="page-hd">
+    <div>
+      <div class="page-title">Beneficiary Tracking</div>
+      <div class="page-sub"><strong>42 lakh households</strong> across all PKSF programmes</div>
+    </div>
+    <div class="page-acts">
+      <button class="btn btn-sec" onclick="fpQuick('Analyse beneficiary impact data and key outcomes for Q3')">🤖 Impact Analysis</button>
+      <button class="btn btn-pri" onclick="toast('Opening beneficiary registration form...','👤','g')">+ Register HH</button>
+    </div>
+  </div>
+
+  <!-- FREYA -->
+  <div class="freya-box">
+    <div class="freya-box-ic">🤖</div>
+    <div style="flex:1">
+      <div class="freya-box-label">Freya · Beneficiary Analytics</div>
+      <div class="freya-box-text">
+        <strong>89% of USSP households have achieved food security milestone</strong> — up 4% from Q2. Graduation tracking shows <strong>18% of enrolled households</strong> have crossed the poverty line threshold. Mymensingh leads at 94% food security. 23 unions in Rajshahi need additional livelihood support — Freya has identified specific households for targeted intervention.
+      </div>
+    </div>
+    <div class="freya-box-acts">
+      <button class="btn btn-pri btn-sm" onclick="showOutput('ussp-report')">View Report</button>
+      <button class="btn btn-sec btn-sm" onclick="fpQuick('Which households in Rajshahi need immediate livelihood support?')">Rajshahi Details</button>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="grid-5" style="margin-bottom:20px">
+    <div class="stat-card"><div class="stat-ic">👨‍👩‍👧</div><div class="stat-val">42 lac</div><div class="stat-label">Total Programme Beneficiaries</div><div class="stat-change chg-up">↑ 3.2 lac this quarter</div></div>
+    <div class="stat-card"><div class="stat-ic">🍚</div><div class="stat-val">89%</div><div class="stat-label">Food Security Achieved</div><div class="stat-change chg-up">↑ 4% vs Q2</div></div>
+    <div class="stat-card"><div class="stat-ic">💼</div><div class="stat-val">68%</div><div class="stat-label">Income Generating Activity</div><div class="stat-change chg-up">↑ 6% this year</div></div>
+    <div class="stat-card"><div class="stat-ic">🏦</div><div class="stat-val">95%</div><div class="stat-label">Savings Group Membership</div><div class="stat-change chg-up">↑ 2% vs Q2</div></div>
+    <div class="stat-card"><div class="stat-ic">🎓</div><div class="stat-val">18%</div><div class="stat-label">Graduated (Poverty Line)</div><div class="stat-change chg-up">↑ 3% this year</div></div>
+  </div>
+
+  <!-- MILESTONE PROGRESS -->
+  <div class="grid-2" style="margin-bottom:16px">
+    <div class="card card-lg">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">USSP — Milestone Achievement by Division</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span style="color:var(--tx)">Mymensingh</span><span style="font-weight:700;color:var(--pri)">94% Food Security</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:94%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span style="color:var(--tx)">Khulna</span><span style="font-weight:700;color:var(--pri)">92% Food Security</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:92%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span style="color:var(--tx)">Chittagong</span><span style="font-weight:700;color:var(--pri)">91% Food Security</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:91%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span style="color:var(--tx)">Barisal</span><span style="font-weight:700;color:var(--pri)">90% Food Security</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:90%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span style="color:var(--tx)">Dhaka</span><span style="font-weight:700;color:var(--pri)">88% Food Security</span></div>
+          <div class="prog-bar"><div class="prog-fill" style="width:88%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span style="color:var(--tx)">Sylhet</span><span style="font-weight:700;color:var(--am)">82% Food Security</span></div>
+          <div class="prog-bar"><div class="prog-fill prog-fill-am" style="width:82%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span style="color:var(--tx)">Rangpur</span><span style="font-weight:700;color:var(--am)">79% Food Security</span></div>
+          <div class="prog-bar"><div class="prog-fill prog-fill-am" style="width:79%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px"><span style="color:var(--tx)">Rajshahi</span><span style="font-weight:700;color:var(--rd)">71% — Needs Action</span></div>
+          <div class="prog-bar"><div class="prog-fill prog-fill-rd" style="width:71%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-lg">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">Impact Summary — Key Outcomes Q3</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:24px">🍚</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--tx)">1,82,301 households achieved Food Security</div>
+            <div style="font-size:10px;color:var(--tx3)">89% of enrolled USSP households · Milestone verified by field officers</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:24px">🏦</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--tx)">1,94,590 households have savings accounts</div>
+            <div style="font-size:10px;color:var(--tx3)">Avg. savings: BDT 8,400 per household · 95% in savings groups</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:24px">💼</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--tx)">1,39,285 households have income generating activities</div>
+            <div style="font-size:10px;color:var(--tx3)">Poultry, livestock, small trade, tailoring, crop farming</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:24px">🎓</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--tx)">36,870 households graduated above poverty line</div>
+            <div style="font-size:10px;color:var(--tx3)">18% graduation rate · Up 3% year-on-year · Sustainable livelihoods confirmed</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--rdbg);border-radius:8px;border:1px solid var(--rdbdr)">
+          <div style="font-size:24px">⚠️</div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--rd)">12,480 households at risk in Rajshahi</div>
+            <div style="font-size:10px;color:var(--tx3)">Below food security threshold · Freya recommends emergency livelihood package</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <button class="btn btn-pri btn-sm" onclick="fpQuick('What emergency support packages should we deploy for at-risk households in Rajshahi?')">🤖 Get Freya Recommendations</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BENEFICIARY SEARCH -->
+  <div class="card">
+    <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">🔍 Find a Beneficiary Household</div>
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <div class="search-bar" style="flex:1;min-width:250px">
+        <span>🔍</span>
+        <input type="text" placeholder="Search by name, household ID, village, union…" oninput="searchBeneficiary(this.value)">
+      </div>
+      <select class="btn btn-sec" style="padding:7px 12px;font-size:11px">
+        <option>All Programmes</option>
+        <option>USSP</option><option>ENRICH</option><option>PACE-II</option><option>SFMF</option>
+      </select>
+      <select class="btn btn-sec" style="padding:7px 12px;font-size:11px">
+        <option>All Divisions</option>
+        <option>Dhaka</option><option>Chittagong</option><option>Rajshahi</option><option>Khulna</option>
+      </select>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Household ID</th><th>Head of HH</th><th>Village / Union</th><th>Division</th><th>Programme</th><th>Food Security</th><th>Enrolled</th><th>Actions</th></tr></thead>
+      <tbody id="bene-table">
+        <tr><td style="font-family:var(--mono);font-size:10px">USSP-MY-004821</td><td>Rahela Begum</td><td>Shimulia / Gouripur</td><td>Mymensingh</td><td><span class="badge badge-g">USSP</span></td><td><span class="badge badge-g">✓ Achieved</span></td><td>Mar 2024</td><td><button class="btn btn-sec btn-sm" onclick="toast('Opening household profile...','👨‍👩‍👧','g')">View</button></td></tr>
+        <tr><td style="font-family:var(--mono);font-size:10px">USSP-RAJ-019204</td><td>Nasrin Akter</td><td>Char Mohanpur / Godagari</td><td>Rajshahi</td><td><span class="badge badge-g">USSP</span></td><td><span class="badge badge-r">✗ Below Target</span></td><td>Jan 2024</td><td><button class="btn btn-warn btn-sm" onclick="toast('Opening support workflow for this household...','⚠️','a')">Support</button></td></tr>
+        <tr><td style="font-family:var(--mono);font-size:10px">ENRICH-KHL-008124</td><td>Sufia Khatun</td><td>Batiaghata / Dumuria</td><td>Khulna</td><td><span class="badge badge-b">ENRICH</span></td><td><span class="badge badge-g">✓ Achieved</span></td><td>Apr 2023</td><td><button class="btn btn-sec btn-sm" onclick="toast('Opening household profile...','👨‍👩‍👧','g')">View</button></td></tr>
+        <tr><td style="font-family:var(--mono);font-size:10px">PACE-DHK-002341</td><td>Mosammat Rima</td><td>Savar / Ashulia</td><td>Dhaka</td><td><span class="badge badge-p">PACE-II</span></td><td><span class="badge badge-g">✓ Achieved</span></td><td>Jun 2023</td><td><button class="btn btn-sec btn-sm" onclick="toast('Opening household profile...','👨‍👩‍👧','g')">View</button></td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px;font-size:11px;color:var(--tx3)">Showing 4 of 42,00,000+ beneficiaries · Use search or filters to find specific households</div>
+  </div>
+
+</div></div></div>
+
+<div id="freya-panel">
+  <div class="fp-header"><div class="fp-avatar">🤖</div><div><div class="fp-name">Freya</div><div class="fp-status"><span class="status-dot sd-g"></span> Beneficiary Analytics · Online</div></div><button class="btn btn-sm btn-sec" style="margin-left:auto" onclick="closeFreya()">✕ Close</button></div>
+  <div class="fp-quick">
+    <button class="btn btn-sm btn-pri"  onclick="fpQuick('How many households achieved food security milestone this quarter?')">🍚 Food Security</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Which districts have the lowest graduation rates?')">📍 Low Graduation</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Generate beneficiary impact report for IFAD')">📋 IFAD Impact</button>
+  </div>
+  <div id="fp-msgs"></div>
+  <div class="fp-input-area"><div class="fp-input-row"><input class="fp-input" id="fp-input" type="text" placeholder="Ask about any beneficiary or programme impact…"><button class="btn btn-pri btn-sm" onclick="fpSend()">Send ↑</button></div></div>
+</div>
+<div id="output-modal"><div class="output-box"><div class="ob-header"><div><div class="ob-agent-label" id="ob-agent"></div><div class="ob-title" id="ob-title"></div></div><div class="ob-close" onclick="closeOutput()">✕</div></div><div class="ob-body" id="ob-body"></div><div class="ob-footer" id="ob-footer"></div></div></div>
+<div id="confirm-modal"><div class="confirm-box"><div class="confirm-title" id="confirm-title"></div><div class="confirm-body" id="confirm-body"></div><div class="confirm-acts"><button class="btn btn-sec btn-sm" onclick="closeConfirm()">Cancel</button><button class="btn btn-pri btn-sm" id="confirm-ok">Confirm</button></div></div></div>
+<div id="toast-container"></div>
+<script src="js/shared.js"></script>
+<script>
+function searchBeneficiary(q) {
+  const rows = document.querySelectorAll('#bene-table tr');
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = !q || text.includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

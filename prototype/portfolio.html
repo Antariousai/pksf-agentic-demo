@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Loan Portfolio — PKSF AI</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+.div-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.div-bar-label { width: 100px; font-size: 11px; color: var(--tx2); flex-shrink: 0; }
+.div-bar-wrap  { flex: 1; }
+.div-bar-fill  { height: 20px; border-radius: 4px; display: flex; align-items: center; padding: 0 8px; font-size: 9px; font-weight: 700; color: #fff; white-space: nowrap; transition: width .6s; }
+.div-bar-val   { font-size: 11px; font-weight: 700; width: 60px; text-align: right; flex-shrink: 0; }
+
+.trend-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; padding: 8px 0; }
+.tc-bar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.tc-fill { width: 100%; border-radius: 3px 3px 0 0; transition: height .5s; }
+.tc-lbl  { font-size: 8px; color: var(--tx3); }
+.tc-val  { font-size: 8px; font-weight: 700; }
+
+.par-ring {
+  position: relative; display: inline-flex;
+  align-items: center; justify-content: center;
+}
+.par-ring svg { transform: rotate(-90deg); }
+.par-ring-text {
+  position: absolute; text-align: center;
+}
+.par-ring-val { font-size: 22px; font-weight: 800; color: var(--tx); display: block; line-height: 1; }
+.par-ring-lbl { font-size: 9px; color: var(--tx3); display: block; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div id="shell">
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo">🏛</div>
+    <div class="tb-brand-text">
+      <div class="tb-brand-main">PKSF · Antarious AI</div>
+      <div class="tb-brand-sub">Intelligence Platform</div>
+    </div>
+  </div>
+  <div class="tb-freya-bar" onclick="openFreya()">
+    <div class="tb-fa">🤖</div>
+    <div class="tb-fstatus" id="freya-status-text">
+      <strong>Freya</strong> completed Q3 portfolio analysis · PAR30 improved 0.6% · 276 POs reviewed
+    </div>
+    <div class="tb-fdot"></div>
+  </div>
+  <div class="tb-controls">
+    <div class="mode-toggle">
+      <button class="mode-btn" data-mode="manual" onclick="setMode('manual')">Manual</button>
+      <button class="mode-btn on" data-mode="semi" onclick="setMode('semi')">Semi-Auto</button>
+      <button class="mode-btn" data-mode="full" onclick="setMode('full')">Full Auto</button>
+    </div>
+    <div class="tb-icon-btn" onclick="toggleTheme()" id="theme-btn">🌙</div>
+    <div class="tb-icon-btn">🔔<div class="tb-ndot"></div></div>
+    <div class="tb-user">
+      <div class="tb-av">AH</div>
+      <div><div class="tb-uname">Dr. Anisul Haque</div><div class="tb-urole">Managing Director</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-inner">
+    <div class="sb-section-label">Overview</div>
+    <a href="dashboard.html"><div class="nav-item"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
+    <div class="sb-section-label">Partner Network</div>
+    <a href="partners.html"><div class="nav-item"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
+    <a href="portfolio.html"><div class="nav-item active"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
+    <div class="sb-section-label">Programmes</div>
+    <a href="programs.html"><div class="nav-item"><span class="nav-ic">🌾</span>Active Programmes</div></a>
+    <a href="beneficiaries.html"><div class="nav-item"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
+    <div class="sb-section-label">Intelligence</div>
+    <a href="reports.html"><div class="nav-item"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
+    <a href="agents.html"><div class="nav-item"><span class="nav-ic">🤖</span>AI Agents</div></a>
+    <div class="sb-section-label">Operations</div>
+    <a href="finance.html"><div class="nav-item"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
+    <a href="hr.html"><div class="nav-item"><span class="nav-ic">👥</span>HR &amp; People</div></a>
+    <a href="notifications.html"><div class="nav-item"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
+    <div class="sb-section-label">Account</div>
+    <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+  </div>
+  <div class="sb-footer">
+    <div class="sb-org">
+      <div class="sb-org-av">🏛</div>
+      <div><div class="sb-org-name">PKSF</div><div class="sb-org-type">Apex MFI · Dhaka, Bangladesh</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+<div class="content-area">
+
+  <div class="page-hd">
+    <div>
+      <div class="page-title">Loan Portfolio Monitor</div>
+      <div class="page-sub">Consolidated portfolio across <strong>276 Partner Organisations</strong> · Q3 FY 2025-26</div>
+    </div>
+    <div class="page-acts">
+      <button class="btn btn-sec" onclick="showOutput('portfolio-health')">🤖 Full Analysis</button>
+      <button class="btn btn-sec" onclick="toast('Exporting portfolio data...','📊','g')">⬇ Export</button>
+      <button class="btn btn-pri" onclick="fpQuick('Analyse the loan portfolio and highlight key risks')">Ask Freya</button>
+    </div>
+  </div>
+
+  <!-- FREYA BOX -->
+  <div class="freya-box">
+    <div class="freya-box-ic">🤖</div>
+    <div style="flex:1">
+      <div class="freya-box-label">Freya · Loan & Portfolio Monitor</div>
+      <div class="freya-box-text">
+        Q3 portfolio health has improved. <strong>PAR30 decreased from 4.8% to 4.2%</strong> — below the 5% PKSF benchmark. Khulna and Chittagong remain the strongest divisions. <strong>Rangpur is the only division above threshold at 6.1%</strong>, driven by post-flood income disruption across 3 POs. Total portfolio grew 8.2% year-on-year to ৳28,450 crore.
+      </div>
+    </div>
+    <div class="freya-box-acts">
+      <button class="btn btn-pri btn-sm" onclick="showOutput('portfolio-health')">View Full Report</button>
+      <button class="btn btn-sec btn-sm" onclick="fpQuick('What action should we take on Rangpur division portfolio?')">Ask Freya</button>
+    </div>
+  </div>
+
+  <!-- TOP KPIs -->
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="stat-card">
+      <div class="stat-ic">💰</div>
+      <div class="stat-val">৳28,450 Cr</div>
+      <div class="stat-label">Total Active Portfolio</div>
+      <div class="stat-change chg-up">↑ 8.2% year-on-year</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-ic">👤</div>
+      <div class="stat-val">90.2 lac</div>
+      <div class="stat-label">Total Active Borrowers</div>
+      <div class="stat-change chg-up">↑ 2.1 lac new borrowers</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-ic">📉</div>
+      <div class="stat-val">4.2%</div>
+      <div class="stat-label">PAR30 (National)</div>
+      <div class="stat-change chg-up">↓ 0.6% vs Q2 · Below 5% target ✓</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-ic">💸</div>
+      <div class="stat-val">৳52,800</div>
+      <div class="stat-label">Average Loan Size</div>
+      <div class="stat-change chg-up">↑ BDT 3,200 vs last year</div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+
+    <!-- Division PAR30 Breakdown -->
+    <div class="card card-lg">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:700;color:var(--tx)">PAR30 by Division</div>
+        <span class="badge badge-g badge-dot">5% Benchmark</span>
+      </div>
+      <div id="div-bars"></div>
+    </div>
+
+    <!-- Portfolio Trend -->
+    <div class="card card-lg">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">Portfolio Growth Trend (৳ Crore)</div>
+      <div style="font-size:10px;color:var(--tx3);margin-bottom:12px">Last 6 quarters</div>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:100px">
+        <div id="trend-chart" style="display:flex;align-items:flex-end;gap:8px;width:100%;height:100%"></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:12px">
+        <div style="font-size:11px;color:var(--tx3)">Q2 '24: <strong style="color:var(--tx)">৳22,180 Cr</strong></div>
+        <div style="font-size:11px;color:var(--tx3)">Q3 '26: <strong style="color:var(--pri)">৳28,450 Cr</strong></div>
+        <div style="font-size:11px;color:var(--acc)">↑ 28.3% over 6 quarters</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO TABLE BY DIVISION -->
+  <div class="card" style="margin-bottom:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--tx)">Division-wise Portfolio Summary</div>
+      <button class="btn btn-sec btn-sm" onclick="toast('Exporting division data...','📊','g')">⬇ Export</button>
+    </div>
+    <div class="sheet-view">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Division</th>
+            <th>Active POs</th>
+            <th>Borrowers</th>
+            <th>Portfolio (BDT Cr)</th>
+            <th>Avg Loan (BDT)</th>
+            <th>PAR30</th>
+            <th>PAR90</th>
+            <th>QoQ Change</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="division-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PRODUCT MIX + TOP POs -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+    <!-- Loan Product Mix -->
+    <div class="card card-lg">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">Loan Product Mix</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px">
+            <span style="color:var(--tx)">General Microfinance</span>
+            <span style="font-weight:700;color:var(--pri)">68% · ৳19,346 Cr</span>
+          </div>
+          <div class="prog-bar" style="height:10px"><div class="prog-fill" style="width:68%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px">
+            <span style="color:var(--tx)">Agricultural / Seasonal Loans</span>
+            <span style="font-weight:700;color:var(--bl)">14% · ৳3,983 Cr</span>
+          </div>
+          <div class="prog-bar" style="height:10px"><div class="prog-fill" style="width:14%;background:var(--bl)"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px">
+            <span style="color:var(--tx)">SME / Enterprise Loans</span>
+            <span style="font-weight:700;color:var(--pu)">9% · ৳2,561 Cr</span>
+          </div>
+          <div class="prog-bar" style="height:10px"><div class="prog-fill" style="width:9%;background:var(--pu)"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px">
+            <span style="color:var(--tx)">Sanitation / WASH Loans</span>
+            <span style="font-weight:700;color:var(--am)">5% · ৳1,423 Cr</span>
+          </div>
+          <div class="prog-bar" style="height:10px"><div class="prog-fill" style="width:5%;background:var(--am)"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px">
+            <span style="color:var(--tx)">Emergency / Disaster Loans</span>
+            <span style="font-weight:700;color:var(--rd)">4% · ৳1,138 Cr</span>
+          </div>
+          <div class="prog-bar" style="height:10px"><div class="prog-fill" style="width:4%;background:var(--rd)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 5 POs by Portfolio -->
+    <div class="card card-lg">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:14px">Top 5 POs by Portfolio Size</div>
+      <table class="data-table">
+        <thead><tr><th>Partner Organisation</th><th>Division</th><th>Portfolio</th><th>PAR30</th></tr></thead>
+        <tbody>
+          <tr><td>Grameen Shakti Sangha</td><td>Dhaka</td><td>৳842 Cr</td><td style="color:var(--pri)">2.1%</td></tr>
+          <tr><td>Delta MFI Khulna</td><td>Khulna</td><td>৳680 Cr</td><td style="color:var(--pri)">2.6%</td></tr>
+          <tr><td>Chittagong Women's Dev</td><td>Chittagong</td><td>৳614 Cr</td><td style="color:var(--pri)">3.2%</td></tr>
+          <tr><td>Ekota Nari Sangha</td><td>Dhaka</td><td>৳587 Cr</td><td style="color:var(--pri)">2.8%</td></tr>
+          <tr><td>Mymensingh Grameen Sangstha</td><td>Mymensingh</td><td>৳541 Cr</td><td style="color:var(--pri)">3.1%</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px">
+        <button class="btn btn-sec btn-sm" onclick="window.location.href='partners.html'">View All Partners →</button>
+      </div>
+    </div>
+  </div>
+
+</div></div></div><!-- /content-area /content /shell -->
+
+<!-- FREYA PANEL -->
+<div id="freya-panel">
+  <div class="fp-header">
+    <div class="fp-avatar">🤖</div>
+    <div>
+      <div class="fp-name">Freya</div>
+      <div class="fp-status"><span class="status-dot sd-g"></span> Loan & Portfolio Monitor · Online</div>
+    </div>
+    <button class="btn btn-sm btn-sec" style="margin-left:auto" onclick="closeFreya()">✕ Close</button>
+  </div>
+  <div class="fp-quick">
+    <button class="btn btn-sm btn-pri"  onclick="fpQuick('Give me the full portfolio health summary')">📊 Portfolio Summary</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Which divisions have PAR above 5%?')">⚠ At-Risk Divisions</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('What is driving PAR improvement this quarter?')">📈 Improvement Drivers</button>
+  </div>
+  <div id="fp-msgs"></div>
+  <div class="fp-input-area">
+    <div class="fp-input-row">
+      <input class="fp-input" id="fp-input" type="text" placeholder="Ask about portfolio, PAR, trends…">
+      <button class="btn btn-pri btn-sm" onclick="fpSend()">Send ↑</button>
+    </div>
+  </div>
+</div>
+
+<!-- OUTPUT MODAL -->
+<div id="output-modal">
+  <div class="output-box">
+    <div class="ob-header">
+      <div><div class="ob-agent-label" id="ob-agent"></div><div class="ob-title" id="ob-title"></div></div>
+      <div class="ob-close" onclick="closeOutput()">✕</div>
+    </div>
+    <div class="ob-body" id="ob-body"></div>
+    <div class="ob-footer" id="ob-footer"></div>
+  </div>
+</div>
+<div id="confirm-modal">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirm-title"></div>
+    <div class="confirm-body"  id="confirm-body"></div>
+    <div class="confirm-acts">
+      <button class="btn btn-sec btn-sm" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-pri btn-sm" id="confirm-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+
+<script src="js/shared.js"></script>
+<script>
+const DIVISION_DATA = [
+  { name:'Dhaka',      pos:52, borrowers:'18.2 lac', portfolio:5840, avgLoan:32100, par30:3.8, par90:1.6, qoq:'+0.8%', status:'healthy' },
+  { name:'Chittagong', pos:38, borrowers:'14.1 lac', portfolio:4520, avgLoan:32100, par30:2.9, par90:1.1, qoq:'+1.1%', status:'healthy' },
+  { name:'Rajshahi',   pos:41, borrowers:'12.8 lac', portfolio:4110, avgLoan:32100, par30:4.7, par90:2.0, qoq:'+0.4%', status:'monitor' },
+  { name:'Khulna',     pos:35, borrowers:'11.4 lac', portfolio:3650, avgLoan:32100, par30:2.6, par90:0.9, qoq:'+1.3%', status:'healthy' },
+  { name:'Sylhet',     pos:28, borrowers:'8.9 lac',  portfolio:2850, avgLoan:32100, par30:4.4, par90:1.8, qoq:'+0.2%', status:'monitor' },
+  { name:'Barisal',    pos:26, borrowers:'7.6 lac',  portfolio:2440, avgLoan:32100, par30:3.2, par90:1.4, qoq:'+0.9%', status:'healthy' },
+  { name:'Rangpur',    pos:32, borrowers:'10.2 lac', portfolio:3270, avgLoan:32100, par30:6.1, par90:2.8, qoq:'-0.3%', status:'atrisk'  },
+  { name:'Mymensingh', pos:24, borrowers:'7.0 lac',  portfolio:1770, avgLoan:32100, par30:3.4, par90:1.5, qoq:'+0.6%', status:'healthy' },
+];
+
+// Division bars
+const barsDiv = document.getElementById('div-bars');
+barsDiv.innerHTML = DIVISION_DATA.map(d => `
+  <div class="div-bar-row">
+    <div class="div-bar-label">${d.name}</div>
+    <div class="div-bar-wrap">
+      <div class="div-bar-fill"
+           style="width:${Math.min(100, d.par30/8*100)}%;
+                  background:${d.par30>=6?'var(--rd)':d.par30>=5?'var(--am)':'var(--acc)'}">
+        ${d.par30}%
+      </div>
+    </div>
+    <div class="div-bar-val" style="color:${d.par30>=6?'var(--rd)':d.par30>=5?'var(--am)':'var(--pri)'}">
+      ${d.par30}%
+    </div>
+  </div>
+`).join('') + `
+  <div style="border-top:2px dashed var(--am);margin-top:4px;padding-top:4px;font-size:9px;color:var(--am);text-align:right">
+    ← 5% PKSF Benchmark
+  </div>`;
+
+// Trend chart
+const TREND = [22180, 23450, 24800, 25900, 27100, 28450];
+const TREND_Q = ['Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25'];
+const maxT = Math.max(...TREND);
+const tChart = document.getElementById('trend-chart');
+tChart.innerHTML = TREND.map((v,i) => `
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+    <div style="width:100%;height:${(v/maxT*90).toFixed(0)}px;
+                background:${i===5?'var(--pri)':'var(--border2)'};
+                border-radius:4px 4px 0 0;transition:height .5s;
+                border:1px solid ${i===5?'var(--pri2)':'var(--border)'}">
+    </div>
+    <div style="font-size:8px;color:${i===5?'var(--pri)':'var(--tx3)'};font-weight:${i===5?'700':'400'};margin-top:3px">${TREND_Q[i]}</div>
+    <div style="font-size:8px;font-weight:700;color:${i===5?'var(--pri)':'var(--tx2)'}">${(v/100).toFixed(0)}Cr</div>
+  </div>
+`).join('');
+
+// Division table
+const divTbl = document.getElementById('division-table');
+divTbl.innerHTML = DIVISION_DATA.map(d => `
+  <tr>
+    <td>${d.name}</td>
+    <td>${d.pos}</td>
+    <td>${d.borrowers}</td>
+    <td>৳${d.portfolio.toLocaleString()} Cr</td>
+    <td>৳${d.avgLoan.toLocaleString()}</td>
+    <td style="color:${d.par30>=6?'var(--rd)':d.par30>=5?'var(--am)':'var(--pri)'};font-weight:700">${d.par30}%</td>
+    <td>${d.par90}%</td>
+    <td style="color:${d.qoq.startsWith('-')?'var(--rd)':'var(--pri)'}">
+      ${d.qoq.startsWith('-')?'↓':'↑'} ${d.qoq.replace(/[+-]/,'')}
+    </td>
+    <td>${d.status==='atrisk'?'<span class="badge badge-r">⚠ At Risk</span>':d.status==='monitor'?'<span class="badge badge-a">Monitor</span>':'<span class="badge badge-g">Healthy</span>'}</td>
+  </tr>
+`).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PKSF · Antarious AI — Login</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+body { margin: 0; min-height: 100vh; background: var(--bg); display: flex; align-items: center; justify-content: center; }
+
+.login-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Left panel — branding */
+.login-brand {
+  background: linear-gradient(145deg, #003d1e 0%, #005C2B 50%, #007A38 100%);
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: 60px 40px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.login-brand::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.brand-logo {
+  width: 80px; height: 80px; border-radius: 20px;
+  background: rgba(255,255,255,.15);
+  border: 2px solid rgba(255,255,255,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+}
+.brand-name {
+  font-size: 32px; font-weight: 800; color: #fff;
+  letter-spacing: -1px; margin-bottom: 4px;
+}
+.brand-name span { color: #6ee7b7; }
+.brand-tagline {
+  font-size: 13px; color: rgba(255,255,255,.7);
+  margin-bottom: 40px; line-height: 1.5;
+}
+.brand-org {
+  font-size: 11px; color: rgba(255,255,255,.5);
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-top: 8px;
+}
+.brand-divider { width: 40px; height: 2px; background: rgba(255,255,255,.2); margin: 16px auto; }
+
+.brand-features { display: flex; flex-direction: column; gap: 12px; max-width: 360px; margin-bottom: 40px; }
+.bf-item {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px; padding: 12px 16px; text-align: left;
+}
+.bf-ic { font-size: 20px; flex-shrink: 0; }
+.bf-text strong { display: block; font-size: 12px; font-weight: 700; color: #fff; }
+.bf-text span   { font-size: 10px; color: rgba(255,255,255,.6); }
+
+.brand-stats {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 12px; max-width: 360px;
+}
+.bs-item { text-align: center; }
+.bs-val  { font-size: 22px; font-weight: 800; color: #6ee7b7; }
+.bs-lbl  { font-size: 9px; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+/* Right panel — form */
+.login-form-panel {
+  display: flex; flex-direction: column;
+  justify-content: center; padding: 60px 50px;
+  background: var(--card);
+}
+.lf-header { margin-bottom: 40px; }
+.lf-welcome { font-size: 11px; font-weight: 600; color: var(--acc); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.lf-title   { font-size: 28px; font-weight: 800; color: var(--tx); letter-spacing: -.5px; margin-bottom: 6px; }
+.lf-sub     { font-size: 13px; color: var(--tx3); }
+
+.lf-form { max-width: 400px; }
+.lf-group { margin-bottom: 20px; }
+.lf-label {
+  display: block; font-size: 11px; font-weight: 700;
+  color: var(--tx2); margin-bottom: 6px; letter-spacing: .3px;
+}
+.lf-input {
+  width: 100%; padding: 11px 14px;
+  border: 2px solid var(--border); border-radius: 9px;
+  font-size: 13px; color: var(--tx); background: var(--card2);
+  outline: none; transition: all .15s;
+}
+.lf-input:focus { border-color: var(--pri); background: var(--card); }
+.lf-input::placeholder { color: var(--tx4); }
+
+.lf-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.lf-check { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--tx2); cursor: pointer; }
+.lf-check input { width: 14px; height: 14px; accent-color: var(--pri); }
+.lf-forgot { font-size: 11px; color: var(--pri); font-weight: 600; cursor: pointer; }
+.lf-forgot:hover { text-decoration: underline; }
+
+.lf-submit {
+  width: 100%; padding: 13px;
+  background: var(--pri); color: #fff;
+  border: none; border-radius: 9px;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .2s; letter-spacing: .3px;
+}
+.lf-submit:hover { background: var(--pri2); box-shadow: 0 6px 20px rgba(0,92,43,.35); transform: translateY(-1px); }
+
+.lf-divider { display: flex; align-items: center; gap: 12px; margin: 24px 0; }
+.lf-div-line { flex: 1; height: 1px; background: var(--border); }
+.lf-div-text { font-size: 11px; color: var(--tx4); }
+
+.demo-accounts { display: flex; flex-direction: column; gap: 8px; }
+.demo-account {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border: 1px solid var(--border);
+  border-radius: 8px; cursor: pointer; transition: all .15s;
+  background: var(--card2);
+}
+.demo-account:hover { border-color: var(--pri); background: rgba(0,92,43,.04); }
+.da-av {
+  width: 32px; height: 32px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.da-name { font-size: 12px; font-weight: 700; color: var(--tx); }
+.da-role { font-size: 10px; color: var(--tx3); }
+.da-arrow { margin-left: auto; font-size: 14px; color: var(--tx4); }
+
+.lf-footer { margin-top: 40px; font-size: 10px; color: var(--tx4); line-height: 1.6; }
+.lf-footer strong { color: var(--tx3); }
+
+@media(max-width: 900px) {
+  .login-wrapper { grid-template-columns: 1fr; }
+  .login-brand { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="login-wrapper">
+
+  <!-- BRAND PANEL -->
+  <div class="login-brand">
+    <div class="brand-logo">🏛</div>
+    <div class="brand-name">Antarious <span>AI</span></div>
+    <div class="brand-tagline">AI-Powered Operations Platform<br>for PKSF & Partner Organizations</div>
+    <div class="brand-org">Palli Karma-Sahayak Foundation · Bangladesh</div>
+    <div class="brand-divider"></div>
+
+    <div class="brand-features">
+      <div class="bf-item">
+        <div class="bf-ic">🤖</div>
+        <div class="bf-text">
+          <strong>Freya AI Assistant</strong>
+          <span>Ask anything — reports, analytics, drafts, alerts</span>
+        </div>
+      </div>
+      <div class="bf-item">
+        <div class="bf-ic">📊</div>
+        <div class="bf-text">
+          <strong>Live Portfolio Monitoring</strong>
+          <span>276 Partner Orgs · Real-time PAR alerts</span>
+        </div>
+      </div>
+      <div class="bf-item">
+        <div class="bf-ic">📋</div>
+        <div class="bf-text">
+          <strong>Automated Reporting</strong>
+          <span>IFAD, World Bank, ADB reports in minutes</span>
+        </div>
+      </div>
+      <div class="bf-item">
+        <div class="bf-ic">🌾</div>
+        <div class="bf-text">
+          <strong>Programme Intelligence</strong>
+          <span>USSP, ENRICH, PACE — live tracking</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-stats">
+      <div class="bs-item"><div class="bs-val">276</div><div class="bs-lbl">Partner Orgs</div></div>
+      <div class="bs-item"><div class="bs-val">90 lac</div><div class="bs-lbl">Borrowers</div></div>
+      <div class="bs-item"><div class="bs-val">৳28k Cr</div><div class="bs-lbl">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- FORM PANEL -->
+  <div class="login-form-panel">
+    <div class="lf-header">
+      <div class="lf-welcome">Welcome Back</div>
+      <div class="lf-title">Sign in to PKSF AI</div>
+      <div class="lf-sub">Access your programmes, reports, and AI assistant</div>
+    </div>
+
+    <div class="lf-form">
+      <div class="lf-group">
+        <label class="lf-label">Employee ID / Email</label>
+        <input class="lf-input" type="text" placeholder="e.g. emp001@pksf.org.bd" id="login-email" value="director@pksf.org.bd">
+      </div>
+      <div class="lf-group">
+        <label class="lf-label">Password</label>
+        <input class="lf-input" type="password" placeholder="Enter your password" id="login-pass" value="••••••••">
+      </div>
+      <div class="lf-row">
+        <label class="lf-check"><input type="checkbox" checked> Keep me signed in</label>
+        <span class="lf-forgot">Forgot password?</span>
+      </div>
+      <button class="lf-submit" onclick="doLogin()">Sign In to PKSF AI</button>
+    </div>
+
+    <div class="lf-divider">
+      <div class="lf-div-line"></div>
+      <div class="lf-div-text">or sign in as a demo user</div>
+      <div class="lf-div-line"></div>
+    </div>
+
+    <div class="demo-accounts">
+      <div class="demo-account" onclick="loginAs('director')">
+        <div class="da-av" style="background:linear-gradient(135deg,#005C2B,#00A651)">AD</div>
+        <div><div class="da-name">Dr. Anisul Haque</div><div class="da-role">Managing Director · Full Access</div></div>
+        <div class="da-arrow">→</div>
+      </div>
+      <div class="demo-account" onclick="loginAs('programme')">
+        <div class="da-av" style="background:linear-gradient(135deg,#2563eb,#60a5fa)">RB</div>
+        <div><div class="da-name">Rowshan Begum</div><div class="da-role">Programme Officer · USSP Division</div></div>
+        <div class="da-arrow">→</div>
+      </div>
+      <div class="demo-account" onclick="loginAs('finance')">
+        <div class="da-av" style="background:linear-gradient(135deg,#7c3aed,#a78bfa)">MR</div>
+        <div><div class="da-name">Mohammad Rashid</div><div class="da-role">Finance Officer · Accounts Department</div></div>
+        <div class="da-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="lf-footer">
+      <strong>PKSF · Antarious AI Platform</strong> · Powered by Betopia Limited<br>
+      Confidential — Authorised PKSF Personnel Only · v1.0 May 2026
+    </div>
+  </div>
+
+</div>
+
+<div id="toast-container"></div>
+<script src="js/shared.js"></script>
+<script>
+function doLogin() {
+  const email = document.getElementById('login-email').value;
+  if (!email) { toast('Please enter your Employee ID or email', '⚠️', 'a'); return; }
+  toast('Signing you in...', '🔐', 'g');
+  setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+}
+
+function loginAs(role) {
+  const names = { director: 'Dr. Anisul Haque', programme: 'Rowshan Begum', finance: 'Mohammad Rashid' };
+  toast(`Signing in as ${names[role]}...`, '👤', 'g');
+  setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+}
+
+// Allow Enter key on login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+</script>
+</body>
+</html>

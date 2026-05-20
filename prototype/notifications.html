@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications — PKSF Antarious AI</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+.notif-page { max-width: 860px; margin: 0 auto; }
+.notif-toolbar { display:flex; align-items:center; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
+.notif-toolbar h1 { flex:1; font-size:1.35rem; font-weight:700; color:var(--tx); margin:0; }
+.notif-filter-chips { display:flex; gap:8px; flex-wrap:wrap; }
+.n-chip { padding:5px 14px; border-radius:20px; font-size:.8rem; font-weight:600; border:1.5px solid var(--bd); background:var(--bg2); color:var(--tx2); cursor:pointer; transition:all .15s; }
+.n-chip.active, .n-chip:hover { background:var(--pri); color:#fff; border-color:var(--pri); }
+.notif-group { margin-bottom:28px; }
+.notif-group-label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--tx3); margin-bottom:10px; padding-left:4px; }
+.notif-item { display:flex; align-items:flex-start; gap:14px; padding:14px 16px; background:var(--bg2); border:1px solid var(--bd); border-radius:10px; margin-bottom:8px; cursor:pointer; transition:box-shadow .15s, border-color .15s; position:relative; }
+.notif-item:hover { box-shadow:0 2px 10px rgba(0,0,0,.08); border-color:var(--pri2); }
+.notif-item.unread { border-left:4px solid var(--pri); background:var(--bg); }
+.notif-item.unread::before { content:''; position:absolute; top:14px; right:14px; width:8px; height:8px; border-radius:50%; background:var(--pri); }
+.ni-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+.ni-icon.alert   { background:#FFF3CD; }
+.ni-icon.info    { background:#D4EDDA; }
+.ni-icon.action  { background:#CCE5FF; }
+.ni-icon.warn    { background:#F8D7DA; }
+.ni-body { flex:1; min-width:0; }
+.ni-title { font-size:.9rem; font-weight:600; color:var(--tx); margin:0 0 3px; }
+.ni-desc { font-size:.82rem; color:var(--tx2); margin:0 0 6px; line-height:1.45; }
+.ni-meta { display:flex; align-items:center; gap:10px; font-size:.75rem; color:var(--tx3); }
+.ni-tag { padding:2px 8px; border-radius:4px; font-size:.7rem; font-weight:600; }
+.ni-tag.alert  { background:#FFF3CD; color:#856404; }
+.ni-tag.info   { background:#D4EDDA; color:#155724; }
+.ni-tag.action { background:#CCE5FF; color:#004085; }
+.ni-tag.warn   { background:#F8D7DA; color:#721C24; }
+.ni-actions { display:flex; gap:8px; margin-top:8px; }
+.mark-all-btn { padding:6px 16px; border-radius:8px; font-size:.8rem; font-weight:600; border:1.5px solid var(--bd); background:transparent; color:var(--tx2); cursor:pointer; transition:all .15s; }
+.mark-all-btn:hover { background:var(--bg2); color:var(--pri); border-color:var(--pri); }
+.notif-empty { text-align:center; padding:60px 20px; color:var(--tx3); }
+.notif-empty .empty-icon { font-size:3rem; margin-bottom:12px; }
+.notif-empty p { font-size:.95rem; }
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo">P</div>
+    <div>
+      <div class="tb-title">Antarious AI</div>
+      <div class="tb-sub">PKSF Intelligence Platform</div>
+    </div>
+  </div>
+  <div class="tb-right">
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="setMode('auto')" title="Full Auto">Auto</button>
+      <button class="mode-btn" onclick="setMode('semi')" title="Semi-Auto">Semi</button>
+      <button class="mode-btn" onclick="setMode('manual')" title="Manual">Manual</button>
+    </div>
+    <div class="tb-icon-btn" onclick="openFreya()" title="Ask Freya AI">🤖</div>
+    <div class="tb-icon-btn active-notif" onclick="window.location.href='notifications.html'" title="Notifications">🔔 <span class="notif-dot"></span></div>
+    <div class="tb-avatar" title="Md. Rafiqul Islam — MD">RI</div>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <a href="dashboard.html"><div class="nav-item"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
+  <div class="nav-sep">Operations</div>
+  <a href="partners.html"><div class="nav-item"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
+  <a href="portfolio.html"><div class="nav-item"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
+  <div class="nav-sep">Programmes</div>
+  <a href="programs.html"><div class="nav-item"><span class="nav-ic">🌾</span>Active Programmes</div></a>
+  <a href="beneficiaries.html"><div class="nav-item"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
+  <div class="nav-sep">Intelligence</div>
+  <a href="reports.html"><div class="nav-item"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
+  <a href="agents.html"><div class="nav-item"><span class="nav-ic">🤖</span>AI Agents</div></a>
+  <div class="nav-sep">Admin</div>
+  <a href="finance.html"><div class="nav-item"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
+  <a href="hr.html"><div class="nav-item"><span class="nav-ic">👥</span>HR &amp; People</div></a>
+  <a href="notifications.html"><div class="nav-item active"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
+  <div class="nav-sep"></div>
+  <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+<div class="notif-page">
+
+  <div class="notif-toolbar">
+    <h1>🔔 Notifications <span style="font-size:.85rem;font-weight:400;color:var(--tx3);margin-left:6px;">7 unread</span></h1>
+    <div class="notif-filter-chips">
+      <div class="n-chip active" onclick="filterNotifs('all',this)">All</div>
+      <div class="n-chip" onclick="filterNotifs('alert',this)">Alerts</div>
+      <div class="n-chip" onclick="filterNotifs('action',this)">Action Needed</div>
+      <div class="n-chip" onclick="filterNotifs('info',this)">Info</div>
+    </div>
+    <button class="mark-all-btn" onclick="markAllRead()">Mark All as Read</button>
+  </div>
+
+  <!-- Today -->
+  <div class="notif-group" data-group="today">
+    <div class="notif-group-label">Today — May 20, 2026</div>
+
+    <div class="notif-item unread" data-type="warn" onclick="goTo('partners.html')">
+      <div class="ni-icon warn">⚠️</div>
+      <div class="ni-body">
+        <p class="ni-title">Critical PAR90 Breach — BURO Bangladesh (Mymensingh)</p>
+        <p class="ni-desc">PAR90 has risen to 8.7%, exceeding the 7% threshold. Immediate review and corrective action plan required as per PKSF compliance protocol.</p>
+        <div class="ni-meta">
+          <span class="ni-tag warn">Critical</span>
+          <span>Portfolio Monitor Agent</span>
+          <span>08:42 AM</span>
+        </div>
+        <div class="ni-actions">
+          <button class="btn btn-warn btn-sm" onclick="event.stopPropagation();window.location.href='partners.html'">Review Partner</button>
+          <button class="btn btn-sec btn-sm" onclick="event.stopPropagation();toast('Escalated to MD for review','📤','success')">Escalate to MD</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="notif-item unread" data-type="action" onclick="goTo('reports.html')">
+      <div class="ni-icon action">📋</div>
+      <div class="ni-body">
+        <p class="ni-title">IFAD PACE-II Progress Report Due in 3 Days</p>
+        <p class="ni-desc">Quarterly progress report for IFAD PACE-II programme is due on May 23, 2026. Report is 52% complete — narrative sections for Component 2 & 3 still pending input.</p>
+        <div class="ni-meta">
+          <span class="ni-tag action">Action Required</span>
+          <span>Report Generator Agent</span>
+          <span>07:15 AM</span>
+        </div>
+        <div class="ni-actions">
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();window.location.href='reports.html'">Complete Report</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="notif-item unread" data-type="alert" onclick="goTo('finance.html')">
+      <div class="ni-icon alert">💰</div>
+      <div class="ni-body">
+        <p class="ni-title">May 2026 Payroll Ready for Approval — ৳8.42 Cr</p>
+        <p class="ni-desc">Payroll for 612 staff members has been prepared by Finance Intelligence Agent. Total disbursement: ৳8,42,35,000. Pending MD approval before May 25 disbursement date.</p>
+        <div class="ni-meta">
+          <span class="ni-tag alert">Pending Approval</span>
+          <span>Finance Intelligence Agent</span>
+          <span>06:00 AM</span>
+        </div>
+        <div class="ni-actions">
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();window.location.href='finance.html'">Review Payroll</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="notif-item unread" data-type="info" onclick="goTo('agents.html')">
+      <div class="ni-icon info">🤖</div>
+      <div class="ni-body">
+        <p class="ni-title">Portfolio Health Report Generated — Q1 FY2026</p>
+        <p class="ni-desc">Freya has completed the quarterly Portfolio Health Report covering all 276 Partner Organizations. Key finding: PAR30 improved by 0.3% QoQ. Report is ready for review.</p>
+        <div class="ni-meta">
+          <span class="ni-tag info">Completed</span>
+          <span>Report Generator Agent</span>
+          <span>05:30 AM</span>
+        </div>
+        <div class="ni-actions">
+          <button class="btn btn-sec btn-sm" onclick="event.stopPropagation();window.location.href='reports.html'">View Report</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="notif-item unread" data-type="alert" onclick="goTo('partners.html')">
+      <div class="ni-icon alert">🏢</div>
+      <div class="ni-body">
+        <p class="ni-title">12 Partner Organizations Above PAR30 Threshold</p>
+        <p class="ni-desc">Freya's weekly portfolio scan flagged 12 POs with PAR30 above 5%. Of these, 3 are classified as critical (PAR30 > 7%). Recommended: schedule joint monitoring visits.</p>
+        <div class="ni-meta">
+          <span class="ni-tag alert">Alert</span>
+          <span>Portfolio Monitor Agent</span>
+          <span>12:00 AM</span>
+        </div>
+        <div class="ni-actions">
+          <button class="btn btn-warn btn-sm" onclick="event.stopPropagation();window.location.href='partners.html'">View At-Risk POs</button>
+          <button class="btn btn-sec btn-sm" onclick="event.stopPropagation();toast('Monitoring visits scheduled for next week','📅','success')">Schedule Visits</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Yesterday -->
+  <div class="notif-group" data-group="yesterday">
+    <div class="notif-group-label">Yesterday — May 19, 2026</div>
+
+    <div class="notif-item unread" data-type="action" onclick="goTo('hr.html')">
+      <div class="ni-icon action">👥</div>
+      <div class="ni-body">
+        <p class="ni-title">4 Staff Contracts Expiring Within 30 Days</p>
+        <p class="ni-desc">HR Agent has identified 4 staff members with contracts expiring before June 20, 2026. Renewal or separation decisions required to ensure compliance with labour regulations.</p>
+        <div class="ni-meta">
+          <span class="ni-tag action">Action Required</span>
+          <span>HR Agent</span>
+          <span>May 19, 3:22 PM</span>
+        </div>
+        <div class="ni-actions">
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();window.location.href='hr.html'">Review Contracts</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="notif-item" data-type="info" onclick="goTo('programs.html')">
+      <div class="ni-icon info">🌾</div>
+      <div class="ni-body">
+        <p class="ni-title">USSP Enrollment Milestone: 9.2 Lac Households</p>
+        <p class="ni-desc">Ultra-Sohayota (USSP) programme has reached 92% of its 10 lac household target. Rajshahi and Rangpur divisions are leading enrollment. On track for Q2 FY2026 target.</p>
+        <div class="ni-meta">
+          <span class="ni-tag info">Milestone</span>
+          <span>Programme Intelligence Agent</span>
+          <span>May 19, 10:00 AM</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Older -->
+  <div class="notif-group" data-group="older">
+    <div class="notif-group-label">Earlier This Week</div>
+
+    <div class="notif-item" data-type="info">
+      <div class="ni-icon info">📊</div>
+      <div class="ni-body">
+        <p class="ni-title">KfW Climate Adaptation Grant — Tranche 3 Released</p>
+        <p class="ni-desc">KfW Development Bank has approved and released Tranche 3 of the Climate Adaptation programme grant: EUR 2.5M (৳29.75 Cr). Funds have been credited to the programme account.</p>
+        <div class="ni-meta">
+          <span class="ni-tag info">Received</span>
+          <span>Finance Intelligence Agent</span>
+          <span>May 17, 2:45 PM</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="notif-item" data-type="info">
+      <div class="ni-icon info">✅</div>
+      <div class="ni-body">
+        <p class="ni-title">Bangladesh Bank MRA Return — Filed Successfully</p>
+        <p class="ni-desc">The quarterly MRA (Microcredit Regulatory Authority) return has been completed and submitted by Compliance Sentinel Agent. Reference: MRA-2026-Q1-PKSF-0047.</p>
+        <div class="ni-meta">
+          <span class="ni-tag info">Completed</span>
+          <span>Compliance Sentinel Agent</span>
+          <span>May 16, 11:30 AM</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="notif-item" data-type="action">
+      <div class="ni-icon action">📑</div>
+      <div class="ni-body">
+        <p class="ni-title">3 New Vacancies Posted — Programme Officer, Finance Analyst, IT Officer</p>
+        <p class="ni-desc">HR Agent has posted 3 open positions on BDJOBS. Applications are being collected. Interview schedule will be prepared once application window closes on June 5, 2026.</p>
+        <div class="ni-meta">
+          <span class="ni-tag action">In Progress</span>
+          <span>HR Agent</span>
+          <span>May 15, 9:00 AM</span>
+        </div>
+        <div class="ni-actions">
+          <button class="btn btn-sec btn-sm" onclick="event.stopPropagation();window.location.href='hr.html'">View Recruitment</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /notif-page -->
+</div><!-- /content -->
+
+<!-- Freya Panel -->
+<div class="freya-panel" id="freyaPanel">
+  <div class="fp-header">
+    <div class="fp-title">🤖 Freya AI Assistant</div>
+    <button class="fp-close" onclick="closeFreya()">✕</button>
+  </div>
+  <div class="fp-msgs" id="fpMsgs">
+    <div class="fp-msg fp-msg-bot">Hello! I noticed you have <strong>7 unread notifications</strong>. The most urgent item is the <strong>IFAD PACE-II report</strong> due in 3 days. Would you like me to help complete the missing narrative sections?</div>
+  </div>
+  <div class="fp-quick-btns">
+    <button class="fp-quick-btn" onclick="fpQuick('Summarize critical alerts')">Summarize critical alerts</button>
+    <button class="fp-quick-btn" onclick="fpQuick('What needs my approval today?')">What needs approval today?</button>
+    <button class="fp-quick-btn" onclick="fpQuick('Draft response for BURO Bangladesh')">Draft response for BURO</button>
+  </div>
+  <div class="fp-input-row">
+    <input type="text" class="fp-input" id="fpInput" placeholder="Ask Freya anything…" onkeydown="if(event.key==='Enter')fpSend()">
+    <button class="fp-send-btn" onclick="fpSend()">➤</button>
+  </div>
+</div>
+
+<!-- Output Modal -->
+<div class="modal-overlay" id="outputModal" onclick="closeOutput()">
+  <div class="modal-box modal-lg" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <span id="outputTitle">Output</span>
+      <button class="modal-close" onclick="closeOutput()">✕</button>
+    </div>
+    <div class="modal-body" id="outputBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-sec" onclick="closeOutput()">Close</button>
+      <button class="btn btn-pri" onclick="toast('Downloaded successfully','⬇️','success');closeOutput()">Download</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <span id="confirmTitle">Confirm Action</span>
+      <button class="modal-close" onclick="document.getElementById('confirmModal').style.display='none'">✕</button>
+    </div>
+    <div class="modal-body" id="confirmBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-sec" onclick="document.getElementById('confirmModal').style.display='none'">Cancel</button>
+      <button class="btn btn-pri" id="confirmOkBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toastContainer" class="toast-container"></div>
+
+<script src="js/shared.js"></script>
+<script>
+highlightNav('ni-notifications');
+
+let currentFilter = 'all';
+let unreadCount = 7;
+
+function filterNotifs(type, el) {
+  currentFilter = type;
+  document.querySelectorAll('.n-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.notif-item').forEach(item => {
+    if (type === 'all') {
+      item.style.display = '';
+    } else {
+      const itemType = item.dataset.type;
+      item.style.display = (itemType === type) ? '' : 'none';
+    }
+  });
+  // Hide empty groups
+  document.querySelectorAll('.notif-group').forEach(group => {
+    const visible = [...group.querySelectorAll('.notif-item')].some(i => i.style.display !== 'none');
+    group.style.display = visible ? '' : 'none';
+  });
+}
+
+function markAllRead() {
+  document.querySelectorAll('.notif-item.unread').forEach(item => {
+    item.classList.remove('unread');
+  });
+  unreadCount = 0;
+  document.querySelector('.notif-toolbar h1').innerHTML = '🔔 Notifications <span style="font-size:.85rem;font-weight:400;color:var(--tx3);margin-left:6px;">All caught up</span>';
+  toast('All notifications marked as read', '✅', 'success');
+}
+
+function goTo(url) {
+  window.location.href = url;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard — PKSF AI</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+/* Dashboard-specific */
+.welcome-banner {
+  background: linear-gradient(135deg, var(--pri) 0%, var(--pri2) 60%, var(--acc) 100%);
+  border-radius: 16px; padding: 24px 28px;
+  display: flex; align-items: center; gap: 20px;
+  margin-bottom: 20px; color: #fff; position: relative; overflow: hidden;
+}
+.welcome-banner::after {
+  content: '🤖';
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  font-size: 64px; opacity: .12;
+}
+.wb-content h2 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.wb-content p  { font-size: 12px; opacity: .85; max-width: 600px; line-height: 1.6; }
+.wb-ask {
+  display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;
+}
+.wb-ask-btn {
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  color: #fff; border-radius: 8px; padding: 7px 14px;
+  font-size: 11px; font-weight: 600; cursor: pointer; transition: all .15s;
+}
+.wb-ask-btn:hover { background: rgba(255,255,255,.25); }
+
+.alert-strip {
+  background: var(--ambg); border: 1px solid var(--ambdr);
+  border-radius: 10px; padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.as-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: #92400e; font-weight: 500;
+}
+.as-sep { color: var(--ambdr); }
+
+.freya-tasks {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+}
+.ft-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.ft-title   { font-size: 13px; font-weight: 700; color: var(--tx); }
+.ft-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid var(--border);
+  font-size: 11px;
+}
+.ft-item:last-child { border-bottom: none; }
+.ft-ic { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.ft-ic-g { background: rgba(0,92,43,.08); }
+.ft-ic-a { background: var(--ambg); }
+.ft-ic-b { background: var(--blbg); }
+.ft-name  { flex: 1; font-weight: 500; color: var(--tx); }
+.ft-prog  { width: 100px; }
+.ft-pct   { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--pri); min-width: 36px; text-align: right; }
+
+.activity-feed { display: flex; flex-direction: column; gap: 8px; }
+.af-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 11px; padding: 8px 10px; border-radius: 7px;
+  background: var(--card2); border: 1px solid var(--border);
+}
+.af-ic { font-size: 14px; flex-shrink: 0; }
+.af-content { flex: 1; }
+.af-title  { font-weight: 600; color: var(--tx); margin-bottom: 1px; }
+.af-desc   { color: var(--tx3); }
+.af-time   { font-size: 9px; color: var(--tx4); margin-top: 2px; }
+
+.deadline-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+  font-size: 11px;
+}
+.deadline-item:last-child { border-bottom: none; }
+.dl-date { font-family: var(--mono); font-size: 10px; font-weight: 700; width: 55px; flex-shrink: 0; }
+.dl-date.urgent { color: var(--rd); }
+.dl-date.soon   { color: var(--am); }
+.dl-date.ok     { color: var(--pri); }
+.dl-name { flex: 1; font-weight: 500; color: var(--tx); }
+.dl-org  { font-size: 9px; color: var(--tx3); }
+</style>
+</head>
+<body>
+<div id="shell">
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo">🏛</div>
+    <div class="tb-brand-text">
+      <div class="tb-brand-main">PKSF · Antarious AI</div>
+      <div class="tb-brand-sub">Intelligence Platform</div>
+    </div>
+  </div>
+  <div class="tb-freya-bar" onclick="openFreya()">
+    <div class="tb-fa">🤖</div>
+    <div class="tb-fstatus" id="freya-status-text">
+      <strong>Freya</strong> is analysing Q3 portfolio data — PAR report 78% complete
+    </div>
+    <div class="tb-fdot"></div>
+  </div>
+  <div class="tb-controls">
+    <div class="mode-toggle">
+      <button class="mode-btn" data-mode="manual" onclick="setMode('manual')">Manual</button>
+      <button class="mode-btn on" data-mode="semi" onclick="setMode('semi')">Semi-Auto</button>
+      <button class="mode-btn" data-mode="full" onclick="setMode('full')">Full Auto</button>
+    </div>
+    <div class="tb-icon-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle Theme">🌙</div>
+    <div class="tb-icon-btn" onclick="window.location.href='notifications.html'" title="Notifications">
+      🔔<div class="tb-ndot"></div>
+    </div>
+    <div class="tb-user">
+      <div class="tb-av">AH</div>
+      <div><div class="tb-uname">Dr. Anisul Haque</div><div class="tb-urole">Managing Director</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-inner">
+    <div class="sb-section-label">Overview</div>
+    <a href="dashboard.html"><div class="nav-item active" id="ni-dashboard"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
+
+    <div class="sb-section-label">Partner Network</div>
+    <a href="partners.html"><div class="nav-item" id="ni-partners"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
+    <a href="portfolio.html"><div class="nav-item" id="ni-portfolio"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
+
+    <div class="sb-section-label">Programmes</div>
+    <a href="programs.html"><div class="nav-item" id="ni-programs"><span class="nav-ic">🌾</span>Active Programmes</div></a>
+    <a href="beneficiaries.html"><div class="nav-item" id="ni-beneficiaries"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
+
+    <div class="sb-section-label">Intelligence</div>
+    <a href="reports.html"><div class="nav-item" id="ni-reports"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
+    <a href="agents.html"><div class="nav-item" id="ni-agents"><span class="nav-ic">🤖</span>AI Agents</div></a>
+
+    <div class="sb-section-label">Operations</div>
+    <a href="finance.html"><div class="nav-item" id="ni-finance"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
+    <a href="hr.html"><div class="nav-item" id="ni-hr"><span class="nav-ic">👥</span>HR &amp; People</div></a>
+    <a href="notifications.html"><div class="nav-item" id="ni-notifications"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
+
+    <div class="sb-section-label">Account</div>
+    <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+  </div>
+  <div class="sb-footer">
+    <div class="sb-org">
+      <div class="sb-org-av">🏛</div>
+      <div><div class="sb-org-name">PKSF</div><div class="sb-org-type">Apex MFI · Dhaka, Bangladesh</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+<div class="content-area">
+
+  <!-- WELCOME BANNER -->
+  <div class="welcome-banner">
+    <div>
+      <div class="wb-content">
+        <h2>Good morning, Dr. Haque 👋</h2>
+        <p>Freya has analysed your morning data. There are <strong>3 partner alerts</strong>, <strong>2 reports</strong> ready for your review, and <strong>1 approval</strong> needed before end of day. Your portfolio PAR30 improved by 0.6% this quarter.</p>
+        <div class="wb-ask">
+          <button class="wb-ask-btn" onclick="fpQuick('What needs my attention today?')">📋 What needs my attention?</button>
+          <button class="wb-ask-btn" onclick="fpQuick('Summarise this week\\'s portfolio performance')">📊 Portfolio summary</button>
+          <button class="wb-ask-btn" onclick="fpQuick('Which reports are due soon?')">📄 Upcoming deadlines</button>
+          <button class="wb-ask-btn" onclick="fpQuick('Draft my morning brief')">✍️ Morning brief</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALERT STRIP -->
+  <div class="alert-strip">
+    <span style="font-size:16px">⚠️</span>
+    <div class="as-item">🏢 <strong>12 POs</strong> have PAR30 &gt; 5% — <a href="partners.html" style="color:var(--am);font-weight:700">Review now</a></div>
+    <div class="as-sep">·</div>
+    <div class="as-item">📋 IFAD PACE-II report due in <strong>14 days</strong></div>
+    <div class="as-sep">·</div>
+    <div class="as-item">✅ April payroll ready for <strong>approval</strong></div>
+    <div class="as-sep">·</div>
+    <div class="as-item">📊 Q3 Board Report draft is <strong>ready</strong></div>
+    <div style="margin-left:auto">
+      <button class="btn btn-warn btn-sm" onclick="toast('Opening all alerts...','🔔','a')">View All Alerts (7)</button>
+    </div>
+  </div>
+
+  <!-- KPI STATS -->
+  <div class="grid-5" style="margin-bottom:20px">
+    <div class="stat-card card-hover" onclick="window.location.href='partners.html'">
+      <div class="stat-ic">🏢</div>
+      <div class="stat-val">276</div>
+      <div class="stat-label">Partner Organisations</div>
+      <div class="stat-change chg-up">↑ 4 new this quarter</div>
+    </div>
+    <div class="stat-card card-hover" onclick="window.location.href='portfolio.html'">
+      <div class="stat-ic">💳</div>
+      <div class="stat-val">৳28,450 Cr</div>
+      <div class="stat-label">Active Loan Portfolio</div>
+      <div class="stat-change chg-up">↑ 8.2% year-on-year</div>
+    </div>
+    <div class="stat-card amber card-hover" onclick="window.location.href='portfolio.html'">
+      <div class="stat-ic">📉</div>
+      <div class="stat-val">4.2%</div>
+      <div class="stat-label">PAR30 (Overall)</div>
+      <div class="stat-change chg-up">↓ 0.6% vs last quarter ✓</div>
+    </div>
+    <div class="stat-card card-hover" onclick="window.location.href='programs.html'">
+      <div class="stat-ic">👨‍👩‍👧</div>
+      <div class="stat-val">90.2 lac</div>
+      <div class="stat-label">Active Borrowers</div>
+      <div class="stat-change chg-up">↑ 2.1 lac this quarter</div>
+    </div>
+    <div class="stat-card card-hover" onclick="window.location.href='programs.html'">
+      <div class="stat-ic">🌾</div>
+      <div class="stat-val">6</div>
+      <div class="stat-label">Active Programmes</div>
+      <div class="stat-change chg-nt">USSP · ENRICH · PACE +3</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT GRID -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 320px;gap:16px;margin-bottom:20px">
+
+    <!-- Quick Actions -->
+    <div class="card card-lg">
+      <div class="page-hd" style="margin-bottom:14px">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--tx)">🚀 Quick Actions</div>
+          <div style="font-size:10px;color:var(--tx3);margin-top:2px">Common tasks — one click to get started</div>
+        </div>
+      </div>
+      <div class="qa-grid">
+        <div class="qa-card" onclick="showOutput('portfolio-health')">
+          <div class="qa-card-ic">💳</div>
+          <div class="qa-card-title">Portfolio Health Check</div>
+          <div class="qa-card-desc">Freya analyses all 276 PO portfolios instantly</div>
+        </div>
+        <div class="qa-card" onclick="window.location.href='reports.html'">
+          <div class="qa-card-ic">📋</div>
+          <div class="qa-card-title">Generate Report</div>
+          <div class="qa-card-desc">IFAD, World Bank, ADB — AI drafts in minutes</div>
+        </div>
+        <div class="qa-card" onclick="window.location.href='partners.html'">
+          <div class="qa-card-ic">🏢</div>
+          <div class="qa-card-title">Partner Performance</div>
+          <div class="qa-card-desc">See which POs need attention today</div>
+        </div>
+        <div class="qa-card" onclick="showOutput('ussp-report')">
+          <div class="qa-card-ic">🌾</div>
+          <div class="qa-card-title">USSP Progress</div>
+          <div class="qa-card-desc">Ultra-poor programme quarterly update</div>
+        </div>
+        <div class="qa-card" onclick="fpQuick('Draft a reminder letter to Shapla Credit Society about their PAR30')">
+          <div class="qa-card-ic">✍️</div>
+          <div class="qa-card-title">Draft a Letter</div>
+          <div class="qa-card-desc">Freya drafts in seconds — you review &amp; send</div>
+        </div>
+        <div class="qa-card" onclick="window.location.href='finance.html'">
+          <div class="qa-card-ic">💰</div>
+          <div class="qa-card-title">Check Budget</div>
+          <div class="qa-card-desc">Budget utilisation &amp; grant status</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Freya Active Tasks -->
+    <div class="card card-lg">
+      <div class="ft-header">
+        <div class="ft-title">🤖 Freya — Active Tasks</div>
+        <span class="badge badge-g badge-dot">Semi-Auto Mode</span>
+      </div>
+      <div id="freya-progress-bar" style="display:none;margin-bottom:10px">
+        <div style="font-size:10px;color:var(--tx3);margin-bottom:4px" id="freya-progress-label">Working...</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div>
+      </div>
+      <div class="ft-item">
+        <div class="ft-ic ft-ic-g">📊</div>
+        <div class="ft-name">Q3 Portfolio Analysis<br><span style="font-size:9px;color:var(--tx3)">Analysing 276 PO submissions</span></div>
+        <div class="ft-prog"><div class="prog-bar"><div class="prog-fill" style="width:78%"></div></div></div>
+        <div class="ft-pct">78%</div>
+      </div>
+      <div class="ft-item">
+        <div class="ft-ic ft-ic-b">📋</div>
+        <div class="ft-name">IFAD PACE-II Draft<br><span style="font-size:9px;color:var(--tx3)">Narrative sections in progress</span></div>
+        <div class="ft-prog"><div class="prog-bar"><div class="prog-fill ft-fill-bl" style="width:52%;background:var(--bl)"></div></div></div>
+        <div class="ft-pct" style="color:var(--bl)">52%</div>
+      </div>
+      <div class="ft-item">
+        <div class="ft-ic ft-ic-a">🔍</div>
+        <div class="ft-name">Partner Compliance Check<br><span style="font-size:9px;color:var(--tx3)">Shapla Credit Society audit</span></div>
+        <div class="ft-prog"><div class="prog-bar"><div class="prog-fill" style="width:35%;background:var(--am)"></div></div></div>
+        <div class="ft-pct" style="color:var(--am)">35%</div>
+      </div>
+      <div class="ft-item">
+        <div class="ft-ic ft-ic-g">🧾</div>
+        <div class="ft-name">April Payroll Processing<br><span style="font-size:9px;color:var(--tx3)">612 staff — awaiting your approval</span></div>
+        <div class="ft-prog"><div class="prog-bar"><div class="prog-fill" style="width:90%"></div></div></div>
+        <div class="ft-pct">90%</div>
+      </div>
+      <div class="ft-item">
+        <div class="ft-ic ft-ic-g">📦</div>
+        <div class="ft-name">Procurement Analysis<br><span style="font-size:9px;color:var(--tx3)">Office equipment vendor comparison</span></div>
+        <div class="ft-prog"><div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div></div>
+        <div class="ft-pct">Done ✓</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button class="btn btn-pri btn-sm" onclick="openFreya()">🤖 Talk to Freya</button>
+        <button class="btn btn-sec btn-sm" onclick="window.location.href='agents.html'">View All Agents</button>
+      </div>
+    </div>
+
+    <!-- Upcoming Deadlines -->
+    <div class="card card-lg">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">📅 Upcoming Deadlines</div>
+      <div class="deadline-item">
+        <div class="dl-date urgent">2 days</div>
+        <div><div class="dl-name">Payroll Approval</div><div class="dl-org">HR · 612 staff</div></div>
+        <button class="btn btn-pri btn-sm" onclick="toast('Opening payroll approval...','✅','g')">Approve</button>
+      </div>
+      <div class="deadline-item">
+        <div class="dl-date urgent">5 days</div>
+        <div><div class="dl-name">Bangladesh Bank Return</div><div class="dl-org">Finance · MRA Format</div></div>
+        <button class="btn btn-warn btn-sm" onclick="toast('Opening BB return...','📋','a')">Review</button>
+      </div>
+      <div class="deadline-item">
+        <div class="dl-date soon">14 days</div>
+        <div><div class="dl-name">IFAD PACE-II Report</div><div class="dl-org">Freya draft 52% ready</div></div>
+        <button class="btn btn-sec btn-sm" onclick="window.location.href='reports.html'">Open</button>
+      </div>
+      <div class="deadline-item">
+        <div class="dl-date soon">18 days</div>
+        <div><div class="dl-name">ENRICH Q3 Submission</div><div class="dl-org">M&amp;E · Programme Division</div></div>
+        <button class="btn btn-sec btn-sm" onclick="window.location.href='reports.html'">Open</button>
+      </div>
+      <div class="deadline-item">
+        <div class="dl-date ok">30 days</div>
+        <div><div class="dl-name">ADB SFMF Progress Report</div><div class="dl-org">Finance &amp; Programme</div></div>
+        <button class="btn btn-sec btn-sm" onclick="window.location.href='reports.html'">Open</button>
+      </div>
+      <div class="deadline-item">
+        <div class="dl-date ok">45 days</div>
+        <div><div class="dl-name">Annual Board Report</div><div class="dl-org">Board Secretariat</div></div>
+        <button class="btn btn-sec btn-sm" onclick="window.location.href='reports.html'">Open</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM GRID -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+    <!-- Recent Activity -->
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">🕐 Recent Activity</div>
+      <div class="activity-feed">
+        <div class="af-item">
+          <div class="af-ic">🤖</div>
+          <div class="af-content">
+            <div class="af-title">Freya completed Partner Performance Analysis</div>
+            <div class="af-desc">12 POs flagged for attention · Q3 data processed · Recommendations ready</div>
+            <div class="af-time">2 hours ago · AI Agent</div>
+          </div>
+          <button class="btn btn-sec btn-sm" onclick="showOutput('partner-analysis')">View</button>
+        </div>
+        <div class="af-item">
+          <div class="af-ic">✅</div>
+          <div class="af-content">
+            <div class="af-title">Tenderboard approved IT procurement — BDT 42 lac</div>
+            <div class="af-desc">Approved by MD · 3 vendors evaluated · Rahim Tech selected</div>
+            <div class="af-time">Yesterday · Procurement</div>
+          </div>
+        </div>
+        <div class="af-item">
+          <div class="af-ic">📊</div>
+          <div class="af-content">
+            <div class="af-title">USSP Q3 field data consolidated</div>
+            <div class="af-desc">2,04,832 households · 8 divisions · Data quality score 94%</div>
+            <div class="af-time">2 days ago · M&amp;E Division</div>
+          </div>
+          <button class="btn btn-sec btn-sm" onclick="showOutput('ussp-report')">View</button>
+        </div>
+        <div class="af-item">
+          <div class="af-ic">📩</div>
+          <div class="af-content">
+            <div class="af-title">IFAD project coordinator emailed — site visit confirmed</div>
+            <div class="af-desc">Visit scheduled 12–14 June · Dhaka + Mymensingh · 4 programmes</div>
+            <div class="af-time">3 days ago · Donor Relations</div>
+          </div>
+        </div>
+        <div class="af-item">
+          <div class="af-ic">⚠️</div>
+          <div class="af-content">
+            <div class="af-title">Shapla Credit Society — compliance alert raised</div>
+            <div class="af-desc">PAR30 at 11.2% · Governance concerns · Audit team assigned</div>
+            <div class="af-time">4 days ago · Freya Compliance Agent</div>
+          </div>
+          <button class="btn btn-warn btn-sm" onclick="window.location.href='partners.html'">Review</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Programme Snapshot -->
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">🌾 Programme Snapshot — Q3</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <div>
+              <span style="font-size:12px;font-weight:600;color:var(--tx)">USSP</span>
+              <span style="font-size:10px;color:var(--tx3);margin-left:6px">Ultra-Sohayota Programme</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--pri)">82%</span>
+              <span class="badge badge-a badge-dot">On Track</span>
+            </div>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:82%"></div></div>
+          <div style="font-size:9px;color:var(--tx3);margin-top:3px">2,04,832 / 2,50,000 households enrolled</div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <div>
+              <span style="font-size:12px;font-weight:600;color:var(--tx)">ENRICH</span>
+              <span style="font-size:10px;color:var(--tx3);margin-left:6px">120 Pilot Unions</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--pri)">91%</span>
+              <span class="badge badge-g badge-dot">On Track</span>
+            </div>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:91%"></div></div>
+          <div style="font-size:9px;color:var(--tx3);margin-top:3px">89% food security milestone achieved</div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <div>
+              <span style="font-size:12px;font-weight:600;color:var(--tx)">PACE-II</span>
+              <span style="font-size:10px;color:var(--tx3);margin-left:6px">IFAD-funded · Women's Empowerment</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--am)">74%</span>
+              <span class="badge badge-a badge-dot">Monitor</span>
+            </div>
+          </div>
+          <div class="prog-bar"><div class="prog-fill prog-fill-am" style="width:74%"></div></div>
+          <div style="font-size:9px;color:var(--tx3);margin-top:3px">Income generation target: 74% · skills training on track</div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <div>
+              <span style="font-size:12px;font-weight:600;color:var(--tx)">SFMF</span>
+              <span style="font-size:10px;color:var(--tx3);margin-left:6px">Agriculture &amp; Farmers</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--pri)">88%</span>
+              <span class="badge badge-g badge-dot">On Track</span>
+            </div>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:88%"></div></div>
+          <div style="font-size:9px;color:var(--tx3);margin-top:3px">42,000 farmers supported · ADB-funded</div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <div>
+              <span style="font-size:12px;font-weight:600;color:var(--tx)">Climate Adaptation</span>
+              <span style="font-size:10px;color:var(--tx3);margin-left:6px">KfW / GIZ · Coastal Areas</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;font-weight:700;color:var(--am)">61%</span>
+              <span class="badge badge-a badge-dot">Below Target</span>
+            </div>
+          </div>
+          <div class="prog-bar"><div class="prog-fill prog-fill-am" style="width:61%"></div></div>
+          <div style="font-size:9px;color:var(--tx3);margin-top:3px">Post-flood delays in Khulna &amp; Barisal</div>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <button class="btn btn-sec btn-sm" onclick="window.location.href='programs.html'">View All Programmes →</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content-area -->
+</div><!-- /content -->
+</div><!-- /shell -->
+
+<!-- FREYA PANEL -->
+<div id="freya-panel">
+  <div class="fp-header">
+    <div class="fp-avatar">🤖</div>
+    <div>
+      <div class="fp-name">Freya</div>
+      <div class="fp-status"><span class="status-dot sd-g"></span> AI Programme Intelligence · Online</div>
+    </div>
+    <button class="btn btn-sm btn-sec" style="margin-left:auto" onclick="closeFreya()">✕ Close</button>
+  </div>
+  <div class="fp-quick">
+    <button class="btn btn-sm btn-pri"  onclick="fpQuick('What needs my attention today?')">📋 Today\'s priorities</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Summarise the portfolio health this quarter')">📊 Portfolio</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Which programmes are below target?')">🌾 Programmes</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('What reports are due in the next 30 days?')">📅 Deadlines</button>
+  </div>
+  <div id="fp-msgs"></div>
+  <div class="fp-input-area">
+    <div class="fp-input-row">
+      <input class="fp-input" id="fp-input" type="text" placeholder="Ask Freya anything — reports, data, letters, analysis…">
+      <button class="btn btn-pri btn-sm" onclick="fpSend()">Send ↑</button>
+    </div>
+    <div style="font-size:9px;color:var(--tx4);margin-top:5px">Semi-Auto mode · Freya will propose, you approve</div>
+  </div>
+</div>
+
+<!-- OUTPUT MODAL -->
+<div id="output-modal">
+  <div class="output-box">
+    <div class="ob-header">
+      <div>
+        <div class="ob-agent-label" id="ob-agent"></div>
+        <div class="ob-title" id="ob-title"></div>
+      </div>
+      <div class="ob-close" onclick="closeOutput()">✕</div>
+    </div>
+    <div class="ob-body" id="ob-body"></div>
+    <div class="ob-footer" id="ob-footer"></div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div id="confirm-modal">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirm-title"></div>
+    <div class="confirm-body"  id="confirm-body"></div>
+    <div class="confirm-acts">
+      <button class="btn btn-sec btn-sm" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-pri btn-sm" id="confirm-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="js/shared.js"></script>
+</body>
+</html>

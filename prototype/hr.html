@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HR & People — PKSF AI</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="shell">
+<div id="topbar">
+  <div class="tb-brand"><div class="tb-logo">🏛</div><div class="tb-brand-text"><div class="tb-brand-main">PKSF · Antarious AI</div><div class="tb-brand-sub">Intelligence Platform</div></div></div>
+  <div class="tb-freya-bar" onclick="openFreya()"><div class="tb-fa">🤖</div><div class="tb-fstatus" id="freya-status-text"><strong>Freya</strong> tracking 612 staff · 4 contracts expiring · 3 vacancies open · Payroll ready</div><div class="tb-fdot"></div></div>
+  <div class="tb-controls">
+    <div class="mode-toggle">
+      <button class="mode-btn" data-mode="manual" onclick="setMode('manual')">Manual</button>
+      <button class="mode-btn on" data-mode="semi" onclick="setMode('semi')">Semi-Auto</button>
+      <button class="mode-btn" data-mode="full" onclick="setMode('full')">Full Auto</button>
+    </div>
+    <div class="tb-icon-btn" onclick="toggleTheme()" id="theme-btn">🌙</div>
+    <div class="tb-icon-btn">🔔<div class="tb-ndot"></div></div>
+    <div class="tb-user"><div class="tb-av">AH</div><div><div class="tb-uname">Dr. Anisul Haque</div><div class="tb-urole">Managing Director</div></div></div>
+  </div>
+</div>
+<div id="sidebar">
+  <div class="sb-inner">
+    <div class="sb-section-label">Overview</div>
+    <a href="dashboard.html"><div class="nav-item"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
+    <div class="sb-section-label">Partner Network</div>
+    <a href="partners.html"><div class="nav-item"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
+    <a href="portfolio.html"><div class="nav-item"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
+    <div class="sb-section-label">Programmes</div>
+    <a href="programs.html"><div class="nav-item"><span class="nav-ic">🌾</span>Active Programmes</div></a>
+    <a href="beneficiaries.html"><div class="nav-item"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
+    <div class="sb-section-label">Intelligence</div>
+    <a href="reports.html"><div class="nav-item"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
+    <a href="agents.html"><div class="nav-item"><span class="nav-ic">🤖</span>AI Agents</div></a>
+    <div class="sb-section-label">Operations</div>
+    <a href="finance.html"><div class="nav-item"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
+    <a href="hr.html"><div class="nav-item active"><span class="nav-ic">👥</span>HR &amp; People</div></a>
+    <a href="notifications.html"><div class="nav-item"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
+    <div class="sb-section-label">Account</div>
+    <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+  </div>
+  <div class="sb-footer"><div class="sb-org"><div class="sb-org-av">🏛</div><div><div class="sb-org-name">PKSF</div><div class="sb-org-type">Apex MFI · Dhaka, Bangladesh</div></div></div></div>
+</div>
+
+<div id="content">
+<div class="content-area">
+
+  <div class="page-hd">
+    <div>
+      <div class="page-title">HR &amp; People Management</div>
+      <div class="page-sub"><strong>612 staff members</strong> across PKSF HQ and field offices</div>
+    </div>
+    <div class="page-acts">
+      <button class="btn btn-sec" onclick="fpQuick('Give me a summary of HR status for PKSF this month')">🤖 HR Summary</button>
+      <button class="btn btn-pri" onclick="toast('Opening new staff onboarding wizard...','👤','g')">+ Add Staff</button>
+    </div>
+  </div>
+
+  <!-- FREYA -->
+  <div class="freya-box">
+    <div class="freya-box-ic">🤖</div>
+    <div style="flex:1">
+      <div class="freya-box-label">Freya · HR Intelligence</div>
+      <div class="freya-box-text">
+        <strong>4 staff contracts expire in the next 60 days</strong> — renewal workflow initiated. <strong>3 vacancies</strong> are currently open (2 Field Officers, 1 Finance Manager). <strong>Annual performance appraisal cycle</strong> starts next month — Freya will send self-appraisal forms to all 612 staff automatically.
+      </div>
+    </div>
+    <div class="freya-box-acts">
+      <button class="btn btn-pri btn-sm" onclick="toast('Opening contract renewals...','📝','g')">Contract Renewals (4)</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Opening vacancy listings...','💼','g')">View Vacancies (3)</button>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="grid-5" style="margin-bottom:20px">
+    <div class="stat-card"><div class="stat-ic">👥</div><div class="stat-val">612</div><div class="stat-label">Total Staff</div><div class="stat-change chg-up">↑ 8 new hires this quarter</div></div>
+    <div class="stat-card amber"><div class="stat-ic">📋</div><div class="stat-val">4</div><div class="stat-label">Contracts Expiring (&lt;60d)</div><div class="stat-change chg-nt">Renewal workflows active</div></div>
+    <div class="stat-card"><div class="stat-ic">💼</div><div class="stat-val">3</div><div class="stat-label">Open Vacancies</div><div class="stat-change chg-nt">2 Field Officers · 1 Finance</div></div>
+    <div class="stat-card"><div class="stat-ic">🎓</div><div class="stat-val">94%</div><div class="stat-label">Training Compliance</div><div class="stat-change chg-up">↑ 3% this quarter</div></div>
+    <div class="stat-card"><div class="stat-ic">🏖</div><div class="stat-val">12%</div><div class="stat-label">Leave Utilisation</div><div class="stat-change chg-nt">Avg 18 days/year used</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab-item active" onclick="switchHTab(this,'overview')">Overview</div>
+    <div class="tab-item" onclick="switchHTab(this,'staff')">Staff Directory</div>
+    <div class="tab-item" onclick="switchHTab(this,'leave')">Leave Management</div>
+    <div class="tab-item" onclick="switchHTab(this,'performance')">Performance</div>
+  </div>
+
+  <!-- OVERVIEW TAB -->
+  <div id="htab-overview">
+    <div class="grid-2" style="margin-bottom:14px">
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">Department Breakdown</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="div-bar-row" style="display:flex;align-items:center;gap:10px">
+            <div style="width:120px;font-size:11px;color:var(--tx2)">Field Operations</div>
+            <div style="flex:1"><div class="prog-bar" style="height:14px"><div class="prog-fill" style="width:47%;height:14px"></div></div></div>
+            <div style="font-size:10px;font-weight:700;color:var(--tx);width:70px;text-align:right">288 (47%)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:120px;font-size:11px;color:var(--tx2)">Programme Div.</div>
+            <div style="flex:1"><div class="prog-bar" style="height:14px"><div class="prog-fill" style="width:23%;height:14px"></div></div></div>
+            <div style="font-size:10px;font-weight:700;color:var(--tx);width:70px;text-align:right">142 (23%)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:120px;font-size:11px;color:var(--tx2)">Finance &amp; Accts</div>
+            <div style="flex:1"><div class="prog-bar" style="height:14px"><div class="prog-fill" style="width:8%;height:14px;background:var(--bl)"></div></div></div>
+            <div style="font-size:10px;font-weight:700;color:var(--tx);width:70px;text-align:right">48 (8%)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:120px;font-size:11px;color:var(--tx2)">Admin &amp; Support</div>
+            <div style="flex:1"><div class="prog-bar" style="height:14px"><div class="prog-fill" style="width:14%;height:14px;background:var(--pu)"></div></div></div>
+            <div style="font-size:10px;font-weight:700;color:var(--tx);width:70px;text-align:right">84 (14%)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:120px;font-size:11px;color:var(--tx2)">M&amp;E Division</div>
+            <div style="flex:1"><div class="prog-bar" style="height:14px"><div class="prog-fill" style="width:6%;height:14px;background:var(--acc2)"></div></div></div>
+            <div style="font-size:10px;font-weight:700;color:var(--tx);width:70px;text-align:right">38 (6%)</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:120px;font-size:11px;color:var(--tx2)">Management</div>
+            <div style="flex:1"><div class="prog-bar" style="height:14px"><div class="prog-fill" style="width:2%;height:14px;background:var(--am)"></div></div></div>
+            <div style="font-size:10px;font-weight:700;color:var(--tx);width:70px;text-align:right">12 (2%)</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">⚠ Actions Required</div>
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-dot active">!</div>
+            <div class="step-content">
+              <div class="step-title">Payroll Approval Pending</div>
+              <div class="step-desc">612 staff · ৳4.82 Cr · Due in 2 days</div>
+            </div>
+            <button class="btn btn-warn btn-sm" onclick="toast('Opening payroll...','💰','a')">Approve</button>
+          </div>
+          <div class="step-item">
+            <div class="step-dot active">!</div>
+            <div class="step-content">
+              <div class="step-title">4 Contracts Expiring in 60 Days</div>
+              <div class="step-desc">HR has prepared renewal paperwork</div>
+            </div>
+            <button class="btn btn-sec btn-sm" onclick="toast('Opening renewals...','📝','g')">Review</button>
+          </div>
+          <div class="step-item">
+            <div class="step-dot pending">3</div>
+            <div class="step-content">
+              <div class="step-title">Field Officer Vacancy — Rangpur</div>
+              <div class="step-desc">2 positions · 14 applications received · Freya screened</div>
+            </div>
+            <button class="btn btn-sec btn-sm" onclick="toast('Opening CVs...','👤','g')">View CVs</button>
+          </div>
+          <div class="step-item">
+            <div class="step-dot pending">4</div>
+            <div class="step-content">
+              <div class="step-title">Annual Appraisal Cycle Starting</div>
+              <div class="step-desc">June 1st · 612 self-appraisals · Freya will auto-send</div>
+            </div>
+            <button class="btn btn-sec btn-sm" onclick="toast('Configuring appraisal cycle...','📊','g')">Configure</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAFF DIRECTORY -->
+  <div id="htab-staff" style="display:none">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div class="search-bar" style="flex:1">
+          <span>🔍</span>
+          <input type="text" placeholder="Search staff by name, ID, department, position…">
+        </div>
+        <select class="btn btn-sec" style="padding:7px 12px;font-size:11px">
+          <option>All Departments</option>
+          <option>Field Operations</option><option>Programme Division</option>
+          <option>Finance &amp; Accounts</option><option>M&amp;E Division</option>
+        </select>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>Employee</th><th>ID</th><th>Department</th><th>Position</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,var(--pri),var(--acc));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">RB</div>Rowshan Begum</div></td>
+            <td style="font-family:var(--mono);font-size:10px">EMP-0142</td>
+            <td>Programme Division</td>
+            <td>Senior Programme Officer</td>
+            <td>Dhaka HQ</td>
+            <td><span class="badge badge-g">Active</span></td>
+            <td><button class="btn btn-sec btn-sm" onclick="toast('Opening staff profile...','👤','g')">View</button></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#2563eb,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">MR</div>Mohammad Rashid</div></td>
+            <td style="font-family:var(--mono);font-size:10px">EMP-0089</td>
+            <td>Finance &amp; Accounts</td>
+            <td>Senior Finance Officer</td>
+            <td>Dhaka HQ</td>
+            <td><span class="badge badge-g">Active</span></td>
+            <td><button class="btn btn-sec btn-sm" onclick="toast('Opening staff profile...','👤','g')">View</button></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#7c3aed,#a78bfa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">FA</div>Fatema Akter</div></td>
+            <td style="font-family:var(--mono);font-size:10px">EMP-0231</td>
+            <td>Field Operations</td>
+            <td>Field Officer</td>
+            <td>Rangpur Region</td>
+            <td><span class="badge badge-g">Active</span></td>
+            <td><button class="btn btn-sec btn-sm" onclick="toast('Opening staff profile...','👤','g')">View</button></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#d97706,#fbbf24);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">KI</div>Karim Islam</div></td>
+            <td style="font-family:var(--mono);font-size:10px">EMP-0318</td>
+            <td>M&amp;E Division</td>
+            <td>M&amp;E Specialist</td>
+            <td>Dhaka HQ</td>
+            <td><span class="badge badge-a">⚠ Contract Due</span></td>
+            <td><button class="btn btn-warn btn-sm" onclick="toast('Opening renewal form...','📝','a')">Renew</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px;font-size:11px;color:var(--tx3)">Showing 4 of 612 staff members · Use search to find others</div>
+    </div>
+  </div>
+
+  <!-- LEAVE TAB -->
+  <div id="htab-leave" style="display:none">
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">Leave Requests — Pending Approval</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card2)">
+            <div style="width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--pri),var(--acc));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0">FA</div>
+            <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--tx)">Fatema Akter</div><div style="font-size:10px;color:var(--tx3)">Annual Leave · 5 days · 25 Jun – 29 Jun</div></div>
+            <button class="btn btn-pri btn-sm" onclick="toast('Leave approved for Fatema Akter','✅','g')">Approve</button>
+            <button class="btn btn-sec btn-sm" onclick="toast('Leave request declined','❌','a')">Decline</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--card2)">
+            <div style="width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#2563eb,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0">KI</div>
+            <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--tx)">Karim Islam</div><div style="font-size:10px;color:var(--tx3)">Medical Leave · 3 days · 22 May – 24 May</div></div>
+            <button class="btn btn-pri btn-sm" onclick="toast('Medical leave approved','✅','g')">Approve</button>
+            <button class="btn btn-sec btn-sm" onclick="toast('Leave declined','❌','a')">Decline</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">Leave Balance Summary</div>
+        <table class="data-table">
+          <thead><tr><th>Leave Type</th><th>Allocation</th><th>Used</th><th>Balance</th></tr></thead>
+          <tbody>
+            <tr><td>Annual Leave</td><td>20 days</td><td>8 days</td><td style="color:var(--pri);font-weight:700">12 days</td></tr>
+            <tr><td>Medical Leave</td><td>14 days</td><td>3 days</td><td style="color:var(--pri);font-weight:700">11 days</td></tr>
+            <tr><td>Casual Leave</td><td>10 days</td><td>4 days</td><td style="color:var(--pri);font-weight:700">6 days</td></tr>
+            <tr><td>Compensatory Leave</td><td>Earned</td><td>0 days</td><td style="color:var(--pri);font-weight:700">2 days</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;font-size:10px;color:var(--tx3)">Showing your personal leave balance. HR managers can view all staff balances.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE TAB -->
+  <div id="htab-performance" style="display:none">
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:6px">Annual Performance Appraisal — FY 2025-26</div>
+      <div class="alert alert-b" style="margin-bottom:14px">ℹ️ Appraisal cycle starts <strong>June 1, 2026</strong>. Freya will automatically send self-appraisal forms to all 612 staff on that date.</div>
+      <div class="grid-4">
+        <div style="text-align:center;padding:16px;background:var(--card2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:24px;font-weight:800;color:var(--pri)">612</div>
+          <div style="font-size:10px;color:var(--tx3)">Staff to Appraise</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--card2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:24px;font-weight:800;color:var(--am)">Jun 1</div>
+          <div style="font-size:10px;color:var(--tx3)">Cycle Starts</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--card2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:24px;font-weight:800;color:var(--bl)">Jul 31</div>
+          <div style="font-size:10px;color:var(--tx3)">Completion Target</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--card2);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:24px;font-weight:800;color:var(--pri)">5-pt</div>
+          <div style="font-size:10px;color:var(--tx3)">Rating Scale</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></div></div>
+
+<div id="freya-panel">
+  <div class="fp-header"><div class="fp-avatar">🤖</div><div><div class="fp-name">Freya</div><div class="fp-status"><span class="status-dot sd-g"></span> HR Intelligence · Online</div></div><button class="btn btn-sm btn-sec" style="margin-left:auto" onclick="closeFreya()">✕ Close</button></div>
+  <div class="fp-quick">
+    <button class="btn btn-sm btn-pri"  onclick="fpQuick('Give me the HR status summary for this month')">👥 HR Summary</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Which staff contracts are expiring in the next 60 days?')">📝 Contracts</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Help me draft a job description for a Field Officer in Rangpur')">✍️ Draft JD</button>
+  </div>
+  <div id="fp-msgs"></div>
+  <div class="fp-input-area"><div class="fp-input-row"><input class="fp-input" id="fp-input" type="text" placeholder="Ask about staff, payroll, leave, performance…"><button class="btn btn-pri btn-sm" onclick="fpSend()">Send ↑</button></div></div>
+</div>
+<div id="output-modal"><div class="output-box"><div class="ob-header"><div><div class="ob-agent-label" id="ob-agent"></div><div class="ob-title" id="ob-title"></div></div><div class="ob-close" onclick="closeOutput()">✕</div></div><div class="ob-body" id="ob-body"></div><div class="ob-footer" id="ob-footer"></div></div></div>
+<div id="confirm-modal"><div class="confirm-box"><div class="confirm-title" id="confirm-title"></div><div class="confirm-body" id="confirm-body"></div><div class="confirm-acts"><button class="btn btn-sec btn-sm" onclick="closeConfirm()">Cancel</button><button class="btn btn-pri btn-sm" id="confirm-ok">Confirm</button></div></div></div>
+<div id="toast-container"></div>
+<script src="js/shared.js"></script>
+<script>
+function switchHTab(el, id) {
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['overview','staff','leave','performance'].forEach(t => {
+    document.getElementById('htab-'+t).style.display = t === id ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

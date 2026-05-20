@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Agents — PKSF AI</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+.agent-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 18px;
+  transition: all .2s; cursor: pointer;
+  position: relative; overflow: hidden;
+}
+.agent-card:hover { box-shadow: var(--sh2); transform: translateY(-2px); }
+.agent-card.running { border-color: var(--pri); }
+.agent-card.running::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--pri), var(--acc));
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer { 0%{background-position:-200%} 100%{background-position:200%} }
+.agent-card.idle::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--border2); }
+
+.agent-header { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.agent-avatar {
+  width: 44px; height: 44px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.agent-name    { font-size: 13px; font-weight: 800; color: var(--tx); }
+.agent-type    { font-size: 9px; font-family: var(--mono); color: var(--tx3); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+.agent-status-row { display:flex; align-items:center; gap:6px; margin-bottom:8px; font-size:11px; }
+.agent-desc    { font-size:11px; color:var(--tx3); line-height:1.55; margin-bottom:10px; }
+.agent-stats   { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:10px; }
+.as-stat       { background:var(--card2); border-radius:6px; padding:6px; text-align:center; }
+.as-stat-val   { font-size:13px; font-weight:800; color:var(--pri); }
+.as-stat-lbl   { font-size:8px; color:var(--tx3); }
+.agent-actions { display:flex; gap:6px; flex-wrap:wrap; }
+
+.run-log {
+  background: #0a1410; border-radius: 8px; padding: 12px;
+  font-family: var(--mono); font-size: 10px; color: #6ee7b7;
+  line-height: 1.8; max-height: 160px; overflow-y: auto;
+}
+.rl-ts { color: #475569; }
+.rl-ok { color: #6ee7b7; }
+.rl-warn { color: #fbbf24; }
+.rl-err  { color: #f87171; }
+</style>
+</head>
+<body>
+<div id="shell">
+
+<div id="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo">🏛</div>
+    <div class="tb-brand-text">
+      <div class="tb-brand-main">PKSF · Antarious AI</div>
+      <div class="tb-brand-sub">Intelligence Platform</div>
+    </div>
+  </div>
+  <div class="tb-freya-bar" onclick="openFreya()">
+    <div class="tb-fa">🤖</div>
+    <div class="tb-fstatus" id="freya-status-text">
+      <strong>Freya</strong> is orchestrating 5 active agents · All systems operational
+    </div>
+    <div class="tb-fdot"></div>
+  </div>
+  <div class="tb-controls">
+    <div class="mode-toggle">
+      <button class="mode-btn" data-mode="manual" onclick="setMode('manual')">Manual</button>
+      <button class="mode-btn on" data-mode="semi" onclick="setMode('semi')">Semi-Auto</button>
+      <button class="mode-btn" data-mode="full" onclick="setMode('full')">Full Auto</button>
+    </div>
+    <div class="tb-icon-btn" onclick="toggleTheme()" id="theme-btn">🌙</div>
+    <div class="tb-icon-btn">🔔<div class="tb-ndot"></div></div>
+    <div class="tb-user">
+      <div class="tb-av">AH</div>
+      <div><div class="tb-uname">Dr. Anisul Haque</div><div class="tb-urole">Managing Director</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="sidebar">
+  <div class="sb-inner">
+    <div class="sb-section-label">Overview</div>
+    <a href="dashboard.html"><div class="nav-item"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
+    <div class="sb-section-label">Partner Network</div>
+    <a href="partners.html"><div class="nav-item"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
+    <a href="portfolio.html"><div class="nav-item"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
+    <div class="sb-section-label">Programmes</div>
+    <a href="programs.html"><div class="nav-item"><span class="nav-ic">🌾</span>Active Programmes</div></a>
+    <a href="beneficiaries.html"><div class="nav-item"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
+    <div class="sb-section-label">Intelligence</div>
+    <a href="reports.html"><div class="nav-item"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
+    <a href="agents.html"><div class="nav-item active"><span class="nav-ic">🤖</span>AI Agents</div></a>
+    <div class="sb-section-label">Operations</div>
+    <a href="finance.html"><div class="nav-item"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
+    <a href="hr.html"><div class="nav-item"><span class="nav-ic">👥</span>HR &amp; People</div></a>
+    <a href="notifications.html"><div class="nav-item"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
+    <div class="sb-section-label">Account</div>
+    <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+  </div>
+  <div class="sb-footer">
+    <div class="sb-org">
+      <div class="sb-org-av">🏛</div>
+      <div><div class="sb-org-name">PKSF</div><div class="sb-org-type">Apex MFI · Dhaka, Bangladesh</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="content">
+<div class="content-area">
+
+  <div class="page-hd">
+    <div>
+      <div class="page-title">AI Agents &amp; Automation</div>
+      <div class="page-sub">Freya orchestrates specialist agents that work 24/7 on your behalf · You review and approve outputs</div>
+    </div>
+    <div class="page-acts">
+      <button class="btn btn-sec" onclick="showAgentLog()">📋 Agent Log</button>
+      <button class="btn btn-pri" onclick="fpQuick('What are all the AI agents doing right now?')">🤖 Ask Freya</button>
+    </div>
+  </div>
+
+  <!-- MODE EXPLAINER -->
+  <div class="freya-box">
+    <div class="freya-box-ic">🤖</div>
+    <div style="flex:1">
+      <div class="freya-box-label">How Freya &amp; AI Agents Work</div>
+      <div class="freya-box-text">
+        Freya is your AI programme manager. It runs <strong>specialist agents</strong> that each handle one type of work — like a dedicated team member for each function.
+        In <strong>Semi-Auto mode</strong> (current), agents complete their work and bring results to you for approval. Nothing is sent or acted on without your sign-off.
+        In <strong>Full Auto mode</strong>, approved routine tasks run without interruption — reports generate, alerts send, and reminders go out automatically.
+      </div>
+    </div>
+    <div class="freya-box-acts">
+      <button class="btn btn-sec btn-sm" onclick="toast('Switching to Full Auto requires MD approval','⚡','a')">Switch to Full Auto</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="stat-card"><div class="stat-ic">🤖</div><div class="stat-val">8</div><div class="stat-label">Active Agents</div><div class="stat-change chg-up">5 running · 3 on standby</div></div>
+    <div class="stat-card"><div class="stat-ic">✅</div><div class="stat-val">142</div><div class="stat-label">Tasks Completed This Month</div><div class="stat-change chg-up">↑ 18% vs last month</div></div>
+    <div class="stat-card"><div class="stat-ic">⏱</div><div class="stat-val">94%</div><div class="stat-label">On-Time Delivery Rate</div><div class="stat-change chg-up">All SLAs met</div></div>
+    <div class="stat-card"><div class="stat-ic">👁</div><div class="stat-val">28</div><div class="stat-label">Awaiting Your Review</div><div class="stat-change chg-nt">Semi-Auto: needs approval</div></div>
+  </div>
+
+  <!-- AGENTS GRID -->
+  <div class="grid-3">
+
+    <div class="agent-card running" onclick="openAgentDetail('portfolio')">
+      <div class="agent-header">
+        <div class="agent-avatar" style="background:rgba(0,92,43,.1)">💳</div>
+        <div>
+          <div class="agent-name">Loan &amp; Portfolio Monitor</div>
+          <div class="agent-type">Finance Intelligence</div>
+        </div>
+        <span class="badge badge-g badge-dot" style="margin-left:auto">Running</span>
+      </div>
+      <div class="agent-desc">Continuously monitors PAR30, PAR90, and repayment health across all 276 POs. Flags deviations, triggers alerts, and prepares portfolio reports.</div>
+      <div class="agent-stats">
+        <div class="as-stat"><div class="as-stat-val">276</div><div class="as-stat-lbl">POs Monitored</div></div>
+        <div class="as-stat"><div class="as-stat-val">4.2%</div><div class="as-stat-lbl">PAR30 Today</div></div>
+        <div class="as-stat"><div class="as-stat-val">12</div><div class="as-stat-lbl">Alerts Raised</div></div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:9px;color:var(--tx3);margin-bottom:3px">Current task: Q3 portfolio analysis (78% complete)</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:78%"></div></div>
+      </div>
+      <div class="agent-actions">
+        <button class="btn btn-pri btn-sm" onclick="showOutput('portfolio-health');event.stopPropagation()">View Output</button>
+        <button class="btn btn-sec btn-sm" onclick="toast('Triggering manual portfolio run...','💳','g');event.stopPropagation()">Run Now</button>
+      </div>
+    </div>
+
+    <div class="agent-card running" onclick="openAgentDetail('programme')">
+      <div class="agent-header">
+        <div class="agent-avatar" style="background:rgba(0,92,43,.1)">🌾</div>
+        <div>
+          <div class="agent-name">Programme Intelligence</div>
+          <div class="agent-type">M&amp;E Intelligence</div>
+        </div>
+        <span class="badge badge-g badge-dot" style="margin-left:auto">Running</span>
+      </div>
+      <div class="agent-desc">Monitors progress against targets for all PKSF programmes. Generates deviation alerts, field data synthesis, and quarterly progress reports for donors.</div>
+      <div class="agent-stats">
+        <div class="as-stat"><div class="as-stat-val">6</div><div class="as-stat-lbl">Programmes</div></div>
+        <div class="as-stat"><div class="as-stat-val">81%</div><div class="as-stat-lbl">Avg Achievement</div></div>
+        <div class="as-stat"><div class="as-stat-val">2</div><div class="as-stat-lbl">Alerts</div></div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:9px;color:var(--tx3);margin-bottom:3px">Current task: USSP Q3 data synthesis</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:65%"></div></div>
+      </div>
+      <div class="agent-actions">
+        <button class="btn btn-pri btn-sm" onclick="showOutput('ussp-report');event.stopPropagation()">View Output</button>
+        <button class="btn btn-sec btn-sm" onclick="event.stopPropagation();toast('Syncing latest field data...','🌾','g')">Sync Data</button>
+      </div>
+    </div>
+
+    <div class="agent-card running" onclick="openAgentDetail('report')">
+      <div class="agent-header">
+        <div class="agent-avatar" style="background:var(--blbg)">📋</div>
+        <div>
+          <div class="agent-name">Report Generator</div>
+          <div class="agent-type">M&amp;E Report Intelligence</div>
+        </div>
+        <span class="badge badge-g badge-dot" style="margin-left:auto">Running</span>
+      </div>
+      <div class="agent-desc">Generates donor reports (IFAD, World Bank, ADB), board reports, and regulatory submissions. Pulls live data, fills tables, and drafts narratives for your review.</div>
+      <div class="agent-stats">
+        <div class="as-stat"><div class="as-stat-val">3</div><div class="as-stat-lbl">Reports Ready</div></div>
+        <div class="as-stat"><div class="as-stat-val">2</div><div class="as-stat-lbl">In Progress</div></div>
+        <div class="as-stat"><div class="as-stat-val">14d</div><div class="as-stat-lbl">Next Deadline</div></div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:9px;color:var(--tx3);margin-bottom:3px">Current task: IFAD PACE-II Q3 draft (52%)</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:52%;background:var(--am)"></div></div>
+      </div>
+      <div class="agent-actions">
+        <button class="btn btn-pri btn-sm" onclick="window.location.href='reports.html';event.stopPropagation()">View Reports</button>
+      </div>
+    </div>
+
+    <div class="agent-card running" onclick="openAgentDetail('compliance')">
+      <div class="agent-header">
+        <div class="agent-avatar" style="background:var(--ambg)">🔍</div>
+        <div>
+          <div class="agent-name">Compliance Sentinel</div>
+          <div class="agent-type">Regulatory Compliance</div>
+        </div>
+        <span class="badge badge-g badge-dot" style="margin-left:auto">Running</span>
+      </div>
+      <div class="agent-desc">Monitors partner compliance, flags governance concerns, prepares Bangladesh Bank regulatory returns, and tracks PKSF internal policy adherence across all POs.</div>
+      <div class="agent-stats">
+        <div class="as-stat"><div class="as-stat-val">3</div><div class="as-stat-lbl">Flags Active</div></div>
+        <div class="as-stat"><div class="as-stat-val">BB</div><div class="as-stat-lbl">Return Due 5d</div></div>
+        <div class="as-stat"><div class="as-stat-val">97%</div><div class="as-stat-lbl">Compliance Score</div></div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:9px;color:var(--am);margin-bottom:3px">Current task: Shapla Credit Society audit (35%)</div>
+        <div class="prog-bar"><div class="prog-fill prog-fill-am" style="width:35%"></div></div>
+      </div>
+      <div class="agent-actions">
+        <button class="btn btn-warn btn-sm" onclick="toast('Opening compliance dashboard...','🔍','a');event.stopPropagation()">View Flags</button>
+      </div>
+    </div>
+
+    <div class="agent-card running" onclick="openAgentDetail('finance')">
+      <div class="agent-header">
+        <div class="agent-avatar" style="background:var(--pubg)">💰</div>
+        <div>
+          <div class="agent-name">Finance Intelligence</div>
+          <div class="agent-type">Budget &amp; Grant Management</div>
+        </div>
+        <span class="badge badge-g badge-dot" style="margin-left:auto">Running</span>
+      </div>
+      <div class="agent-desc">Monitors budget utilisation, grant disbursements, and financial compliance. Prepares payroll, processes procurement analyses, and prepares donor financial reports.</div>
+      <div class="agent-stats">
+        <div class="as-stat"><div class="as-stat-val">৳842 Cr</div><div class="as-stat-lbl">Budget Monitored</div></div>
+        <div class="as-stat"><div class="as-stat-val">74%</div><div class="as-stat-lbl">Utilised Q3</div></div>
+        <div class="as-stat"><div class="as-stat-val">612</div><div class="as-stat-lbl">Payroll Items</div></div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:9px;color:var(--tx3);margin-bottom:3px">Current task: April payroll processing (90%)</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:90%"></div></div>
+      </div>
+      <div class="agent-actions">
+        <button class="btn btn-pri btn-sm" onclick="showOutput('budget-analysis');event.stopPropagation()">Budget Report</button>
+        <button class="btn btn-sec btn-sm" onclick="window.location.href='finance.html';event.stopPropagation()">Finance →</button>
+      </div>
+    </div>
+
+    <div class="agent-card idle" onclick="openAgentDetail('hr')">
+      <div class="agent-header">
+        <div class="agent-avatar" style="background:var(--card2)">👥</div>
+        <div>
+          <div class="agent-name">HR &amp; People Agent</div>
+          <div class="agent-type">Human Resources</div>
+        </div>
+        <span class="badge badge-dot" style="margin-left:auto">Standby</span>
+      </div>
+      <div class="agent-desc">Manages payroll processing, leave tracking, performance review cycles, contract alerts, and staff onboarding workflows for PKSF's 612 employees.</div>
+      <div class="agent-stats">
+        <div class="as-stat"><div class="as-stat-val">612</div><div class="as-stat-lbl">Staff Members</div></div>
+        <div class="as-stat"><div class="as-stat-val">4</div><div class="as-stat-lbl">Contracts Due</div></div>
+        <div class="as-stat"><div class="as-stat-val">3</div><div class="as-stat-lbl">Vacancies Open</div></div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div style="font-size:9px;color:var(--tx3);margin-bottom:3px">Last task: Payroll approval pending (standby)</div>
+        <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+      </div>
+      <div class="agent-actions">
+        <button class="btn btn-sec btn-sm" onclick="window.location.href='hr.html';event.stopPropagation()">HR Dashboard →</button>
+      </div>
+    </div>
+
+    <div class="agent-card idle" onclick="openAgentDetail('document')">
+      <div class="agent-header">
+        <div class="agent-avatar" style="background:var(--card2)">✍️</div>
+        <div>
+          <div class="agent-name">Document Drafter</div>
+          <div class="agent-type">Correspondence &amp; Drafting</div>
+        </div>
+        <span class="badge badge-dot" style="margin-left:auto">Standby</span>
+      </div>
+      <div class="agent-desc">Drafts official letters, memos, partner notifications, and correspondence. Uses PKSF letter templates and learns from your writing style over time.</div>
+      <div class="agent-stats">
+        <div class="as-stat"><div class="as-stat-val">48</div><div class="as-stat-lbl">Letters This Month</div></div>
+        <div class="as-stat"><div class="as-stat-val">2 min</div><div class="as-stat-lbl">Avg Draft Time</div></div>
+        <div class="as-stat"><div class="as-stat-val">96%</div><div class="as-stat-lbl">Approval Rate</div></div>
+      </div>
+      <div class="agent-actions">
+        <button class="btn btn-pri btn-sm" onclick="fpQuick('Draft an official letter to Shapla Credit Society regarding their PAR30 performance and the compliance audit being initiated');event.stopPropagation()">Draft a Letter</button>
+      </div>
+    </div>
+
+    <div class="agent-card idle" onclick="openAgentDetail('beneficiary')">
+      <div class="agent-header">
+        <div class="agent-avatar" style="background:var(--card2)">👨‍👩‍👧</div>
+        <div>
+          <div class="agent-name">Beneficiary Analytics</div>
+          <div class="agent-type">Programme Intelligence</div>
+        </div>
+        <span class="badge badge-dot" style="margin-left:auto">Standby</span>
+      </div>
+      <div class="agent-desc">Analyses beneficiary progress across PKSF programmes, computes graduation rates, identifies at-risk households, and generates impact reports.</div>
+      <div class="agent-stats">
+        <div class="as-stat"><div class="as-stat-val">42 lac</div><div class="as-stat-lbl">Beneficiaries</div></div>
+        <div class="as-stat"><div class="as-stat-val">89%</div><div class="as-stat-lbl">Food Security</div></div>
+        <div class="as-stat"><div class="as-stat-val">18%</div><div class="as-stat-lbl">Graduated</div></div>
+      </div>
+      <div class="agent-actions">
+        <button class="btn btn-sec btn-sm" onclick="toast('Running beneficiary impact analysis...','👨‍👩‍👧','g');event.stopPropagation()">Run Analysis</button>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- LIVE AGENT LOG -->
+  <div class="card" style="margin-top:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;color:var(--tx)">📟 Live Agent Activity Log</div>
+      <div style="display:flex;gap:6px">
+        <span class="badge badge-g badge-dot">Live</span>
+        <button class="btn btn-sec btn-sm" onclick="toast('Downloading full log...','📋','g')">Export Log</button>
+      </div>
+    </div>
+    <div class="run-log" id="agent-log">
+      <div><span class="rl-ts">[09:44:12] </span><span class="rl-ok">✓ Portfolio Monitor: PAR30 computed for 276 POs — 4.2% national average</span></div>
+      <div><span class="rl-ts">[09:42:58] </span><span class="rl-warn">⚠ Portfolio Monitor: Rangpur Division PAR30 at 6.1% — above 5% threshold. Alert raised.</span></div>
+      <div><span class="rl-ts">[09:40:31] </span><span class="rl-ok">✓ Finance Intelligence: April payroll computed for 612 staff. Awaiting MD approval.</span></div>
+      <div><span class="rl-ts">[09:38:15] </span><span class="rl-ok">✓ Programme Intelligence: USSP data sync complete — 2,04,832 HH records processed</span></div>
+      <div><span class="rl-ts">[09:35:02] </span><span class="rl-warn">⚠ Compliance Sentinel: Shapla Credit Society — governance flag confirmed. Audit assigned.</span></div>
+      <div><span class="rl-ts">[09:22:44] </span><span class="rl-ok">✓ Report Generator: Q3 Portfolio Health Report generated (28 pages). Ready for MD review.</span></div>
+      <div><span class="rl-ts">[09:18:32] </span><span class="rl-ok">✓ Report Generator: Q3 Board Report generated (32 pages + 12 annexures).</span></div>
+      <div><span class="rl-ts">[08:55:17] </span><span class="rl-ok">✓ Compliance Sentinel: Bangladesh Bank return — 14/18 fields auto-populated. 4 pending verification.</span></div>
+      <div><span class="rl-ts">[08:30:00] </span><span class="rl-ok">✓ Freya Orchestrator: Morning data sync complete. 8 agents initialised. 5 tasks queued.</span></div>
+      <div><span class="rl-ts">[00:01:00] </span><span class="rl-ok">✓ Portfolio Monitor: Overnight batch run completed. PAR data refreshed for all 276 POs.</span></div>
+    </div>
+  </div>
+
+</div></div></div>
+
+<!-- AGENT DETAIL MODAL -->
+<div id="output-modal">
+  <div class="output-box">
+    <div class="ob-header">
+      <div><div class="ob-agent-label" id="ob-agent"></div><div class="ob-title" id="ob-title"></div></div>
+      <div class="ob-close" onclick="closeOutput()">✕</div>
+    </div>
+    <div class="ob-body" id="ob-body"></div>
+    <div class="ob-footer" id="ob-footer"></div>
+  </div>
+</div>
+
+<div id="freya-panel">
+  <div class="fp-header">
+    <div class="fp-avatar">🤖</div>
+    <div>
+      <div class="fp-name">Freya</div>
+      <div class="fp-status"><span class="status-dot sd-g"></span> Agent Orchestrator · Online</div>
+    </div>
+    <button class="btn btn-sm btn-sec" style="margin-left:auto" onclick="closeFreya()">✕ Close</button>
+  </div>
+  <div class="fp-quick">
+    <button class="btn btn-sm btn-pri"  onclick="fpQuick('What are all agents working on right now?')">⚡ Agent Status</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Run the portfolio analysis right now and show me the results')">💳 Run Portfolio</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Switch to Full Auto mode — what will change?')">🔄 Full Auto?</button>
+  </div>
+  <div id="fp-msgs"></div>
+  <div class="fp-input-area">
+    <div class="fp-input-row">
+      <input class="fp-input" id="fp-input" type="text" placeholder="Ask Freya to run, stop, or configure any agent…">
+      <button class="btn btn-pri btn-sm" onclick="fpSend()">Send ↑</button>
+    </div>
+  </div>
+</div>
+<div id="confirm-modal">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirm-title"></div>
+    <div class="confirm-body"  id="confirm-body"></div>
+    <div class="confirm-acts">
+      <button class="btn btn-sec btn-sm" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-pri btn-sm" id="confirm-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="js/shared.js"></script>
+<script>
+function openAgentDetail(id) {
+  const names = { portfolio:'Loan & Portfolio Monitor', programme:'Programme Intelligence', report:'Report Generator', compliance:'Compliance Sentinel', finance:'Finance Intelligence', hr:'HR & People Agent', document:'Document Drafter', beneficiary:'Beneficiary Analytics' };
+  document.getElementById('ob-agent').textContent = 'AI AGENT DETAIL · ANTARIOUS';
+  document.getElementById('ob-title').textContent = names[id] || id;
+  document.getElementById('ob-body').innerHTML = `
+    <div class="alert alert-b">ℹ️ This agent is part of the Freya Orchestration Engine. It runs automatically in Semi-Auto mode and brings results to you for approval.</div>
+    <div class="freya-box">
+      <div class="freya-box-ic">🤖</div>
+      <div>
+        <div class="freya-box-label">Agent Configuration</div>
+        <div class="freya-box-text">This agent runs on a <strong>scheduled + event-triggered</strong> basis. In Semi-Auto mode, all outputs are queued for your review before any action is taken. You can run it manually at any time, or switch to Full Auto to let it execute approved actions automatically.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+      <button class="btn btn-pri" onclick="toast('Agent triggered manually...','🤖','g');closeOutput()">▶ Run Manually Now</button>
+      <button class="btn btn-sec" onclick="toast('Opening agent settings...','⚙','g')">⚙ Configure</button>
+      <button class="btn btn-sec" onclick="toast('Opening output history...','📋','g')">📋 Output History</button>
+    </div>`;
+  document.getElementById('ob-footer').innerHTML = '<button class="btn btn-sec btn-sm" onclick="closeOutput()">Close</button>';
+  document.getElementById('output-modal').classList.add('open');
+}
+
+function showAgentLog() {
+  document.getElementById('ob-agent').textContent = 'FREYA ORCHESTRATOR · ACTIVITY LOG';
+  document.getElementById('ob-title').textContent = 'Full Agent Activity Log — Today';
+  document.getElementById('ob-body').innerHTML = `
+    <div class="run-log" style="max-height:400px">
+      ${document.getElementById('agent-log').innerHTML}
+      <div><span class="rl-ts">[Yesterday 22:10:00] </span><span class="rl-ok">✓ Portfolio Monitor: End-of-day batch completed. 12 alerts queued for morning review.</span></div>
+      <div><span class="rl-ts">[Yesterday 18:30:00] </span><span class="rl-ok">✓ Document Drafter: 3 partner notification letters drafted and queued for approval.</span></div>
+      <div><span class="rl-ts">[Yesterday 15:42:00] </span><span class="rl-ok">✓ HR Agent: Contract expiry alert — 4 staff contracts expire in 60 days. HR notified.</span></div>
+    </div>`;
+  document.getElementById('ob-footer').innerHTML = `
+    <button class="btn btn-sec btn-sm" onclick="toast('Downloading full log...','📋','g');closeOutput()">⬇ Export Log</button>
+    <button class="btn btn-sec btn-sm" onclick="closeOutput()">Close</button>`;
+  document.getElementById('output-modal').classList.add('open');
+}
+
+// Animate log updates
+setInterval(() => {
+  const log = document.getElementById('agent-log');
+  if (!log) return;
+  const now = new Date();
+  const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const msgs = [
+    ['ok','✓ Portfolio Monitor: PAR data refreshed for Dhaka Division'],
+    ['ok','✓ Compliance Sentinel: Daily sanctions screening completed — 0 matches'],
+    ['ok','✓ Programme Intelligence: ENRICH field data synced — 14 new submissions'],
+    ['warn','⚠ Finance Intelligence: ENRICH budget utilisation at 87% — monitoring closely'],
+  ];
+  const pick = msgs[Math.floor(Math.random() * msgs.length)];
+  const div = document.createElement('div');
+  div.innerHTML = `<span class="rl-ts">[${ts}] </span><span class="rl-${pick[0]}">${pick[1]}</span>`;
+  log.insertBefore(div, log.firstChild);
+  if (log.children.length > 20) log.removeChild(log.lastChild);
+}, 8000);
+</script>
+</body>
+</html>

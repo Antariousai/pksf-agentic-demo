@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Programmes — PKSF AI</title>
+<link rel="stylesheet" href="css/styles.css">
+<style>
+.prog-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--rl); padding: 20px;
+  border-top: 4px solid var(--acc);
+  transition: all .2s; cursor: pointer;
+}
+.prog-card:hover { box-shadow: var(--sh2); transform: translateY(-2px); }
+.prog-card.amber { border-top-color: var(--am); }
+.prog-card.red   { border-top-color: var(--rd); }
+.prog-card.blue  { border-top-color: var(--bl); }
+.prog-card.purple{ border-top-color: var(--pu); }
+
+.prog-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:12px; }
+.prog-name   { font-size:15px; font-weight:800; color:var(--tx); }
+.prog-fullname { font-size:10px; color:var(--tx3); margin-top:2px; }
+.prog-body   { margin-bottom:14px; }
+.prog-stat   { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:11px; }
+.prog-stat-label { color:var(--tx2); }
+.prog-stat-val   { font-weight:700; color:var(--tx); }
+.prog-footer { display:flex; align-items:center; justify-content:space-between; margin-top:12px; flex-wrap:wrap; gap:6px; }
+</style>
+</head>
+<body>
+<div id="shell">
+
+<div id="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo">🏛</div>
+    <div class="tb-brand-text">
+      <div class="tb-brand-main">PKSF · Antarious AI</div>
+      <div class="tb-brand-sub">Intelligence Platform</div>
+    </div>
+  </div>
+  <div class="tb-freya-bar" onclick="openFreya()">
+    <div class="tb-fa">🤖</div>
+    <div class="tb-fstatus" id="freya-status-text">
+      <strong>Freya</strong> monitoring 6 active programmes · USSP at 82% of Q3 target
+    </div>
+    <div class="tb-fdot"></div>
+  </div>
+  <div class="tb-controls">
+    <div class="mode-toggle">
+      <button class="mode-btn" data-mode="manual" onclick="setMode('manual')">Manual</button>
+      <button class="mode-btn on" data-mode="semi" onclick="setMode('semi')">Semi-Auto</button>
+      <button class="mode-btn" data-mode="full" onclick="setMode('full')">Full Auto</button>
+    </div>
+    <div class="tb-icon-btn" onclick="toggleTheme()" id="theme-btn">🌙</div>
+    <div class="tb-icon-btn">🔔<div class="tb-ndot"></div></div>
+    <div class="tb-user">
+      <div class="tb-av">AH</div>
+      <div><div class="tb-uname">Dr. Anisul Haque</div><div class="tb-urole">Managing Director</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="sidebar">
+  <div class="sb-inner">
+    <div class="sb-section-label">Overview</div>
+    <a href="dashboard.html"><div class="nav-item"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
+    <div class="sb-section-label">Partner Network</div>
+    <a href="partners.html"><div class="nav-item"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
+    <a href="portfolio.html"><div class="nav-item"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
+    <div class="sb-section-label">Programmes</div>
+    <a href="programs.html"><div class="nav-item active"><span class="nav-ic">🌾</span>Active Programmes</div></a>
+    <a href="beneficiaries.html"><div class="nav-item"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
+    <div class="sb-section-label">Intelligence</div>
+    <a href="reports.html"><div class="nav-item"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
+    <a href="agents.html"><div class="nav-item"><span class="nav-ic">🤖</span>AI Agents</div></a>
+    <div class="sb-section-label">Operations</div>
+    <a href="finance.html"><div class="nav-item"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
+    <a href="hr.html"><div class="nav-item"><span class="nav-ic">👥</span>HR &amp; People</div></a>
+    <a href="notifications.html"><div class="nav-item"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
+    <div class="sb-section-label">Account</div>
+    <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+  </div>
+  <div class="sb-footer">
+    <div class="sb-org">
+      <div class="sb-org-av">🏛</div>
+      <div><div class="sb-org-name">PKSF</div><div class="sb-org-type">Apex MFI · Dhaka, Bangladesh</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="content">
+<div class="content-area">
+
+  <div class="page-hd">
+    <div>
+      <div class="page-title">Active Programmes</div>
+      <div class="page-sub"><strong>6 programmes</strong> active · Total beneficiaries: <strong>4.2 million households</strong></div>
+    </div>
+    <div class="page-acts">
+      <button class="btn btn-sec" onclick="fpQuick('Give me a summary of all PKSF programmes')">🤖 Programme Summary</button>
+      <button class="btn btn-pri" onclick="toast('Opening programme setup wizard...','🌾','g')">+ New Programme</button>
+    </div>
+  </div>
+
+  <!-- OVERALL STATS -->
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="stat-card"><div class="stat-ic">🌾</div><div class="stat-val">6</div><div class="stat-label">Active Programmes</div><div class="stat-change chg-nt">2 IFAD · 1 ADB · 1 KfW · 2 GoB</div></div>
+    <div class="stat-card"><div class="stat-ic">👨‍👩‍👧</div><div class="stat-val">42 lac</div><div class="stat-label">Programme Beneficiaries</div><div class="stat-change chg-up">↑ 3.2 lac this quarter</div></div>
+    <div class="stat-card amber"><div class="stat-ic">📊</div><div class="stat-val">81%</div><div class="stat-label">Avg Q3 Target Achievement</div><div class="stat-change chg-up">↑ 6% vs Q2</div></div>
+    <div class="stat-card"><div class="stat-ic">💰</div><div class="stat-val">৳628 Cr</div><div class="stat-label">Q3 Programme Expenditure</div><div class="stat-change chg-up">74% of annual budget used</div></div>
+  </div>
+
+  <!-- FREYA INSIGHT -->
+  <div class="freya-box">
+    <div class="freya-box-ic">🤖</div>
+    <div style="flex:1">
+      <div class="freya-box-label">Freya · Programme Intelligence</div>
+      <div class="freya-box-text">
+        <strong>4 of 6 programmes are on track</strong> for Q3 targets. USSP (82%) and ENRICH (91%) are performing strongly. PACE-II (74%) needs attention in Rajshahi. The Climate Adaptation programme (61%) is behind due to post-flood delays in coastal districts — recommend requesting a no-cost extension from KfW.
+      </div>
+    </div>
+    <div class="freya-box-acts">
+      <button class="btn btn-pri btn-sm" onclick="showOutput('ussp-report')">USSP Report</button>
+      <button class="btn btn-sec btn-sm" onclick="fpQuick('Draft a no-cost extension request for the Climate Adaptation programme')">Draft NCE Request</button>
+    </div>
+  </div>
+
+  <!-- PROGRAMME CARDS -->
+  <div class="grid-3" id="prog-grid">
+
+    <!-- USSP -->
+    <div class="prog-card" onclick="openProgDetail('ussp')">
+      <div class="prog-header">
+        <div>
+          <div class="prog-name">🌾 USSP</div>
+          <div class="prog-fullname">Ultra-Sohayota Programme · GoB + IFAD</div>
+        </div>
+        <span class="badge badge-a badge-dot">82% On Track</span>
+      </div>
+      <div class="prog-body">
+        <div class="prog-stat"><span class="prog-stat-label">Target Households:</span><span class="prog-stat-val">2,50,000</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Enrolled:</span><span class="prog-stat-val">2,04,832</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Food Security Achieved:</span><span class="prog-stat-val" style="color:var(--pri)">89%</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Budget Utilised:</span><span class="prog-stat-val">৳198/280 Cr (76%)</span></div>
+        <div style="margin-top:8px">
+          <div style="font-size:9px;color:var(--tx3);margin-bottom:3px">Q3 Progress</div>
+          <div class="prog-bar"><div class="prog-fill" style="width:82%"></div></div>
+        </div>
+      </div>
+      <div class="prog-footer">
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span class="tag">8 Divisions</span><span class="tag">64 Districts</span><span class="tag">2026-Q4 End</span>
+        </div>
+        <button class="btn btn-pri btn-sm">View Details →</button>
+      </div>
+    </div>
+
+    <!-- ENRICH -->
+    <div class="prog-card" onclick="openProgDetail('enrich')">
+      <div class="prog-header">
+        <div>
+          <div class="prog-name">🏘 ENRICH</div>
+          <div class="prog-fullname">Enhancing Resources & Capacities · GoB</div>
+        </div>
+        <span class="badge badge-g badge-dot">91% On Track</span>
+      </div>
+      <div class="prog-body">
+        <div class="prog-stat"><span class="prog-stat-label">Pilot Unions:</span><span class="prog-stat-val">120 unions</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">HH Enrolled:</span><span class="prog-stat-val">3,84,000</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Milestones Achieved:</span><span class="prog-stat-val" style="color:var(--pri)">89%</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Budget Utilised:</span><span class="prog-stat-val">৳112/145 Cr (87%)</span></div>
+        <div style="margin-top:8px">
+          <div style="font-size:9px;color:var(--tx3);margin-bottom:3px">Q3 Progress</div>
+          <div class="prog-bar"><div class="prog-fill" style="width:91%"></div></div>
+        </div>
+      </div>
+      <div class="prog-footer">
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span class="tag">22 Districts</span><span class="tag">Holistic Model</span>
+        </div>
+        <button class="btn btn-pri btn-sm">View Details →</button>
+      </div>
+    </div>
+
+    <!-- PACE-II -->
+    <div class="prog-card amber" onclick="openProgDetail('pace')">
+      <div class="prog-header">
+        <div>
+          <div class="prog-name">👩 PACE-II</div>
+          <div class="prog-fullname">Partnership for Achieving Community Empowerment · IFAD</div>
+        </div>
+        <span class="badge badge-a badge-dot">74% Needs Attention</span>
+      </div>
+      <div class="prog-body">
+        <div class="prog-stat"><span class="prog-stat-label">Target Women:</span><span class="prog-stat-val">1,20,000</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Enrolled:</span><span class="prog-stat-val">88,800 (74%)</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Income Generating:</span><span class="prog-stat-val" style="color:var(--am)">68%</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Budget Utilised:</span><span class="prog-stat-val">৳71/98 Cr (72%)</span></div>
+        <div style="margin-top:8px">
+          <div style="font-size:9px;color:var(--am);margin-bottom:3px">Below Q3 Target — Action Needed</div>
+          <div class="prog-bar"><div class="prog-fill prog-fill-am" style="width:74%"></div></div>
+        </div>
+      </div>
+      <div class="prog-footer">
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span class="tag">IFAD</span><span class="tag">Rajshahi Lagging</span>
+        </div>
+        <button class="btn btn-warn btn-sm">Review →</button>
+      </div>
+    </div>
+
+    <!-- SFMF -->
+    <div class="prog-card blue" onclick="openProgDetail('sfmf')">
+      <div class="prog-header">
+        <div>
+          <div class="prog-name">🌱 SFMF</div>
+          <div class="prog-fullname">Sustainable Finance for Marginalised Farmers · ADB</div>
+        </div>
+        <span class="badge badge-g badge-dot">88% On Track</span>
+      </div>
+      <div class="prog-body">
+        <div class="prog-stat"><span class="prog-stat-label">Target Farmers:</span><span class="prog-stat-val">50,000</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Supported:</span><span class="prog-stat-val">44,000 (88%)</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Avg Yield Increase:</span><span class="prog-stat-val" style="color:var(--bl)">+23%</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Budget Utilised:</span><span class="prog-stat-val">৳58/87 Cr (67%)</span></div>
+        <div style="margin-top:8px">
+          <div style="font-size:9px;color:var(--tx3);margin-bottom:3px">Q3 Progress</div>
+          <div class="prog-bar"><div class="prog-fill prog-fill-bl" style="width:88%;background:var(--bl)"></div></div>
+        </div>
+      </div>
+      <div class="prog-footer">
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span class="tag">ADB</span><span class="tag">Agriculture</span><span class="tag">6 Districts</span>
+        </div>
+        <button class="btn btn-pri btn-sm">View Details →</button>
+      </div>
+    </div>
+
+    <!-- Climate Adaptation -->
+    <div class="prog-card red" onclick="openProgDetail('climate')">
+      <div class="prog-header">
+        <div>
+          <div class="prog-name">🌊 Climate Adaptation</div>
+          <div class="prog-fullname">Coastal Climate Resilience · KfW / GIZ</div>
+        </div>
+        <span class="badge badge-r badge-dot">61% Below Target</span>
+      </div>
+      <div class="prog-body">
+        <div class="prog-stat"><span class="prog-stat-label">Target HHs:</span><span class="prog-stat-val">80,000</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Enrolled:</span><span class="prog-stat-val">48,800 (61%)</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Climate Resilience Score:</span><span class="prog-stat-val" style="color:var(--rd)">54%</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Budget Utilised:</span><span class="prog-stat-val">৳48/72 Cr (67%)</span></div>
+        <div style="margin-top:8px">
+          <div style="font-size:9px;color:var(--rd);margin-bottom:3px">Post-flood delays · NCE request recommended</div>
+          <div class="prog-bar"><div class="prog-fill prog-fill-rd" style="width:61%"></div></div>
+        </div>
+      </div>
+      <div class="prog-footer">
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span class="tag">KfW/GIZ</span><span class="tag">Coastal</span><span class="tag">Barisal+Khulna</span>
+        </div>
+        <button class="btn btn-danger btn-sm">Take Action →</button>
+      </div>
+    </div>
+
+    <!-- SEIP -->
+    <div class="prog-card purple" onclick="openProgDetail('seip')">
+      <div class="prog-header">
+        <div>
+          <div class="prog-name">🎓 SEIP</div>
+          <div class="prog-fullname">Skills for Employment Investment Programme · ADB</div>
+        </div>
+        <span class="badge badge-g badge-dot">85% On Track</span>
+      </div>
+      <div class="prog-body">
+        <div class="prog-stat"><span class="prog-stat-label">Target Trainees:</span><span class="prog-stat-val">30,000</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Trained:</span><span class="prog-stat-val">25,500 (85%)</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Employment Rate:</span><span class="prog-stat-val" style="color:var(--pu)">72%</span></div>
+        <div class="prog-stat"><span class="prog-stat-label">Certification Rate:</span><span class="prog-stat-val">91%</span></div>
+        <div style="margin-top:8px">
+          <div style="font-size:9px;color:var(--tx3);margin-bottom:3px">Q3 Progress</div>
+          <div class="prog-bar"><div class="prog-fill" style="width:85%;background:var(--pu)"></div></div>
+        </div>
+      </div>
+      <div class="prog-footer">
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span class="tag">ADB</span><span class="tag">Skills Dev</span><span class="tag">Youth Focus</span>
+        </div>
+        <button class="btn btn-pri btn-sm">View Details →</button>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+</div></div></div>
+
+<!-- PROGRAMME DETAIL MODAL -->
+<div id="output-modal">
+  <div class="output-box">
+    <div class="ob-header">
+      <div><div class="ob-agent-label" id="ob-agent"></div><div class="ob-title" id="ob-title"></div></div>
+      <div class="ob-close" onclick="closeOutput()">✕</div>
+    </div>
+    <div class="ob-body" id="ob-body"></div>
+    <div class="ob-footer" id="ob-footer"></div>
+  </div>
+</div>
+
+<div id="freya-panel">
+  <div class="fp-header">
+    <div class="fp-avatar">🤖</div>
+    <div>
+      <div class="fp-name">Freya</div>
+      <div class="fp-status"><span class="status-dot sd-g"></span> Programme Intelligence · Online</div>
+    </div>
+    <button class="btn btn-sm btn-sec" style="margin-left:auto" onclick="closeFreya()">✕ Close</button>
+  </div>
+  <div class="fp-quick">
+    <button class="btn btn-sm btn-pri"  onclick="fpQuick('Which programmes are behind target this quarter?')">⚠ Behind Target</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('Generate USSP Q3 progress report')">📋 USSP Report</button>
+    <button class="btn btn-sm btn-sec"  onclick="fpQuick('What corrective action is needed for PACE-II in Rajshahi?')">🔧 Fix Rajshahi</button>
+  </div>
+  <div id="fp-msgs"></div>
+  <div class="fp-input-area">
+    <div class="fp-input-row">
+      <input class="fp-input" id="fp-input" type="text" placeholder="Ask about any programme…">
+      <button class="btn btn-pri btn-sm" onclick="fpSend()">Send ↑</button>
+    </div>
+  </div>
+</div>
+
+<div id="confirm-modal">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirm-title"></div>
+    <div class="confirm-body"  id="confirm-body"></div>
+    <div class="confirm-acts">
+      <button class="btn btn-sec btn-sm" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-pri btn-sm" id="confirm-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<script src="js/shared.js"></script>
+<script>
+function openProgDetail(id) {
+  const details = {
+    ussp: { title:'USSP — Ultra-Sohayota Programme', agent:'PROGRAMME INTELLIGENCE · FREYA' },
+    enrich: { title:'ENRICH — Enhancing Resources & Capacities', agent:'PROGRAMME INTELLIGENCE · FREYA' },
+    pace: { title:'PACE-II — Partnership for Community Empowerment', agent:'PROGRAMME INTELLIGENCE · FREYA' },
+    climate: { title:'Climate Adaptation Programme — Coastal Resilience', agent:'PROGRAMME INTELLIGENCE · FREYA' },
+    sfmf: { title:'SFMF — Sustainable Finance for Marginalised Farmers', agent:'PROGRAMME INTELLIGENCE · FREYA' },
+    seip: { title:'SEIP — Skills for Employment Investment', agent:'PROGRAMME INTELLIGENCE · FREYA' },
+  };
+  if (id === 'ussp' || id === 'enrich') { showOutput('ussp-report'); return; }
+  const d = details[id];
+  document.getElementById('ob-agent').textContent = d.agent;
+  document.getElementById('ob-title').textContent = d.title;
+  document.getElementById('ob-body').innerHTML = `
+    <div class="freya-box">
+      <div class="freya-box-ic">🤖</div>
+      <div>
+        <div class="freya-box-label">Freya Analysis</div>
+        <div class="freya-box-text">Click "Generate Full Report" below to have Freya compile a complete Q3 progress report for this programme, including indicator achievements, budget utilisation, field data synthesis, and recommendations.</div>
+      </div>
+    </div>
+    <div class="alert alert-b">ℹ️ This programme detail view is loading live data from your field systems and partner reports.</div>
+    <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn btn-pri" onclick="simulateFreyaTask('Generating programme report');closeOutput();toast('Full report will be ready in 2 minutes','📋','g')">🤖 Generate Full Report</button>
+      <button class="btn btn-sec" onclick="toast('Opening indicator dashboard...','📊','g')">📊 Indicator Dashboard</button>
+      <button class="btn btn-sec" onclick="toast('Opening field data view...','🗺','g')">🗺 Field Data</button>
+    </div>`;
+  document.getElementById('ob-footer').innerHTML = `
+    <button class="btn btn-sec btn-sm" onclick="closeOutput()">Close</button>`;
+  document.getElementById('output-modal').classList.add('open');
+}
+</script>
+</body>
+</html>
