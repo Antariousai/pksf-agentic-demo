@@ -1074,3 +1074,35 @@ a { text-decoration: none; color: inherit; }
   transition: background .12s;
 }
 .notif-menu-footer:hover { background: rgba(0,92,43,.06); }
+
+/* ══════════════════════════════════════════════════════
+   ANTARIOUS BRAND LOGO (color-adaptive)
+   ══════════════════════════════════════════════════════ */
+/* Topbar wordmark */
+.tb-brand-img {
+  height: 26px;
+  width: auto;
+  max-width: 150px;
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+  /* Default: original PNG colors (works on light topbar) */
+  transition: filter .2s;
+}
+/* Dark theme inverts the dark wordmark to white */
+[data-theme="dark"] .tb-brand-img {
+  filter: brightness(0) invert(1);
+}
+
+/* Login brand panel — always dark green background, so always white logo */
+.brand-logo-img {
+  width: 240px;
+  max-width: 80%;
+  height: auto;
+  display: block;
+  margin: 0 auto 18px;
+  filter: brightness(0) invert(1);
+}
+
+/* In case the topbar brand area gets a bit cramped after replacing the square logo */
+.tb-brand { gap: 12px; }

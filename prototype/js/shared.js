@@ -15,9 +15,50 @@ function toggleTheme() {
 
 /* ── ROLES ── */
 const PKSF_ROLES = {
-  director:  { initials: 'AH', name: 'Dr. Anisul Haque',  role: 'Managing Director', grad: 'linear-gradient(135deg,#005C2B,#00A651)' },
-  programme: { initials: 'RB', name: 'Rowshan Begum',     role: 'Programme Officer · USSP', grad: 'linear-gradient(135deg,#2563eb,#60a5fa)' },
-  finance:   { initials: 'MR', name: 'Mohammad Rashid',   role: 'Finance Officer',   grad: 'linear-gradient(135deg,#7c3aed,#a78bfa)' }
+  director: {
+    initials: 'AH', name: 'Dr. Anisul Haque', role: 'Managing Director',
+    grad: 'linear-gradient(135deg,#005C2B,#00A651)',
+    greeting: 'Good morning, Dr. Haque 👋',
+    intro: 'Freya has analysed your morning data. There are <strong>3 partner alerts</strong>, <strong>2 reports</strong> ready for your review, and <strong>1 approval</strong> needed before end of day. Your portfolio PAR30 improved by 0.6% this quarter.',
+    asks: [
+      { label: '📋 What needs my attention?',     q: 'What needs my attention today?' },
+      { label: '📊 Portfolio summary',            q: "Summarise this week's portfolio performance" },
+      { label: '📄 Upcoming deadlines',           q: 'Which reports are due soon?' },
+      { label: '✍️ Morning brief',                q: 'Draft my morning brief' }
+    ]
+  },
+  programme: {
+    initials: 'RB', name: 'Rowshan Begum', role: 'Programme Officer · USSP',
+    grad: 'linear-gradient(135deg,#2563eb,#60a5fa)',
+    greeting: 'Good morning, Ms. Begum 👋',
+    intro: 'Freya has updated programme data overnight. <strong>USSP enrolment is at 82%</strong> of its Q3 target with <strong>2,04,832 households</strong> reached. <strong>Rajshahi division is lagging</strong> at 71% food security milestone — recommended field visit within 14 days.',
+    asks: [
+      { label: '🌾 USSP progress',                q: 'Give me a status update on USSP enrolment' },
+      { label: '👨‍👩‍👧 Beneficiary milestones',     q: 'Which beneficiary milestones have we hit this quarter?' },
+      { label: '📍 Field visit plan',             q: 'Plan a field visit to Rajshahi for next week' },
+      { label: '📋 Donor narrative',              q: 'Draft the IFAD PACE-II narrative section for Component 2' }
+    ]
+  },
+  finance: {
+    initials: 'MR', name: 'Mohammad Rashid', role: 'Finance Officer',
+    grad: 'linear-gradient(135deg,#7c3aed,#a78bfa)',
+    greeting: 'Good morning, Mr. Rashid 👋',
+    intro: 'Freya has reconciled overnight transactions. <strong>May payroll (৳8.42 Cr)</strong> awaits MD sign-off, <strong>KfW Tranche 3 (৳29.75 Cr)</strong> is credited, and <strong>budget utilisation is at 74%</strong>. The Bangladesh Bank quarterly return is auto-filled — 4 fields need verification.',
+    asks: [
+      { label: '💰 Budget utilisation',           q: 'Show me current budget utilisation by programme' },
+      { label: '🧾 Payroll status',               q: 'What is the status of the May payroll approval?' },
+      { label: '🏦 Donor disbursements',          q: 'Which donor disbursements are pending?' },
+      { label: '📋 MRA return',                   q: 'Help me complete the Bangladesh Bank MRA return' }
+    ]
+  }
+};
+
+/* Sidebar permissions per role — list of allowed page hrefs.
+   null = full access (sees everything). */
+const PKSF_ROLE_PERMS = {
+  director:  null,
+  programme: ['dashboard.html', 'partners.html', 'portfolio.html', 'programs.html', 'beneficiaries.html', 'reports.html', 'agents.html', 'notifications.html', 'index.html'],
+  finance:   ['dashboard.html', 'partners.html', 'portfolio.html', 'reports.html', 'finance.html', 'notifications.html', 'index.html']
 };
 
 function getCurrentRole() {
@@ -25,7 +66,8 @@ function getCurrentRole() {
 }
 
 function applyRoleToTopbar() {
-  const r = PKSF_ROLES[getCurrentRole()];
+  const current = getCurrentRole();
+  const r = PKSF_ROLES[current];
   if (!r) return;
   document.querySelectorAll('.tb-user').forEach(el => {
     const av = el.querySelector('.tb-av');
@@ -35,13 +77,73 @@ function applyRoleToTopbar() {
     if (uname) uname.textContent = r.name;
     if (urole) urole.textContent = r.role;
   });
+  document.querySelectorAll('#role-menu .role-menu-item[data-role]').forEach(item => {
+    const check = item.querySelector('.role-check');
+    if (check) check.classList.toggle('on', item.dataset.role === current);
+  });
+}
+
+/* Update the welcome banner content per current role (dashboard only) */
+function applyRoleToWelcome() {
+  const r = PKSF_ROLES[getCurrentRole()];
+  if (!r) return;
+  const g = document.getElementById('welcome-greeting');
+  if (g && r.greeting) g.innerHTML = r.greeting;
+  const t = document.getElementById('welcome-text');
+  if (t && r.intro) t.innerHTML = r.intro;
+  const asks = document.getElementById('welcome-asks');
+  if (asks && r.asks) {
+    asks.innerHTML = r.asks.map(a =>
+      `<button class="wb-ask-btn" onclick="fpQuick('${(a.q || '').replace(/'/g, "\\'")}')">${a.label}</button>`
+    ).join('');
+  }
+}
+
+/* Hide sidebar nav items based on role permissions, and hide empty section labels */
+function applyRoleSidebar() {
+  const perms = PKSF_ROLE_PERMS[getCurrentRole()];
+  const navLinks = document.querySelectorAll('#sidebar .sb-inner > a');
+  navLinks.forEach(a => {
+    const href = a.getAttribute('href') || '';
+    const allowed = !perms || perms.includes(href);
+    a.style.display = allowed ? '' : 'none';
+  });
+  // Hide section labels with no visible items below
+  const kids = [...document.querySelectorAll('#sidebar .sb-inner > *')];
+  for (let i = 0; i < kids.length; i++) {
+    const el = kids[i];
+    if (!el.classList.contains('sb-section-label')) continue;
+    let hasVisible = false;
+    for (let j = i + 1; j < kids.length; j++) {
+      const next = kids[j];
+      if (next.classList.contains('sb-section-label')) break;
+      if (next.tagName === 'A' && next.style.display !== 'none') { hasVisible = true; break; }
+    }
+    el.style.display = hasVisible ? '' : 'none';
+  }
+}
+
+/* Hide page sections marked with data-roles that exclude the current role */
+function applyRoleDashboard() {
+  const role = getCurrentRole();
+  document.querySelectorAll('[data-roles]').forEach(el => {
+    const allowed = el.dataset.roles.split(/\s+/).filter(Boolean);
+    el.style.display = allowed.includes(role) ? '' : 'none';
+  });
+}
+
+/* Single entry point — apply every role-driven change */
+function applyRole() {
+  applyRoleToTopbar();
+  applyRoleToWelcome();
+  applyRoleSidebar();
+  applyRoleDashboard();
 }
 
 function switchRole(roleKey) {
   if (!PKSF_ROLES[roleKey]) return;
   localStorage.setItem('pksf-role', roleKey);
-  applyRoleToTopbar();
-  // Re-translate if BN
+  applyRole();
   if (typeof getLang === 'function' && getLang() === 'bn') {
     translateElement(document.body, 'bn');
   }
@@ -105,7 +207,7 @@ function injectTopbarWidgets() {
       menu.innerHTML = `
         <div class="role-menu-label">Switch Role</div>
         ${Object.entries(PKSF_ROLES).map(([k, r]) => `
-          <div class="role-menu-item" onclick="event.stopPropagation();switchRole('${k}')">
+          <div class="role-menu-item" data-role="${k}" onclick="event.stopPropagation();switchRole('${k}')">
             <div class="role-av" style="background:${r.grad}">${r.initials}</div>
             <div class="role-info">
               <div class="role-name">${r.name}</div>
@@ -124,7 +226,7 @@ function injectTopbarWidgets() {
     }
   }
 
-  applyRoleToTopbar();
+  applyRole();
 
   // ── Notification dropdown ──
   // Find the bell icon button (the .tb-icon-btn that contains .tb-ndot)

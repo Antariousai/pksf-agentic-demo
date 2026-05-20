@@ -95,9 +95,9 @@
 <!-- TOP BAR -->
 <div id="topbar">
   <div class="tb-brand">
-    <div class="tb-logo">🏛</div>
+    <img class="tb-brand-img" src="assets/antarious-logo.svg" alt="Antarious">
     <div class="tb-brand-text">
-      <div class="tb-brand-main">PKSF · Antarious AI</div>
+      <div class="tb-brand-main">PKSF</div>
       <div class="tb-brand-sub">Intelligence Platform</div>
     </div>
   </div>
@@ -167,9 +167,9 @@
   <div class="welcome-banner">
     <div>
       <div class="wb-content">
-        <h2>Good morning, Dr. Haque 👋</h2>
-        <p>Freya has analysed your morning data. There are <strong>3 partner alerts</strong>, <strong>2 reports</strong> ready for your review, and <strong>1 approval</strong> needed before end of day. Your portfolio PAR30 improved by 0.6% this quarter.</p>
-        <div class="wb-ask">
+        <h2 id="welcome-greeting">Good morning, Dr. Haque 👋</h2>
+        <p id="welcome-text">Freya has analysed your morning data. There are <strong>3 partner alerts</strong>, <strong>2 reports</strong> ready for your review, and <strong>1 approval</strong> needed before end of day. Your portfolio PAR30 improved by 0.6% this quarter.</p>
+        <div class="wb-ask" id="welcome-asks">
           <button class="wb-ask-btn" onclick="fpQuick('What needs my attention today?')">📋 What needs my attention?</button>
           <button class="wb-ask-btn" onclick="fpQuick('Summarise this week\\'s portfolio performance')">📊 Portfolio summary</button>
           <button class="wb-ask-btn" onclick="fpQuick('Which reports are due soon?')">📄 Upcoming deadlines</button>
@@ -186,7 +186,7 @@
     <div class="as-sep">·</div>
     <div class="as-item">📋 IFAD PACE-II report due in <strong>14 days</strong></div>
     <div class="as-sep">·</div>
-    <div class="as-item">✅ April payroll ready for <strong>approval</strong></div>
+    <div class="as-item" data-roles="director finance">✅ April payroll ready for <strong>approval</strong></div>
     <div class="as-sep">·</div>
     <div class="as-item">📊 Q3 Board Report draft is <strong>ready</strong></div>
     <div style="margin-left:auto">
@@ -255,7 +255,7 @@
           <div class="qa-card-title">Partner Performance</div>
           <div class="qa-card-desc">See which POs need attention today</div>
         </div>
-        <div class="qa-card" onclick="showOutput('ussp-report')">
+        <div class="qa-card" data-roles="director programme" onclick="showOutput('ussp-report')">
           <div class="qa-card-ic">🌾</div>
           <div class="qa-card-title">USSP Progress</div>
           <div class="qa-card-desc">Ultra-poor programme quarterly update</div>
@@ -265,7 +265,7 @@
           <div class="qa-card-title">Draft a Letter</div>
           <div class="qa-card-desc">Freya drafts in seconds — you review &amp; send</div>
         </div>
-        <div class="qa-card" onclick="window.location.href='finance.html'">
+        <div class="qa-card" data-roles="director finance" onclick="window.location.href='finance.html'">
           <div class="qa-card-ic">💰</div>
           <div class="qa-card-title">Check Budget</div>
           <div class="qa-card-desc">Budget utilisation &amp; grant status</div>
@@ -409,7 +409,7 @@
     </div>
 
     <!-- Programme Snapshot -->
-    <div class="card">
+    <div class="card" data-roles="director programme">
       <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">🌾 Programme Snapshot — Q3</div>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div>
