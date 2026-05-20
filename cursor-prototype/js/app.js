@@ -106,7 +106,12 @@ const App = {
           '<div><div class="role-opt-name">' + I18n.field(r, 'name', 'nameEn') + '</div>' +
           '<div class="role-opt-role">' + I18n.field(r, 'role', 'roleEn') + '</div></div>' +
           '<span class="role-opt-check">' + Icons.i('check', 14) + '</span></div>';
-      }).join('');
+      }).join('') +
+      '<div class="role-menu-divider"></div>' +
+      '<div class="role-opt role-opt-logout" onclick="Auth.logout()">' +
+        '<div class="role-opt-av role-opt-av-logout">' + Icons.i('user', 16) + '</div>' +
+        '<div><div class="role-opt-name">' + t('auth.logout') + '</div></div>' +
+      '</div>';
   },
 
   toggleRoleMenu(e) {
@@ -136,6 +141,10 @@ const App = {
 
   setLang(lang) {
     I18n.setLang(lang);
+    if (document.getElementById('shell').classList.contains('is-hidden')) {
+      Auth.setLang(lang);
+      return;
+    }
     App.applyShell();
     App.toast(lang === 'bn' ? t('toast.langBn') : t('toast.langEn'), 'info', 'a');
   },
@@ -635,4 +644,3 @@ const App = {
   },
 };
 
-document.addEventListener('DOMContentLoaded', function() { App.init(); });

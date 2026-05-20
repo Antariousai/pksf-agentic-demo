@@ -7,9 +7,203 @@ function toggleTheme() {
   const html = document.documentElement;
   const isDark = html.getAttribute('data-theme') === 'dark';
   html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  localStorage.setItem('pksf-theme', isDark ? 'light' : 'dark');
   const btn = document.getElementById('theme-btn');
-  if (btn) btn.textContent = isDark ? '🌙' : '☀️';
-  toast('Switched to ' + (isDark ? 'Light' : 'Dark') + ' Mode', 'ℹ️', 'a');
+  if (btn) btn.innerHTML = isDark ? svgIcon('moon') : svgIcon('sun');
+  toast('Switched to ' + (isDark ? 'Light' : 'Dark') + ' Mode', '', 'a');
+}
+
+/* ── ROLES ── */
+const PKSF_ROLES = {
+  director:  { initials: 'AH', name: 'Dr. Anisul Haque',  role: 'Managing Director', grad: 'linear-gradient(135deg,#005C2B,#00A651)' },
+  programme: { initials: 'RB', name: 'Rowshan Begum',     role: 'Programme Officer · USSP', grad: 'linear-gradient(135deg,#2563eb,#60a5fa)' },
+  finance:   { initials: 'MR', name: 'Mohammad Rashid',   role: 'Finance Officer',   grad: 'linear-gradient(135deg,#7c3aed,#a78bfa)' }
+};
+
+function getCurrentRole() {
+  return localStorage.getItem('pksf-role') || 'director';
+}
+
+function applyRoleToTopbar() {
+  const r = PKSF_ROLES[getCurrentRole()];
+  if (!r) return;
+  document.querySelectorAll('.tb-user').forEach(el => {
+    const av = el.querySelector('.tb-av');
+    const uname = el.querySelector('.tb-uname');
+    const urole = el.querySelector('.tb-urole');
+    if (av) { av.textContent = r.initials; av.style.background = r.grad; }
+    if (uname) uname.textContent = r.name;
+    if (urole) urole.textContent = r.role;
+  });
+}
+
+function switchRole(roleKey) {
+  if (!PKSF_ROLES[roleKey]) return;
+  localStorage.setItem('pksf-role', roleKey);
+  applyRoleToTopbar();
+  // Re-translate if BN
+  if (typeof getLang === 'function' && getLang() === 'bn') {
+    translateElement(document.body, 'bn');
+  }
+  closeRoleMenu();
+  const r = PKSF_ROLES[roleKey];
+  toast(`Switched to ${r.name}`, '', 'g');
+}
+
+function toggleRoleMenu(evt) {
+  if (evt) evt.stopPropagation();
+  const menu = document.getElementById('role-menu');
+  if (!menu) return;
+  menu.classList.toggle('open');
+}
+
+function closeRoleMenu() {
+  const menu = document.getElementById('role-menu');
+  if (menu) menu.classList.remove('open');
+}
+
+/* ── Inject language toggle button + role dropdown into existing topbar ── */
+function injectTopbarWidgets() {
+  const controls = document.querySelector('.tb-controls');
+  if (!controls) return;
+
+  // Language toggle button
+  if (!document.getElementById('lang-btn')) {
+    const langBtn = document.createElement('div');
+    langBtn.id = 'lang-btn';
+    langBtn.className = 'tb-icon-btn lang-btn';
+    langBtn.title = 'Switch Language';
+    langBtn.setAttribute('onclick', 'toggleLang()');
+    const initialLang = (typeof getLang === 'function') ? getLang() : 'en';
+    langBtn.innerHTML = svgIcon('languages') + `<span class="lang-btn-text">${initialLang === 'bn' ? 'বাং' : 'EN'}</span>`;
+    // Insert before theme button
+    const themeBtn = document.getElementById('theme-btn');
+    if (themeBtn) controls.insertBefore(langBtn, themeBtn);
+    else controls.appendChild(langBtn);
+  }
+
+  // Convert .tb-user to a clickable wrapper with dropdown
+  const userEl = controls.querySelector('.tb-user');
+  if (userEl && !userEl.dataset.roleWired) {
+    userEl.dataset.roleWired = '1';
+    userEl.style.position = 'relative';
+    userEl.setAttribute('onclick', 'toggleRoleMenu(event)');
+
+    // Add chevron
+    if (!userEl.querySelector('.tb-user-chev')) {
+      const chev = document.createElement('span');
+      chev.className = 'tb-user-chev';
+      chev.innerHTML = svgIcon('chevron-down');
+      userEl.appendChild(chev);
+    }
+
+    // Add dropdown menu
+    if (!document.getElementById('role-menu')) {
+      const menu = document.createElement('div');
+      menu.id = 'role-menu';
+      menu.className = 'role-menu';
+      menu.innerHTML = `
+        <div class="role-menu-label">Switch Role</div>
+        ${Object.entries(PKSF_ROLES).map(([k, r]) => `
+          <div class="role-menu-item" onclick="event.stopPropagation();switchRole('${k}')">
+            <div class="role-av" style="background:${r.grad}">${r.initials}</div>
+            <div class="role-info">
+              <div class="role-name">${r.name}</div>
+              <div class="role-sub">${r.role}</div>
+            </div>
+            <span class="role-check ${getCurrentRole() === k ? 'on' : ''}">${svgIcon('check')}</span>
+          </div>
+        `).join('')}
+        <div class="role-menu-divider"></div>
+        <a href="index.html" class="role-menu-item role-menu-signout">
+          <span class="role-menu-ic">${svgIcon('log-out')}</span>
+          <span>Sign Out</span>
+        </a>
+      `;
+      userEl.appendChild(menu);
+    }
+  }
+
+  applyRoleToTopbar();
+
+  // ── Notification dropdown ──
+  // Find the bell icon button (the .tb-icon-btn that contains .tb-ndot)
+  const notifDot = controls.querySelector('.tb-icon-btn .tb-ndot');
+  const notifBtn = notifDot ? notifDot.parentElement : null;
+  if (notifBtn && !notifBtn.dataset.notifWired) {
+    notifBtn.dataset.notifWired = '1';
+    notifBtn.id = notifBtn.id || 'notif-btn';
+    notifBtn.style.position = 'relative';
+    notifBtn.removeAttribute('onclick');
+    notifBtn.setAttribute('onclick', 'toggleNotifMenu(event)');
+    notifBtn.setAttribute('title', 'Notifications');
+
+    if (!document.getElementById('notif-menu')) {
+      const items = PKSF_NOTIFICATIONS.map(n => `
+        <a class="notif-menu-item ${n.unread ? 'unread' : ''}" href="${n.href}" onclick="event.stopPropagation()">
+          <div class="notif-menu-ic notif-menu-ic-${n.tone}">${svgIcon(n.icon)}</div>
+          <div class="notif-menu-body">
+            <div class="notif-menu-title">${n.title}</div>
+            <div class="notif-menu-desc">${n.desc}</div>
+            <div class="notif-menu-time">${n.time}</div>
+          </div>
+        </a>`).join('');
+      const menu = document.createElement('div');
+      menu.id = 'notif-menu';
+      menu.className = 'notif-menu';
+      menu.innerHTML = `
+        <div class="notif-menu-header">
+          <div class="notif-menu-label">Notifications</div>
+          <span class="notif-menu-count">${PKSF_NOTIFICATIONS.filter(n => n.unread).length} unread</span>
+        </div>
+        <div class="notif-menu-list">${items}</div>
+        <a href="notifications.html" class="notif-menu-footer">View all notifications →</a>
+      `;
+      notifBtn.appendChild(menu);
+    }
+  }
+
+  // Close dropdowns on outside click
+  if (!window.__pksfRoleMenuWired) {
+    window.__pksfRoleMenuWired = true;
+    document.addEventListener('click', e => {
+      const roleMenu = document.getElementById('role-menu');
+      if (roleMenu && roleMenu.classList.contains('open') && !e.target.closest('.tb-user')) {
+        closeRoleMenu();
+      }
+      const notifMenu = document.getElementById('notif-menu');
+      if (notifMenu && notifMenu.classList.contains('open') && !e.target.closest('#notif-btn,[data-notif-wired]')) {
+        notifMenu.classList.remove('open');
+      }
+    });
+  }
+}
+
+/* ── NOTIFICATION DROPDOWN ── */
+const PKSF_NOTIFICATIONS = [
+  { tone:'warn',   icon:'alert-triangle', title:'Critical PAR90 Breach — BURO Bangladesh', desc:'PAR90 at 8.7%, exceeds 7% threshold. Action required.', time:'08:42 AM', unread:true,  href:'partners.html' },
+  { tone:'action', icon:'clipboard-list', title:'IFAD PACE-II Report Due in 3 Days',       desc:'Quarterly report 52% complete. Components 2 & 3 pending.', time:'07:15 AM', unread:true, href:'reports.html' },
+  { tone:'alert',  icon:'wallet',         title:'May Payroll Ready for Approval',          desc:'৳8.42 Cr · 612 staff · MD approval needed before May 25.',  time:'06:00 AM', unread:true,  href:'finance.html' },
+  { tone:'info',   icon:'bot',            title:'Portfolio Health Report Generated',       desc:'Q1 FY2026 · PAR30 improved 0.3% QoQ across 276 POs.',     time:'05:30 AM', unread:true,  href:'reports.html' },
+  { tone:'alert',  icon:'building',       title:'12 POs Above PAR30 Threshold',            desc:'Weekly scan flagged 12 partner orgs · 3 critical.',       time:'12:00 AM', unread:true,  href:'partners.html' }
+];
+
+function toggleNotifMenu(evt) {
+  if (evt) evt.stopPropagation();
+  const menu = document.getElementById('notif-menu');
+  if (!menu) return;
+  closeRoleMenu();
+  menu.classList.toggle('open');
+}
+
+/* ── Persist theme across pages ── */
+function applyStoredTheme() {
+  const t = localStorage.getItem('pksf-theme');
+  if (t === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.innerHTML = svgIcon('sun');
+  }
 }
 
 /* ── OPERATION MODE ── */
@@ -33,7 +227,7 @@ function setMode(m) {
 }
 
 /* ── TOAST ── */
-function toast(msg, ic = 'ℹ️', type = 'g') {
+function toast(msg, ic = '', type = 'g') {
   let c = document.getElementById('toast-container');
   if (!c) {
     c = document.createElement('div');
@@ -42,7 +236,15 @@ function toast(msg, ic = 'ℹ️', type = 'g') {
   }
   const t = document.createElement('div');
   t.className = `toast toast-${type}`;
-  t.innerHTML = `<span class="toast-ic">${ic}</span><div>${msg}</div>`;
+  // Map type to default icon if no icon char provided
+  const defaultByType = { g: 'check-circle', a: 'alert-triangle', r: 'x-circle' };
+  let icHtml;
+  if (ic && typeof svgIcon === 'function') {
+    icHtml = ic;  // pass-through; emoji walker will convert
+  } else {
+    icHtml = (typeof svgIcon === 'function') ? svgIcon(defaultByType[type] || 'check-circle') : '';
+  }
+  t.innerHTML = `<span class="toast-ic">${icHtml}</span><div>${msg}</div>`;
   c.appendChild(t);
   setTimeout(() => {
     t.style.opacity = '0';
@@ -343,6 +545,8 @@ function initKeyboard() {
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded', () => {
   initKeyboard();
+  applyStoredTheme();
+  injectTopbarWidgets();
 
   // Freya input enter key
   const fpInput = document.getElementById('fp-input');

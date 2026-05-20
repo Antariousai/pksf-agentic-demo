@@ -6,96 +6,124 @@
 <title>Notifications — PKSF Antarious AI</title>
 <link rel="stylesheet" href="css/styles.css">
 <style>
-.notif-page { max-width: 860px; margin: 0 auto; }
+.notif-page { max-width: 920px; margin: 0 auto; }
 .notif-toolbar { display:flex; align-items:center; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
-.notif-toolbar h1 { flex:1; font-size:1.35rem; font-weight:700; color:var(--tx); margin:0; }
-.notif-filter-chips { display:flex; gap:8px; flex-wrap:wrap; }
-.n-chip { padding:5px 14px; border-radius:20px; font-size:.8rem; font-weight:600; border:1.5px solid var(--bd); background:var(--bg2); color:var(--tx2); cursor:pointer; transition:all .15s; }
+.notif-toolbar h1 { flex:1; font-size:20px; font-weight:800; color:var(--tx); margin:0; letter-spacing:-.3px; }
+.notif-toolbar h1 .nt-sub { font-size:12px; font-weight:500; color:var(--tx3); margin-left:8px; }
+.notif-filter-chips { display:flex; gap:6px; flex-wrap:wrap; }
+.n-chip { padding:5px 14px; border-radius:20px; font-size:11px; font-weight:600; border:1px solid var(--border); background:var(--card2); color:var(--tx2); cursor:pointer; transition:all .15s; }
 .n-chip.active, .n-chip:hover { background:var(--pri); color:#fff; border-color:var(--pri); }
-.notif-group { margin-bottom:28px; }
-.notif-group-label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--tx3); margin-bottom:10px; padding-left:4px; }
-.notif-item { display:flex; align-items:flex-start; gap:14px; padding:14px 16px; background:var(--bg2); border:1px solid var(--bd); border-radius:10px; margin-bottom:8px; cursor:pointer; transition:box-shadow .15s, border-color .15s; position:relative; }
-.notif-item:hover { box-shadow:0 2px 10px rgba(0,0,0,.08); border-color:var(--pri2); }
-.notif-item.unread { border-left:4px solid var(--pri); background:var(--bg); }
-.notif-item.unread::before { content:''; position:absolute; top:14px; right:14px; width:8px; height:8px; border-radius:50%; background:var(--pri); }
-.ni-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
-.ni-icon.alert   { background:#FFF3CD; }
-.ni-icon.info    { background:#D4EDDA; }
-.ni-icon.action  { background:#CCE5FF; }
-.ni-icon.warn    { background:#F8D7DA; }
+.notif-group { margin-bottom:24px; }
+.notif-group-label { font-family:var(--mono); font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--tx4); margin-bottom:10px; padding-left:4px; }
+.notif-item { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:8px; cursor:pointer; transition:box-shadow .15s, border-color .15s; position:relative; box-shadow:var(--sh); }
+.notif-item:hover { box-shadow:0 4px 14px rgba(0,0,0,.08); border-color:var(--pri); }
+.notif-item.unread { border-left:3px solid var(--pri); }
+.notif-item.unread::before { content:''; position:absolute; top:14px; right:14px; width:7px; height:7px; border-radius:50%; background:var(--pri); box-shadow:0 0 5px var(--pri); }
+.ni-icon { width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.ni-icon.alert   { background: var(--ambg); color: var(--am); }
+.ni-icon.info    { background: rgba(0,92,43,.08); color: var(--pri); }
+.ni-icon.action  { background: var(--blbg); color: #2563eb; }
+.ni-icon.warn    { background: rgba(220,38,38,.1); color: var(--rd); }
+.ni-icon .emoji-svg .ic { width:18px; height:18px; }
 .ni-body { flex:1; min-width:0; }
-.ni-title { font-size:.9rem; font-weight:600; color:var(--tx); margin:0 0 3px; }
-.ni-desc { font-size:.82rem; color:var(--tx2); margin:0 0 6px; line-height:1.45; }
-.ni-meta { display:flex; align-items:center; gap:10px; font-size:.75rem; color:var(--tx3); }
-.ni-tag { padding:2px 8px; border-radius:4px; font-size:.7rem; font-weight:600; }
-.ni-tag.alert  { background:#FFF3CD; color:#856404; }
-.ni-tag.info   { background:#D4EDDA; color:#155724; }
-.ni-tag.action { background:#CCE5FF; color:#004085; }
-.ni-tag.warn   { background:#F8D7DA; color:#721C24; }
-.ni-actions { display:flex; gap:8px; margin-top:8px; }
-.mark-all-btn { padding:6px 16px; border-radius:8px; font-size:.8rem; font-weight:600; border:1.5px solid var(--bd); background:transparent; color:var(--tx2); cursor:pointer; transition:all .15s; }
-.mark-all-btn:hover { background:var(--bg2); color:var(--pri); border-color:var(--pri); }
+.ni-title { font-size:13px; font-weight:700; color:var(--tx); margin:0 0 3px; }
+.ni-desc { font-size:12px; color:var(--tx2); margin:0 0 6px; line-height:1.55; }
+.ni-meta { display:flex; align-items:center; gap:10px; font-size:10px; color:var(--tx3); flex-wrap:wrap; }
+.ni-tag { padding:2px 7px; border-radius:4px; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+.ni-tag.alert  { background: var(--ambg); color: #92400e; }
+.ni-tag.info   { background: rgba(0,92,43,.08); color: var(--pri); }
+.ni-tag.action { background: var(--blbg); color: #1d4ed8; }
+.ni-tag.warn   { background: rgba(220,38,38,.1); color: var(--rd); }
+.ni-actions { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+.mark-all-btn { padding:6px 14px; border-radius:8px; font-size:11px; font-weight:600; border:1px solid var(--border); background:var(--card2); color:var(--tx2); cursor:pointer; transition:all .15s; }
+.mark-all-btn:hover { background:var(--card); color:var(--pri); border-color:var(--pri); }
 .notif-empty { text-align:center; padding:60px 20px; color:var(--tx3); }
-.notif-empty .empty-icon { font-size:3rem; margin-bottom:12px; }
-.notif-empty p { font-size:.95rem; }
+.notif-empty p { font-size:13px; }
 </style>
 </head>
 <body>
+<div id="shell">
 
-<!-- Topbar -->
-<div class="topbar">
+<!-- TOP BAR -->
+<div id="topbar">
   <div class="tb-brand">
-    <div class="tb-logo">P</div>
-    <div>
-      <div class="tb-title">Antarious AI</div>
-      <div class="tb-sub">PKSF Intelligence Platform</div>
+    <div class="tb-logo">🏛</div>
+    <div class="tb-brand-text">
+      <div class="tb-brand-main">PKSF · Antarious AI</div>
+      <div class="tb-brand-sub">Intelligence Platform</div>
     </div>
   </div>
-  <div class="tb-right">
+  <div class="tb-freya-bar" onclick="openFreya()">
+    <div class="tb-fa">🤖</div>
+    <div class="tb-fstatus" id="freya-status-text">
+      <strong>Freya</strong> is monitoring <strong>7 unread notifications</strong> — IFAD PACE-II report due in 3 days
+    </div>
+    <div class="tb-fdot"></div>
+  </div>
+  <div class="tb-controls">
     <div class="mode-toggle">
-      <button class="mode-btn active" onclick="setMode('auto')" title="Full Auto">Auto</button>
-      <button class="mode-btn" onclick="setMode('semi')" title="Semi-Auto">Semi</button>
-      <button class="mode-btn" onclick="setMode('manual')" title="Manual">Manual</button>
+      <button class="mode-btn" data-mode="manual" onclick="setMode('manual')">Manual</button>
+      <button class="mode-btn on" data-mode="semi" onclick="setMode('semi')">Semi-Auto</button>
+      <button class="mode-btn" data-mode="full" onclick="setMode('full')">Full Auto</button>
     </div>
-    <div class="tb-icon-btn" onclick="openFreya()" title="Ask Freya AI">🤖</div>
-    <div class="tb-icon-btn active-notif" onclick="window.location.href='notifications.html'" title="Notifications">🔔 <span class="notif-dot"></span></div>
-    <div class="tb-avatar" title="Md. Rafiqul Islam — MD">RI</div>
+    <div class="tb-icon-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle Theme">🌙</div>
+    <div class="tb-icon-btn" title="Notifications">🔔<div class="tb-ndot"></div></div>
+    <div class="tb-user">
+      <div class="tb-av">AH</div>
+      <div><div class="tb-uname">Dr. Anisul Haque</div><div class="tb-urole">Managing Director</div></div>
+    </div>
   </div>
 </div>
 
-<!-- Sidebar -->
-<div class="sidebar">
-  <a href="dashboard.html"><div class="nav-item"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
-  <div class="nav-sep">Operations</div>
-  <a href="partners.html"><div class="nav-item"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
-  <a href="portfolio.html"><div class="nav-item"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
-  <div class="nav-sep">Programmes</div>
-  <a href="programs.html"><div class="nav-item"><span class="nav-ic">🌾</span>Active Programmes</div></a>
-  <a href="beneficiaries.html"><div class="nav-item"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
-  <div class="nav-sep">Intelligence</div>
-  <a href="reports.html"><div class="nav-item"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
-  <a href="agents.html"><div class="nav-item"><span class="nav-ic">🤖</span>AI Agents</div></a>
-  <div class="nav-sep">Admin</div>
-  <a href="finance.html"><div class="nav-item"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
-  <a href="hr.html"><div class="nav-item"><span class="nav-ic">👥</span>HR &amp; People</div></a>
-  <a href="notifications.html"><div class="nav-item active"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
-  <div class="nav-sep"></div>
-  <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-inner">
+    <div class="sb-section-label">Overview</div>
+    <a href="dashboard.html"><div class="nav-item" id="ni-dashboard"><span class="nav-ic">🏠</span>Home Dashboard</div></a>
+
+    <div class="sb-section-label">Partner Network</div>
+    <a href="partners.html"><div class="nav-item" id="ni-partners"><span class="nav-ic">🏢</span>Partner Orgs <span class="nav-badge nav-badge-a">12</span></div></a>
+    <a href="portfolio.html"><div class="nav-item" id="ni-portfolio"><span class="nav-ic">💳</span>Loan Portfolio</div></a>
+
+    <div class="sb-section-label">Programmes</div>
+    <a href="programs.html"><div class="nav-item" id="ni-programs"><span class="nav-ic">🌾</span>Active Programmes</div></a>
+    <a href="beneficiaries.html"><div class="nav-item" id="ni-beneficiaries"><span class="nav-ic">👨‍👩‍👧</span>Beneficiaries</div></a>
+
+    <div class="sb-section-label">Intelligence</div>
+    <a href="reports.html"><div class="nav-item" id="ni-reports"><span class="nav-ic">📋</span>Reports <span class="nav-badge nav-badge-g">3</span></div></a>
+    <a href="agents.html"><div class="nav-item" id="ni-agents"><span class="nav-ic">🤖</span>AI Agents</div></a>
+
+    <div class="sb-section-label">Operations</div>
+    <a href="finance.html"><div class="nav-item" id="ni-finance"><span class="nav-ic">💰</span>Finance &amp; Grants</div></a>
+    <a href="hr.html"><div class="nav-item" id="ni-hr"><span class="nav-ic">👥</span>HR &amp; People</div></a>
+    <a href="notifications.html"><div class="nav-item active" id="ni-notifications"><span class="nav-ic">🔔</span>Notifications <span class="nav-badge nav-badge-a">7</span></div></a>
+
+    <div class="sb-section-label">Account</div>
+    <a href="index.html"><div class="nav-item"><span class="nav-ic">🚪</span>Sign Out</div></a>
+  </div>
+  <div class="sb-footer">
+    <div class="sb-org">
+      <div class="sb-org-av">🏛</div>
+      <div><div class="sb-org-name">PKSF</div><div class="sb-org-type">Apex MFI · Dhaka, Bangladesh</div></div>
+    </div>
+  </div>
 </div>
 
-<!-- Main Content -->
-<div class="content">
+<!-- CONTENT -->
+<div id="content">
+<div class="content-area">
+
 <div class="notif-page">
 
   <div class="notif-toolbar">
-    <h1>🔔 Notifications <span style="font-size:.85rem;font-weight:400;color:var(--tx3);margin-left:6px;">7 unread</span></h1>
+    <h1>🔔 Notifications <span class="nt-sub" id="nt-unread">7 unread</span></h1>
     <div class="notif-filter-chips">
       <div class="n-chip active" onclick="filterNotifs('all',this)">All</div>
       <div class="n-chip" onclick="filterNotifs('alert',this)">Alerts</div>
       <div class="n-chip" onclick="filterNotifs('action',this)">Action Needed</div>
       <div class="n-chip" onclick="filterNotifs('info',this)">Info</div>
     </div>
-    <button class="mark-all-btn" onclick="markAllRead()">Mark All as Read</button>
+    <button class="mark-all-btn" onclick="markAllRead()">Mark all as read</button>
   </div>
 
   <!-- Today -->
@@ -113,8 +141,8 @@
           <span>08:42 AM</span>
         </div>
         <div class="ni-actions">
-          <button class="btn btn-warn btn-sm" onclick="event.stopPropagation();window.location.href='partners.html'">Review Partner</button>
-          <button class="btn btn-sec btn-sm" onclick="event.stopPropagation();toast('Escalated to MD for review','📤','success')">Escalate to MD</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();window.location.href='partners.html'">Review Partner</button>
+          <button class="btn btn-sec btn-sm" onclick="event.stopPropagation();toast('Escalated to MD for review','📤','g')">Escalate to MD</button>
         </div>
       </div>
     </div>
@@ -123,7 +151,7 @@
       <div class="ni-icon action">📋</div>
       <div class="ni-body">
         <p class="ni-title">IFAD PACE-II Progress Report Due in 3 Days</p>
-        <p class="ni-desc">Quarterly progress report for IFAD PACE-II programme is due on May 23, 2026. Report is 52% complete — narrative sections for Component 2 & 3 still pending input.</p>
+        <p class="ni-desc">Quarterly progress report for IFAD PACE-II programme is due on May 23, 2026. Report is 52% complete — narrative sections for Component 2 &amp; 3 still pending input.</p>
         <div class="ni-meta">
           <span class="ni-tag action">Action Required</span>
           <span>Report Generator Agent</span>
@@ -171,19 +199,18 @@
       <div class="ni-icon alert">🏢</div>
       <div class="ni-body">
         <p class="ni-title">12 Partner Organizations Above PAR30 Threshold</p>
-        <p class="ni-desc">Freya's weekly portfolio scan flagged 12 POs with PAR30 above 5%. Of these, 3 are classified as critical (PAR30 > 7%). Recommended: schedule joint monitoring visits.</p>
+        <p class="ni-desc">Freya's weekly portfolio scan flagged 12 POs with PAR30 above 5%. Of these, 3 are classified as critical (PAR30 &gt; 7%). Recommended: schedule joint monitoring visits.</p>
         <div class="ni-meta">
           <span class="ni-tag alert">Alert</span>
           <span>Portfolio Monitor Agent</span>
           <span>12:00 AM</span>
         </div>
         <div class="ni-actions">
-          <button class="btn btn-warn btn-sm" onclick="event.stopPropagation();window.location.href='partners.html'">View At-Risk POs</button>
-          <button class="btn btn-sec btn-sm" onclick="event.stopPropagation();toast('Monitoring visits scheduled for next week','📅','success')">Schedule Visits</button>
+          <button class="btn btn-pri btn-sm" onclick="event.stopPropagation();window.location.href='partners.html'">View At-Risk POs</button>
+          <button class="btn btn-sec btn-sm" onclick="event.stopPropagation();toast('Monitoring visits scheduled for next week','📅','g')">Schedule Visits</button>
         </div>
       </div>
     </div>
-
   </div>
 
   <!-- Yesterday -->
@@ -218,10 +245,9 @@
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- Older -->
+  <!-- Earlier -->
   <div class="notif-group" data-group="older">
     <div class="notif-group-label">Earlier This Week</div>
 
@@ -266,85 +292,77 @@
         </div>
       </div>
     </div>
-
   </div>
 
 </div><!-- /notif-page -->
+
+</div><!-- /content-area -->
 </div><!-- /content -->
 
-<!-- Freya Panel -->
-<div class="freya-panel" id="freyaPanel">
+</div><!-- /shell -->
+
+<!-- FREYA PANEL -->
+<div id="freya-panel">
   <div class="fp-header">
-    <div class="fp-title">🤖 Freya AI Assistant</div>
-    <button class="fp-close" onclick="closeFreya()">✕</button>
-  </div>
-  <div class="fp-msgs" id="fpMsgs">
-    <div class="fp-msg fp-msg-bot">Hello! I noticed you have <strong>7 unread notifications</strong>. The most urgent item is the <strong>IFAD PACE-II report</strong> due in 3 days. Would you like me to help complete the missing narrative sections?</div>
-  </div>
-  <div class="fp-quick-btns">
-    <button class="fp-quick-btn" onclick="fpQuick('Summarize critical alerts')">Summarize critical alerts</button>
-    <button class="fp-quick-btn" onclick="fpQuick('What needs my approval today?')">What needs approval today?</button>
-    <button class="fp-quick-btn" onclick="fpQuick('Draft response for BURO Bangladesh')">Draft response for BURO</button>
-  </div>
-  <div class="fp-input-row">
-    <input type="text" class="fp-input" id="fpInput" placeholder="Ask Freya anything…" onkeydown="if(event.key==='Enter')fpSend()">
-    <button class="fp-send-btn" onclick="fpSend()">➤</button>
-  </div>
-</div>
-
-<!-- Output Modal -->
-<div class="modal-overlay" id="outputModal" onclick="closeOutput()">
-  <div class="modal-box modal-lg" onclick="event.stopPropagation()">
-    <div class="modal-hdr">
-      <span id="outputTitle">Output</span>
-      <button class="modal-close" onclick="closeOutput()">✕</button>
+    <div class="fp-avatar">🤖</div>
+    <div>
+      <div class="fp-name">Freya</div>
+      <div class="fp-status"><span class="status-dot sd-g"></span> Notifications Assistant · Online</div>
     </div>
-    <div class="modal-body" id="outputBody"></div>
-    <div class="modal-foot">
-      <button class="btn btn-sec" onclick="closeOutput()">Close</button>
-      <button class="btn btn-pri" onclick="toast('Downloaded successfully','⬇️','success');closeOutput()">Download</button>
+    <button class="btn btn-sm btn-sec" style="margin-left:auto" onclick="closeFreya()">✕ Close</button>
+  </div>
+  <div class="fp-quick">
+    <button class="btn btn-sm btn-pri" onclick="fpQuick('Summarise critical alerts for today')">🚨 Critical alerts</button>
+    <button class="btn btn-sm btn-sec" onclick="fpQuick('What needs my approval today?')">✅ Needs approval</button>
+    <button class="btn btn-sm btn-sec" onclick="fpQuick('Draft response for BURO Bangladesh PAR breach')">✍️ Draft response</button>
+  </div>
+  <div id="fp-msgs"></div>
+  <div class="fp-input-area">
+    <div class="fp-input-row">
+      <input class="fp-input" id="fp-input" type="text" placeholder="Ask about any notification…">
+      <button class="btn btn-pri btn-sm" onclick="fpSend()">Send ↑</button>
     </div>
   </div>
 </div>
 
-<!-- Confirm Modal -->
-<div class="modal-overlay" id="confirmModal">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <div class="modal-hdr">
-      <span id="confirmTitle">Confirm Action</span>
-      <button class="modal-close" onclick="document.getElementById('confirmModal').style.display='none'">✕</button>
+<!-- OUTPUT MODAL -->
+<div id="output-modal">
+  <div class="output-box">
+    <div class="ob-header">
+      <div><div class="ob-agent-label" id="ob-agent"></div><div class="ob-title" id="ob-title"></div></div>
+      <div class="ob-close" onclick="closeOutput()">✕</div>
     </div>
-    <div class="modal-body" id="confirmBody"></div>
-    <div class="modal-foot">
-      <button class="btn btn-sec" onclick="document.getElementById('confirmModal').style.display='none'">Cancel</button>
-      <button class="btn btn-pri" id="confirmOkBtn">Confirm</button>
+    <div class="ob-body" id="ob-body"></div>
+    <div class="ob-footer" id="ob-footer"></div>
+  </div>
+</div>
+<div id="confirm-modal">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirm-title"></div>
+    <div class="confirm-body"  id="confirm-body"></div>
+    <div class="confirm-acts">
+      <button class="btn btn-sec btn-sm" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-pri btn-sm" id="confirm-ok">Confirm</button>
     </div>
   </div>
 </div>
+<div id="toast-container"></div>
 
-<!-- Toast -->
-<div id="toastContainer" class="toast-container"></div>
-
+<script src="js/icons.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/shared.js"></script>
 <script>
-highlightNav('ni-notifications');
+highlightNav('notifications');
 
 let currentFilter = 'all';
-let unreadCount = 7;
 
 function filterNotifs(type, el) {
   currentFilter = type;
   document.querySelectorAll('.n-chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   document.querySelectorAll('.notif-item').forEach(item => {
-    if (type === 'all') {
-      item.style.display = '';
-    } else {
-      const itemType = item.dataset.type;
-      item.style.display = (itemType === type) ? '' : 'none';
-    }
+    item.style.display = (type === 'all' || item.dataset.type === type) ? '' : 'none';
   });
-  // Hide empty groups
   document.querySelectorAll('.notif-group').forEach(group => {
     const visible = [...group.querySelectorAll('.notif-item')].some(i => i.style.display !== 'none');
     group.style.display = visible ? '' : 'none';
@@ -352,17 +370,13 @@ function filterNotifs(type, el) {
 }
 
 function markAllRead() {
-  document.querySelectorAll('.notif-item.unread').forEach(item => {
-    item.classList.remove('unread');
-  });
-  unreadCount = 0;
-  document.querySelector('.notif-toolbar h1').innerHTML = '🔔 Notifications <span style="font-size:.85rem;font-weight:400;color:var(--tx3);margin-left:6px;">All caught up</span>';
-  toast('All notifications marked as read', '✅', 'success');
+  document.querySelectorAll('.notif-item.unread').forEach(item => item.classList.remove('unread'));
+  const sub = document.getElementById('nt-unread');
+  if (sub) sub.textContent = 'All caught up';
+  toast('All notifications marked as read', '✅', 'g');
 }
 
-function goTo(url) {
-  window.location.href = url;
-}
+function goTo(url) { window.location.href = url; }
 </script>
 </body>
 </html>

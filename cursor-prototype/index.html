@@ -8,7 +8,109 @@
 </head>
 <body>
 
-<div id="shell">
+<!-- Auth: Login / Sign Up -->
+<div id="auth-screen">
+  <div class="auth-wrapper">
+    <div class="auth-brand">
+      <div class="auth-brand-logo" id="auth-brand-logo"></div>
+      <div class="auth-brand-name">PKSF · <span>Antarious AI</span></div>
+      <p class="auth-brand-tagline" id="auth-brand-tagline"></p>
+      <p class="auth-brand-org" id="auth-brand-org"></p>
+      <div class="auth-brand-divider"></div>
+      <div class="auth-features">
+        <div class="auth-feat"><span class="auth-feat-ic" id="auth-ic-freya"></span><div><strong id="auth-feat-freya"></strong><span id="auth-feat-freya-desc"></span></div></div>
+        <div class="auth-feat"><span class="auth-feat-ic" id="auth-ic-portfolio"></span><div><strong id="auth-feat-portfolio"></strong><span id="auth-feat-portfolio-desc"></span></div></div>
+        <div class="auth-feat"><span class="auth-feat-ic" id="auth-ic-reports"></span><div><strong id="auth-feat-reports"></strong><span id="auth-feat-reports-desc"></span></div></div>
+        <div class="auth-feat"><span class="auth-feat-ic" id="auth-ic-approve"></span><div><strong id="auth-feat-approve"></strong><span id="auth-feat-approve-desc"></span></div></div>
+      </div>
+      <div class="auth-stats">
+        <div><div class="auth-stat-val">৮৭</div><div class="auth-stat-lbl" id="auth-stat-partners-lbl"></div></div>
+        <div><div class="auth-stat-val">১.২৪L</div><div class="auth-stat-lbl" id="auth-stat-loans-lbl"></div></div>
+        <div><div class="auth-stat-val">৬</div><div class="auth-stat-lbl" id="auth-stat-programs-lbl"></div></div>
+      </div>
+    </div>
+
+    <div class="auth-form-panel">
+      <div class="auth-form-top">
+        <div class="lang-toggle" id="auth-lang-toggle" title="">
+          <button type="button" class="lang-btn on" data-lang="bn" onclick="Auth.setLang('bn')">বাং</button>
+          <button type="button" class="lang-btn" data-lang="en" onclick="Auth.setLang('en')">EN</button>
+        </div>
+      </div>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab on" id="auth-tab-login" onclick="Auth.setView('login')"></button>
+        <button type="button" class="auth-tab" id="auth-tab-signup" onclick="Auth.setView('signup')"></button>
+      </div>
+
+      <div id="auth-login-panel">
+        <div class="auth-hd">
+          <div class="auth-welcome" id="auth-login-welcome"></div>
+          <h1 class="auth-title" id="auth-login-title"></h1>
+          <p class="auth-sub" id="auth-login-sub"></p>
+        </div>
+        <form id="login-form" class="auth-form">
+          <div class="auth-field">
+            <label class="auth-label" id="auth-label-email" for="login-email"></label>
+            <input class="auth-input" type="email" id="login-email" value="rahima.begum@pksf.org.bd" autocomplete="username">
+          </div>
+          <div class="auth-field">
+            <label class="auth-label" id="auth-label-password" for="login-pass"></label>
+            <input class="auth-input" type="password" id="login-pass" value="demo123" autocomplete="current-password">
+          </div>
+          <div class="auth-row">
+            <label class="auth-check"><input type="checkbox" id="auth-remember" checked><span id="auth-remember-label"></span></label>
+            <button type="button" class="auth-link" id="auth-forgot" onclick="Auth.toast(t('toast.forgotDemo'), 'info', 'a')"></button>
+          </div>
+          <button type="submit" class="btn btn-pri btn-lg auth-submit" id="auth-signin-btn"></button>
+        </form>
+        <p class="auth-demo-hint" id="auth-demo-hint"></p>
+        <div class="auth-divider"><span id="auth-or-demo"></span></div>
+        <div class="auth-demo-list" id="auth-demo-list"></div>
+        <p class="auth-switch-line"><span id="auth-switch-signup-text"></span> <button type="button" class="auth-link" id="auth-go-signup" onclick="Auth.setView('signup')"></button></p>
+      </div>
+
+      <div id="auth-signup-panel" class="is-hidden">
+        <div class="auth-hd">
+          <div class="auth-welcome" id="auth-signup-welcome"></div>
+          <h1 class="auth-title" id="auth-signup-title"></h1>
+          <p class="auth-sub" id="auth-signup-sub"></p>
+        </div>
+        <form id="signup-form" class="auth-form">
+          <div class="auth-field">
+            <label class="auth-label" id="auth-label-name" for="signup-name"></label>
+            <input class="auth-input" type="text" id="signup-name" autocomplete="name">
+          </div>
+          <div class="auth-field">
+            <label class="auth-label" id="auth-label-signup-email" for="signup-email"></label>
+            <input class="auth-input" type="email" id="signup-email" autocomplete="email">
+          </div>
+          <div class="auth-field">
+            <label class="auth-label" id="auth-label-role" for="signup-role"></label>
+            <select class="auth-input auth-select" id="signup-role"></select>
+          </div>
+          <div class="auth-field">
+            <label class="auth-label" id="auth-label-signup-pass" for="signup-pass"></label>
+            <input class="auth-input" type="password" id="signup-pass" autocomplete="new-password">
+          </div>
+          <div class="auth-field">
+            <label class="auth-label" id="auth-label-confirm" for="signup-pass2"></label>
+            <input class="auth-input" type="password" id="signup-pass2" autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn btn-pri btn-lg auth-submit" id="auth-signup-btn"></button>
+        </form>
+        <p class="auth-switch-line"><span id="auth-switch-login-text"></span> <button type="button" class="auth-link" id="auth-go-login" onclick="Auth.setView('login')"></button></p>
+      </div>
+
+      <div class="auth-footer">
+        <div id="auth-footer-main"></div>
+        <div id="auth-footer-note"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="shell" class="is-hidden">
   <header id="topbar">
     <div class="tb-brand">
       <div class="tb-logo" id="tb-logo"></div>
@@ -139,5 +241,16 @@
 <script src="js/data.js"></script>
 <script src="js/screens.js"></script>
 <script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('auth-brand-logo').innerHTML = Icons.i('leaf', 36, 'icon-white');
+  document.getElementById('auth-ic-freya').innerHTML = Icons.i('bot', 20, 'icon-white');
+  document.getElementById('auth-ic-portfolio').innerHTML = Icons.i('bank', 20, 'icon-white');
+  document.getElementById('auth-ic-reports').innerHTML = Icons.i('file-text', 20, 'icon-white');
+  document.getElementById('auth-ic-approve').innerHTML = Icons.i('check-circle', 20, 'icon-white');
+  Auth.init();
+});
+</script>
 </body>
 </html>

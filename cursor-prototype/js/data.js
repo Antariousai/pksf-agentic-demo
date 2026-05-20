@@ -121,6 +121,15 @@ const ROLES = {
 
 const USER = ROLES.programme;
 
+const DEMO_LOGIN_ACCOUNTS = [
+  { roleId: 'director', email: 'director@pksf.org.bd', gradient: 'linear-gradient(135deg,#b45309,#f59e0b)' },
+  { roleId: 'programme', email: 'rahima.begum@pksf.org.bd', gradient: 'linear-gradient(135deg,#2563eb,#60a5fa)' },
+  { roleId: 'credit', email: 'karimul.haque@pksf.org.bd', gradient: 'linear-gradient(135deg,#005C2B,#00A651)' },
+  { roleId: 'hr', email: 'fatema.akter@pksf.org.bd', gradient: 'linear-gradient(135deg,#7c3aed,#a78bfa)' },
+];
+
+const AUTH_DEMO_PASSWORD = 'demo123';
+
 const TASKS = [
   {
     id: 't1',
